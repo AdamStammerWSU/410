@@ -9,6 +9,13 @@ import java.io.IOException;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		// For testing purposes
+		//GUI results = new GUI();
+		//results.setLocationRelativeTo(null);
+		//results.setSize(500, 200);
+		//results.setVisible(true);
+		
 		if (args.length > 1) {
 			System.out.println("Too many arguements specified. Use --help for details of use.");
 			exit();
@@ -24,6 +31,14 @@ public class Main {
 						.println("\t\t\tThis would use test.txt in the same folder as pair.jar as the data input file");
 			} else { // assume a text file has been specified
 				System.out.println(readInputFile(args[0]));
+				
+				// After all the reading is done
+				// Display the results window
+				GUI results = new GUI();
+				results.setLocationRelativeTo(null);
+				results.setSize(500, 500);
+				results.setVisible(true);
+				
 			}
 		}
 	}
