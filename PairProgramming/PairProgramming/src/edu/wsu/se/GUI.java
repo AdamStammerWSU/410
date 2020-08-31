@@ -99,7 +99,9 @@ public class GUI extends JFrame implements ActionListener{
                 File file = fc.getSelectedFile();
                 // This is where the file is put into displayInput
                 displayInput.setText(Main.readInputFile(file.toString()));
-
+                Main.process(file.toString());
+                //displayInput.setText(Main.processor.lineDataOutput());
+                //displayInput.setText(Main.processor.fileDataOutput());
             } else {
                 // User chose cancel
             }
