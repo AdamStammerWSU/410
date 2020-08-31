@@ -52,16 +52,17 @@ public class Main {
 					parsedData.add(thisLine);
 				}
 
-				if (DEBUG) {
-					for (int i = 0; i < parsedData.size(); i++) {
-						for (int j = 0; j < parsedData.get(i).size(); j++) {
-							System.out.print(parsedData.get(i).get(j) + " ");
-						}
-						System.out.println("");
+				String rawInput = "";
+				for (int i = 0; i < parsedData.size(); i++) {
+					for (int j = 0; j < parsedData.get(i).size(); j++) {
+						rawInput += parsedData.get(i).get(j) + " ";
 					}
+					rawInput += "\n";
 				}
-
 				Processor processor = new Processor(parsedData);
+				System.out.println(rawInput);
+				System.out.println(processor.lineDataOutput());
+				System.out.println("\n\n" + processor.fileDataOutput());
 
 				// After all the reading is done
 				// Display the results window
