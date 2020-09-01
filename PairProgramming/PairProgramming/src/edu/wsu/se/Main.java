@@ -18,7 +18,7 @@ public class Main {
 		// Display the results window
 		GUI results = new GUI();
 		results.setLocationRelativeTo(null);
-		results.setSize(500, 500);
+		results.setSize(800, 500);
 		results.setVisible(true);
 
 	}

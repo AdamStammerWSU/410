@@ -20,17 +20,24 @@ public class GUI extends JFrame implements ActionListener{
 
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
+	JPanel panel3 = new JPanel();
 	
 	// On-screen components for panel1
 	JLabel title1 = new JLabel("Input");
 	JTextArea displayInput = new JTextArea(10, 15);
-	JScrollPane scroll = new JScrollPane(displayInput);
+	JScrollPane scroll1 = new JScrollPane(displayInput);
 	
 	JButton fileButton = new JButton("Choose File");
 	JFileChooser fc;
 	
-	// On-screen text for panel2
-	JLabel title2 = new JLabel("Overall Results");
+	// On-screen components for panel2
+	JLabel title2 = new JLabel("Line by Line");
+	JTextArea lineData = new JTextArea(10, 15);
+	JScrollPane scroll2 = new JScrollPane(lineData);
+	
+	
+	// On-screen components for panel3
+	JLabel title3 = new JLabel("Overall Results");
 	Font bigFont = new Font("Arial", Font.BOLD, 16);
 	
 	JLabel totalLines = new JLabel
@@ -38,13 +45,13 @@ public class GUI extends JFrame implements ActionListener{
 	JLabel largestValue = new JLabel
 			("Largest Value: ");
 	JLabel largeLineOccured = new JLabel
-			("Largest Value Occured on Line(s) ");
+			("Largest Value Occured on Line(s): ");
 	JLabel largeFrequency = new JLabel
 			("Did the Largest Value occur more than once? "); // yes/no
 	JLabel smallestValue = new JLabel
 			("Smallest Value: ");
 	JLabel smallLineOccured = new JLabel
-			("Smallest Value Occured on Line(s) ");
+			("Smallest Value Occured on Line(s): ");
 	JLabel smallFrequency = new JLabel
 			("Did the Smallest Value occur more than once? "); // yes/no
 	JLabel totalSum = new JLabel
@@ -63,30 +70,41 @@ public class GUI extends JFrame implements ActionListener{
 		panel1.setLayout((LayoutManager) new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		title1.setFont(bigFont);
 		
+		lineData.setText("");
+		
+		lineData.setEditable(false);
 		panel2.setLayout((LayoutManager) new BoxLayout(panel2, BoxLayout.Y_AXIS));
 		title2.setFont(bigFont);
 		
+		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
+		title3.setFont(bigFont);
+		
 		// Adds all the components to the first panel
 		panel1.add(title1);
-		panel1.add(scroll);
+		panel1.add(scroll1);
 		panel1.add(fileButton);
 		fileButton.addActionListener(this);
 		fc = new JFileChooser();
 		
 		// Adds all the components to the second panel
 		panel2.add(title2);
-		panel2.add(totalLines);
-		panel2.add(largestValue);
-		panel2.add(largeLineOccured);
-		panel2.add(largeFrequency);
-		panel2.add(smallestValue);
-		panel2.add(smallLineOccured);
-		panel2.add(smallFrequency);
-		panel2.add(totalSum);
-		panel2.add(finalStatus);
+		panel2.add(scroll2);
+
+		// Adds all the components to the third panel
+		panel3.add(title3);
+		panel3.add(totalLines);
+		panel3.add(largestValue);
+		panel3.add(largeLineOccured);
+		panel3.add(largeFrequency);
+		panel3.add(smallestValue);
+		panel3.add(smallLineOccured);
+		panel3.add(smallFrequency);
+		panel3.add(totalSum);
+		panel3.add(finalStatus);
 		
 		add(panel1, BorderLayout.WEST);
-		add(panel2, BorderLayout.EAST);
+		add(panel2, BorderLayout.CENTER);
+		add(panel3, BorderLayout.EAST);
 	}
 
 	@Override
@@ -100,7 +118,7 @@ public class GUI extends JFrame implements ActionListener{
                 // This is where the file is put into displayInput
                 displayInput.setText(Main.readInputFile(file.toString()));
                 Main.process(file.toString());
-                //displayInput.setText(Main.processor.lineDataOutput());
+                lineData.setText(Main.processor.lineDataOutput());
                 //displayInput.setText(Main.processor.fileDataOutput());
             } else {
                 // User chose cancel

@@ -110,6 +110,7 @@ class Processor {
 		sumString = "BREAKEVEN";
 		if (sum != 0)
 			sumString = (sum > 0) ? "PROFIT" : "-LOSS";
+		s += sumString;
 		return s;
 	}
 
