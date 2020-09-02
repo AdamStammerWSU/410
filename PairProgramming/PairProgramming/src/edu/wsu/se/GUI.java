@@ -119,10 +119,12 @@ public class GUI extends JFrame implements ActionListener{
                 totalLines.setText("Number of Lines: " + Main.processor.numberOfLines());
                 largestValue.setText("Largest Value: " + Main.processor.largestValue());
                 largeLineOccured.setText("Largest Value Occured on Line(s): " + Arrays.toString(Main.processor.largestValueLines()));
-                largeFrequency.setText("Largest Value Repeated: ");
+                boolean largeRepeat = Main.processor.largestValueLines().length > 1;
+                largeFrequency.setText("Largest Value Repeated: " + largeRepeat);
                 smallestValue.setText("Smallest Value: " + Main.processor.smallestValue());
                 smallLineOccured.setText("Smallest Value Occured on Line(s): " + Arrays.toString(Main.processor.smallestValueLines()));
-                smallFrequency.setText("Smallest Value Repeated: ");
+                boolean smallestRepeat = Main.processor.smallestValueLines().length > 1;
+                smallFrequency.setText("Smallest Value Repeated: " + smallestRepeat);
                 totalSum.setText("Sum of all values: " + Main.processor.sum());
                 finalStatus.setText("Result: " + Main.processor.sumString);
                 //displayInput.setText(Main.processor.fileDataOutput());
