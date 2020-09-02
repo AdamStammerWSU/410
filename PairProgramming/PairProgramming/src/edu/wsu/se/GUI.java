@@ -22,6 +22,7 @@ import javax.swing.JTextArea;
 
 public class GUI extends JFrame implements ActionListener{
 
+	// Left, center, and right panels
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
@@ -56,9 +57,10 @@ public class GUI extends JFrame implements ActionListener{
 	
 		
 	public GUI () {
-		super("Reading Numbers");
+		super("Reading Numbers"); // Frame title
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// Layouts and appearance for each panel
 		displayInput.setEditable(false);
 		panel1.setLayout((LayoutManager) new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel1.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
@@ -97,6 +99,7 @@ public class GUI extends JFrame implements ActionListener{
 		panel3.add(totalSum);
 		panel3.add(finalStatus);
 		
+		// Panels' position on frame
 		add(panel1, BorderLayout.WEST);
 		add(panel2, BorderLayout.CENTER);
 		add(panel3, BorderLayout.EAST);
@@ -104,13 +107,13 @@ public class GUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// If button clicked...
+		// If file button is clicked
         if (e.getSource() == fileButton) {
             int returnVal = fc.showOpenDialog(GUI.this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                // This is where the file is put into displayInput and lineData text areas
+                // Put the file into displayInput and lineData text areas
                 displayInput.setText(Main.readInputFile(file.toString()));
                 Main.process(file.toString());
                 lineData.setText(Main.processor.lineDataOutput());
@@ -127,7 +130,7 @@ public class GUI extends JFrame implements ActionListener{
                 smallFrequency.setText("Smallest Value Repeated: " + smallestRepeat);
                 totalSum.setText("Sum of all values: " + Main.processor.sum());
                 finalStatus.setText("Result: " + Main.processor.sumString);
-                //displayInput.setText(Main.processor.fileDataOutput());
+                
             } else {
                 // User chose cancel
             }
