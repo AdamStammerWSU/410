@@ -14,8 +14,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		// After all the reading is done
-		// Display the results window
+		// Display the window
 		GUI results = new GUI();
 		results.setLocationRelativeTo(null);
 		results.setSize(800, 500);

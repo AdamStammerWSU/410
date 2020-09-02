@@ -1,12 +1,16 @@
 package edu.wsu.se;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -40,43 +44,33 @@ public class GUI extends JFrame implements ActionListener{
 	JLabel title3 = new JLabel("Overall Results");
 	Font bigFont = new Font("Arial", Font.BOLD, 16);
 	
-	JLabel totalLines = new JLabel
-			("Number of Lines: ");
-	JLabel largestValue = new JLabel
-			("Largest Value: ");
-	JLabel largeLineOccured = new JLabel
-			("Largest Value Occured on Line(s): ");
-	JLabel largeFrequency = new JLabel
-			("Did the Largest Value occur more than once? "); // yes/no
-	JLabel smallestValue = new JLabel
-			("Smallest Value: ");
-	JLabel smallLineOccured = new JLabel
-			("Smallest Value Occured on Line(s): ");
-	JLabel smallFrequency = new JLabel
-			("Did the Smallest Value occur more than once? "); // yes/no
-	JLabel totalSum = new JLabel
-			("Sum of all values: ");
-	JLabel finalStatus = new JLabel
-			("Result: "); // LOSS, PROFIT, BREAKEVEN
+	JLabel totalLines = new JLabel();
+	JLabel largestValue = new JLabel();
+	JLabel largeLineOccured = new JLabel();
+	JLabel largeFrequency = new JLabel();
+	JLabel smallestValue = new JLabel();
+	JLabel smallLineOccured = new JLabel();
+	JLabel smallFrequency = new JLabel();
+	JLabel totalSum = new JLabel();
+	JLabel finalStatus = new JLabel(); // LOSS, PROFIT, BREAKEVEN
 	
 		
 	public GUI () {
 		super("Reading Numbers");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		displayInput.setText("");
-		
 		displayInput.setEditable(false);
 		panel1.setLayout((LayoutManager) new BoxLayout(panel1, BoxLayout.Y_AXIS));
+		panel1.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
 		title1.setFont(bigFont);
-		
-		lineData.setText("");
 		
 		lineData.setEditable(false);
 		panel2.setLayout((LayoutManager) new BoxLayout(panel2, BoxLayout.Y_AXIS));
+		panel2.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 10));
 		title2.setFont(bigFont);
 		
 		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
+		panel3.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 20));
 		title3.setFont(bigFont);
 		
 		// Adds all the components to the first panel
@@ -89,6 +83,7 @@ public class GUI extends JFrame implements ActionListener{
 		// Adds all the components to the second panel
 		panel2.add(title2);
 		panel2.add(scroll2);
+		panel2.add(Box.createRigidArea(new Dimension(0, 29)));	
 
 		// Adds all the components to the third panel
 		panel3.add(title3);
@@ -109,16 +104,27 @@ public class GUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// If button clicked... (only one button at the moment)
+		// If button clicked...
         if (e.getSource() == fileButton) {
             int returnVal = fc.showOpenDialog(GUI.this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                // This is where the file is put into displayInput
+                // This is where the file is put into displayInput and lineData text areas
                 displayInput.setText(Main.readInputFile(file.toString()));
                 Main.process(file.toString());
                 lineData.setText(Main.processor.lineDataOutput());
+                
+                // Set text for the third panel
+                totalLines.setText("Number of Lines: " + Main.processor.numberOfLines());
+                largestValue.setText("Largest Value: " + Main.processor.largestValue());
+                largeLineOccured.setText("Largest Value Occured on Line(s): " + Arrays.toString(Main.processor.largestValueLines()));
+                largeFrequency.setText("Largest Value Repeated: ");
+                smallestValue.setText("Smallest Value: " + Main.processor.smallestValue());
+                smallLineOccured.setText("Smallest Value Occured on Line(s): " + Arrays.toString(Main.processor.smallestValueLines()));
+                smallFrequency.setText("Smallest Value Repeated: ");
+                totalSum.setText("Sum of all values: " + Main.processor.sum());
+                finalStatus.setText("Result: " + Main.processor.sumString);
                 //displayInput.setText(Main.processor.fileDataOutput());
             } else {
                 // User chose cancel
