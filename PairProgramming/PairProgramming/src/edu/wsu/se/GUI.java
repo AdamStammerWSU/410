@@ -129,6 +129,9 @@ public class GUI extends JFrame implements ActionListener{
                 boolean smallestRepeat = Main.processor.smallestValueLines().length > 1;
                 smallFrequency.setText("Smallest Value Repeated: " + smallestRepeat);
                 totalSum.setText("Sum of all values: " + Main.processor.sum());
+                // Final result
+        		if (Main.processor.sum != 0)
+        			Main.processor.sumString = (Main.processor.sum > 0) ? "PROFIT" : "-LOSS";
                 finalStatus.setText("Result: " + Main.processor.sumString);
                 
             } else {
