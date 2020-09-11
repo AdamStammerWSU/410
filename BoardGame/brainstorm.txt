@@ -1,0 +1,48 @@
+Game Mechanics (Round)
+  - Pick a number
+  - Update Matrix
+  - Did Any Win Yet?
+  - Next Player
+  
+Match Mechanics (10 Games)
+  - Go Through 10 Games
+  - Count Game Wins For The Sake of a Tie
+  - Decide Winner
+     - Compare Scores
+     - Tie?
+  
+GUI
+  - Matrix IO
+  - Buttons/Dropdown Input
+  - Get -> Matrix, Current Hand, Win Codition
+  - Set -> Add to Hand
+    Update: Get The Matrix, Get Hand Match.currentGame.getPlayerHand(playerNumber)
+ 
+Networking
+  - Turn Rotation
+  - Check For Winner?
+  - 
+  
+Objects: Player (Hand?), Game, Match, GUI, NetworkHandler
+    Match (Main)
+      -> 4 Players
+      -> 1 GUI
+      -> Game
+      -> NetworkHandler (Host/Client)
+
+Testing
+  - Console Then GUI?
+  - Local Testing To Start
+  
+  
+-----------------------------  
+     P1  P2  P3  P4
+ P1  X   G   x   x
+ P2  x   X   x   x
+ P3  x   x   X   x
+ P4  x   x   x   X
+ 
+ [Numbers in Your Hand]
+ 
+ 1 2 3 4 5 ... 20
+ -----------------------------
