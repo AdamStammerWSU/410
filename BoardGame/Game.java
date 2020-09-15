@@ -105,7 +105,6 @@ public class Game {
 	public void checkWin()
 	{
 		
-		
 	}
 ///////////////////////////////////////////////////Check Game End	
 	public void checkgameEnd()
@@ -127,60 +126,67 @@ public class Game {
 	
 	
 ///////////////////////////////////////////////////Generic Display without GUI
-	public void displayHandP1()
+	public String displayHandP1()
 	{
-		System.out.print("P1: [ ");
+		String hand = "[ ";
+		
 		for(int i = 0; i < turnNumber+4; i++)
 		{
 			if(player1[i] != 0)
-			System.out.print(player1[i] + " ");	
+			hand+= player1[i] + " ";	
 		}
-		System.out.println("]");
+		hand += " ]";
+		return hand;
 	}
-	public void displayHandP2()
+	public String displayHandP2()
 	{
-		System.out.print("P2: [ ");
+		String hand = "[ ";
+		
 		for(int i = 0; i < turnNumber+4; i++)
 		{
 			if(player2[i] != 0)
-			System.out.print(player2[i] + " ");	
+			hand+= player2[i] + " ";	
 		}
-		System.out.println("]");
+		hand += " ]";
+		return hand;
 	}
-	public void displayHandP3()
+	public String displayHandP3()
 	{
-		System.out.print("P3: [ ");
+		String hand = "[ ";
+		
 		for(int i = 0; i < turnNumber+4; i++)
 		{
 			if(player3[i] != 0)
-			System.out.print(player3[i] + " ");
+			hand+= player3[i] + " ";	
 		}
-		System.out.println("]");
+		hand += " ]";
+		return hand;
 	}
-	public void displayHandP4()
+	public String displayHandP4()
 	{
-		System.out.print("P4: [ ");
+		String hand = "[ ";
+		
 		for(int i = 0; i < turnNumber+4; i++)
 		{
 			if(player4[i] != 0)
-			System.out.print(player4[i] + " ");	
+			hand+= player4[i] + " ";	
 		}
-		System.out.println("]");
+		hand += " ]";
+		return hand;
 	}
-	public void displayMatrix()
+	public String displayMatrix()
 	{
-		
-		
+		String matrix = "";
 		for(int i = 0; i < 4; i++)
 		{
-			System.out.print("[ ");
+			matrix += "[ ";
 			for(int j = 3; j >= 0; j--)
 			{
-			System.out.print(supersetMatrix[i][j] + " ");	
+			matrix += supersetMatrix[i][j] + " ";	
 			}
-			System.out.println("]");
+			matrix += "]";
 		}
-		
+		return matrix;
 	}
 	
 }
