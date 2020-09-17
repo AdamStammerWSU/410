@@ -1,20 +1,21 @@
-import java.util.Arrays;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Game {
 
-	int[] player1 = new int[20];
-	int[] player2 = new int[20];
-	int[] player3 = new int[20];
-	int[] player4 = new int[20];
+	Set<Integer> player1 = new TreeSet<Integer>();
+	Set<Integer> player2 = new TreeSet<Integer>();
+	Set<Integer> player3 = new TreeSet<Integer>();
+	Set<Integer> player4 = new TreeSet<Integer>();
 	
 	boolean[][] supersetMatrix = new boolean[4][4];
 	
 	boolean gameEnd = false;
 	int turnNumber = 0;
-	int whoseTurn = 0;
+	int whoseTurn = 1;
+	int whomWon = -1;
 	
-///////////////////////////////////////////////////Initialize Game
 	public void startGame()
 	{
 		Random rand = new Random();
@@ -22,171 +23,270 @@ public class Game {
 		{
 			//Intitializes 3 random integers
 											//Any constraints needed?
-			player1[i] = rand.nextInt(20)+1;
-			player2[i] = rand.nextInt(20)+1;
-			player3[i] = rand.nextInt(20)+1;
-			player4[i] = rand.nextInt(20)+1;
+			player1.add(rand.nextInt(20)+1);
+			player2.add(rand.nextInt(20)+1);
+			player3.add(rand.nextInt(20)+1);
+			player4.add(rand.nextInt(20)+1);
 		}
 	}
-///////////////////////////////////////////////////New Turn (player integer , wanted integer)
 	public void newTurn(int player, int wanted)
 	{
-		if(player == 1)
+		if(whoseTurn == 1)
 		{
-			player1[turnNumber+3] = wanted;
-			whoseTurn = 1;
-			isSuperset();
-		}
-		if(player == 2)
-		{
-			player2[turnNumber+3] = wanted;
-			whoseTurn = 2;
-			isSuperset();
-		}
-		if(player == 3)
-		{
-			player3[turnNumber+3] = wanted;
-			whoseTurn = 3;
-			isSuperset();
-		}
-		if(player == 4)
-		{
-			player4[turnNumber+3] = wanted;
-			whoseTurn = 4;
-			isSuperset();
-			
-			//Updates turn number after player 4 receives new integer
-			incrementTurn();
+			player1.add(wanted);
+			updateMatrix();
+			checkWin();
 			checkgameEnd();
+			whoseTurn = 2;
+		}
+		if(whoseTurn == 2)
+		{
+			player2.add(wanted);
+			updateMatrix();
+			checkWin();
+			checkgameEnd();
+			whoseTurn = 3;
+		}
+		if(whoseTurn == 3)
+		{
+			player3.add(wanted);
+			updateMatrix();
+			checkWin();
+			checkgameEnd();
+			whoseTurn = 4;
+		}
+		if(whoseTurn == 4)
+		{
+			player4.add(wanted);
+			updateMatrix();
+			checkWin();
+			checkgameEnd();
+			whoseTurn = 4;
+			incrementTurn();
+			
 		}
 		
 	}
-///////////////////////////////////////////////////Get Turn	
-	public int getTurn()
+	public void updateMatrix()
 	{
-		return turnNumber;
-	}
-
-///////////////////////////////////////////////////Increment Turn	
-	public void incrementTurn()
-	{
-		if(turnNumber == 17)
-			gameEnd = true;
+		switch (whoseTurn) {
+        case 1:  whoseTurn = 1;
+	        if(player1.containsAll(player2)){
+	    		supersetMatrix[0][1] = true;
+	    		supersetMatrix[1][0] = true;
+	    	}
+	        else{
+	        	supersetMatrix[0][1] = false;
+	    		supersetMatrix[1][0] = false;
+	        }
+	    	if(player1.containsAll(player3)){
+	    		supersetMatrix[0][2] = true;
+	    		supersetMatrix[2][0] = true;
+	    	}
+	    	else{
+	    		supersetMatrix[0][2] = false;
+	    		supersetMatrix[2][0] = false;
+	        }
+	    	if(player1.containsAll(player4)){
+	    		supersetMatrix[0][3] = true;
+	    		supersetMatrix[3][0] = true;
+	    	}
+	    	else{
+	    		supersetMatrix[0][3] = false;
+	    		supersetMatrix[3][0] = false;
+	        }
+                 break;
+        case 2:  whoseTurn = 2;
+	        if(player2.containsAll(player1)){
+	    		supersetMatrix[1][0] = true;
+	    		supersetMatrix[0][1] = true;
+	    	}else
+	        {
+	    		supersetMatrix[1][0] = false;
+	    		supersetMatrix[0][1] = false;
+	        }
+	    	if(player2.containsAll(player3)){
+	    		supersetMatrix[1][2] = true;
+	    		supersetMatrix[2][1] = true;
+	    	}else
+	        {
+	    		supersetMatrix[1][2] = true;
+	    		supersetMatrix[2][1] = true;
+	        }
+	    	if(player2.containsAll(player4)){
+	    		supersetMatrix[1][3] = true;
+	    		supersetMatrix[3][1] = true;
+	    	}else
+	        {
+	    		supersetMatrix[1][3] = true;
+	    		supersetMatrix[3][1] = true;
+	        }
+	                 break;
+        case 3:  whoseTurn = 3;
+	        if(player3.containsAll(player1)){
+	    		supersetMatrix[2][0] = true;
+	    		supersetMatrix[0][2] = true;
+	    	}else
+	        {
+	    		supersetMatrix[2][0] = true;
+	    		supersetMatrix[0][2] = true;
+	        }
+	    	if(player3.containsAll(player2)){
+	    		supersetMatrix[2][1] = true;
+	    		supersetMatrix[1][2] = true;
+	    	}else
+	        {
+	    		supersetMatrix[2][1] = true;
+	    		supersetMatrix[1][2] = true;
+	        }
+	    	if(player3.containsAll(player4)){
+	    		supersetMatrix[2][3] = true;
+	    		supersetMatrix[3][2] = true;
+	    	}else
+	        {
+	    		supersetMatrix[2][3] = true;
+	    		supersetMatrix[3][2] = true;
+	        }
+                 break;
+        case 4:  whoseTurn = 4;
+	        if(player4.containsAll(player1)){
+	    		supersetMatrix[3][0] = true;
+	    		supersetMatrix[0][3] = true;
+	    	}else
+	        {
+	    		supersetMatrix[3][0] = true;
+	    		supersetMatrix[0][3] = true;
+	        }
+	    	if(player4.containsAll(player2)){
+	    		supersetMatrix[3][1] = true;
+	    		supersetMatrix[1][3] = true;
+	    	}else
+	        {
+	    		supersetMatrix[3][1] = true;
+	    		supersetMatrix[1][3] = true;
+	        }
+	    	if(player4.containsAll(player3)){
+	    		supersetMatrix[3][2] = true;
+	    		supersetMatrix[2][3] = true;
+	    	}else
+	        {
+	    		supersetMatrix[3][2] = true;
+	    		supersetMatrix[2][3] = true;
+	        }
+                 break;
+        default: whoseTurn = 0;
+                 break;
+    }
 		
-		turnNumber++;
 	}
-///////////////////////////////////////////////////Whose Turn		
-	public int whoseTurn()
-	{
-		return whoseTurn;
-	}
-///////////////////////////////////////////////////isSuperset	
-	public void isSuperset()
-	{
-			if(Arrays.equals(player1, player2))
-				supersetMatrix[0][1] = true;
-			
-			if(Arrays.equals(player1, player3))
-				supersetMatrix[0][2] = true;
-			
-			if(Arrays.equals(player1, player4))
-				supersetMatrix[0][3] = true;
-			
-			if(Arrays.equals(player2, player3))			
-				supersetMatrix[1][2] = true;
-			
-			if(Arrays.equals(player2, player4))
-				supersetMatrix[1][3] = true;
-			
-			if(Arrays.equals(player3, player4))
-				supersetMatrix[2][3] = true;
-	}
-///////////////////////////////////////////////////Check Win
 	public void checkWin()
 	{
-		
+		if(supersetMatrix[0][1] == true & supersetMatrix[0][2] == true & supersetMatrix[0][3] == true)
+		{
+			whomWon = 1;
+		}
+		if(supersetMatrix[1][0] == true & supersetMatrix[1][2] == true & supersetMatrix[1][3] == true)
+		{
+			whomWon = 2;
+		}
+		if(supersetMatrix[2][0] == true & supersetMatrix[2][1] == true & supersetMatrix[2][3] == true)
+		{
+			whomWon = 3;
+		}
+		if(supersetMatrix[3][0] == true & supersetMatrix[3][1] == true & supersetMatrix[3][2] == true)
+		{
+			whomWon = 4;
+		}
+		if(whomWon != -1)
+			gameEnd = true;
 	}
-///////////////////////////////////////////////////Check Game End	
 	public void checkgameEnd()
 	{
 		if(gameEnd == true)
 		{
-		
+			if(whoseTurn == -1)
+				System.out.println("The game has run out of turns");
+			else
+				System.out.println("Player "+whoseTurn+" won on turn "+turnNumber);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public int getTurnNum()
+	{
+		return turnNumber;
+	}
+	public void incrementTurn()
+	{
+		if(turnNumber >= 17) {
+			whoseTurn = -1;
+			gameEnd = true;
+		}
+		turnNumber++;
+	}	
+	public int whoseTurn()
+	{
+		return whoseTurn;
+	}
 ///////////////////////////////////////////////////Generic Display without GUI
-	public String displayHandP1()
+public String displayHandP1()
 	{
 		String hand = "[ ";
 		
-		for(int i = 0; i < turnNumber+4; i++)
+		for (int i : player1) 
 		{
-			if(player1[i] != 0)
-			hand+= player1[i] + " ";	
+		    hand += (" "+ i);
 		}
 		hand += " ]";
 		return hand;
 	}
-	public String displayHandP2()
+public String displayHandP2()
+{
+	String hand = "[ ";
+	
+	for (int i : player2) 
 	{
-		String hand = "[ ";
-		
-		for(int i = 0; i < turnNumber+4; i++)
-		{
-			if(player2[i] != 0)
-			hand+= player2[i] + " ";	
-		}
-		hand += " ]";
-		return hand;
+	    hand += (" "+ i);
 	}
-	public String displayHandP3()
+	hand += " ]";
+	return hand;
+}
+public String displayHandP3()
+{
+	String hand = "[ ";
+	
+	for (int i : player3) 
 	{
-		String hand = "[ ";
-		
-		for(int i = 0; i < turnNumber+4; i++)
-		{
-			if(player3[i] != 0)
-			hand+= player3[i] + " ";	
-		}
-		hand += " ]";
-		return hand;
+	    hand += (" "+ i);
 	}
-	public String displayHandP4()
+	hand += " ]";
+	return hand;
+}
+public String displayHandP4()
+{
+	String hand = "[ ";
+	
+	for (int i : player4) 
 	{
-		String hand = "[ ";
-		
-		for(int i = 0; i < turnNumber+4; i++)
-		{
-			if(player4[i] != 0)
-			hand+= player4[i] + " ";	
-		}
-		hand += " ]";
-		return hand;
+	    hand += (" "+ i);
 	}
+	hand += " ]";
+	return hand;
+}
+
 	public String displayMatrix()
 	{
-		String matrix = "";
-		for(int i = 0; i < 4; i++)
-		{
-			matrix += "[ ";
-			for(int j = 3; j >= 0; j--)
-			{
-			matrix += supersetMatrix[i][j] + " ";	
-			}
-			matrix += "]";
-		}
-		return matrix;
+	String matrix = "";
+	for(int i = 0; i < 4; i++)
+	{
+	matrix += "[ ";
+	for(int j = 3; j >= 0; j--)
+	{
+	matrix += supersetMatrix[i][j] + " ";	
 	}
+	matrix += "]\n";
+	}
+	return matrix;
+	}
+
+	
 	
 }
