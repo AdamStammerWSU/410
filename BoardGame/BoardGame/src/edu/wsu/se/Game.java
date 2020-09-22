@@ -1,3 +1,4 @@
+package edu.wsu.se;
 import java.awt.List;
 import java.util.LinkedList;
 import java.util.Random;
