@@ -4,54 +4,81 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Player {
-
+public class Player{
+	/*
+	 * Contains
+	 * (A)Player Constructor
+	 * (B)Dummy Constructor
+	 * (C)Add to Hand
+	 * (D)Display Hand
+	 * (E)Misc. Setters and Getters
+	 */
 	Set<Integer> hand = new TreeSet<Integer>();
 	int number;
 	int wins;
-	
-	double ip_address;
-	
-//////////////////////////////////////////////// Constructor
-	public void Player(int number, double ip_address)
+	String ip_address;
+////////////////////////////////////////////////(A)Constructor
+	public Player(int number, String ip_address)
 	{
+		//Basic building blocks of player
 		this.number = number;
 		this.ip_address = ip_address;
 		wins = 0;
-		/*
+		//Makes sure the new hand has all 3 randomized different numbers 
+		int counter = 0;
 		Random rand = new Random();
-			for(int i = 0; i < 3; i++)
-			{
-				hand.add(rand.nextInt(20)+1);
-			}	
-			*/
-		
+		while(counter < 3){
+			Set <Integer> newNumber = new TreeSet<Integer>();
+			int newest = rand.nextInt(20)+1;
+			newNumber.add(newest);
+			if(hand.containsAll(newNumber) == false) {
+				hand.add(newest);
+				counter++;
+			}
+		}
 	}
+////////////////////////////////////////////////(B)Dummy Constructor
+	//Player used to test game
+	public Player(int number, int dummyNumber, boolean x)
+	{
+		this.number = number;
+		hand.add(1);
+		hand.add(2);
+		hand.add(dummyNumber);
+	}
+////////////////////////////////////////////////(C)Add to Hand
+	//Add to players hand
 	public void addNumber(int number) 
 	{
 		hand.add(number);
 	}
-	/////////////////////////////////////////////// Setters and Getters
+////////////////////////////////////////////////(D)Display Hand
+	//Display hand
+	public String displayHand()
+	{
+		String value = "[ ";
+		for (int i : hand) {
+		    value += (" "+ i);
+		}
+		value += " ]";
+		return value;
+	}
+	///////////////////////////////////////////////(E)Setters and Getters
 	public int getNumber() {
 		return number;
 	}
-
 	public void setNumber(int number) {
 		this.number = number;
 	}
-
-	public double getIp_address() {
+	public String getIp_address() {
 		return ip_address;
 	}
-
-	public void setIp_address(double ip_address) {
+	public void setIp_address(String ip_address) {
 		this.ip_address = ip_address;
 	}
-
 	public int getWins() {
 		return wins;
 	}
-
 	public void setWins(int wins) {
 		this.wins = wins;
 	}
@@ -60,19 +87,5 @@ public class Player {
 	}
 	public void setHand(Set<Integer> hand) {
 		this.hand = hand;
-	}
-	public String displayHand()
-	{
-		
-		String value = "[ ";
-		for (int i : hand) 
-		{
-		    value += (" "+ i);
-		}
-		value += " ]";
-		return value;
-	}
-	
-	
-	
+	}	
 }
