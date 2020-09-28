@@ -13,6 +13,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
@@ -173,5 +174,26 @@ public class GUI extends JFrame implements ActionListener{
 		// game or say that all 10 games have been completed and the overall winner
 		// etc.
 	
+	}
+	
+
+	public void PROMPT_ERROR() {
+		JOptionPane.showMessageDialog(this, "Eggs are not supposed to be green.", "Inane error",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
+	public boolean PROMPT_FOR_SERVER() {
+		int r = JOptionPane.showConfirmDialog(this, "Are you hosting the game (SERVER)?");
+		if (r == JOptionPane.YES_OPTION)
+			return true;
+		return false;
+	}
+	
+	public String PROMPT_FOR_IP() {
+		return JOptionPane.showInputDialog(this, "IP to connect to:");
+	}
+	
+	public int PROMPT_FOR_PORT() {
+		return Integer.parseInt(JOptionPane.showInputDialog(this, "Port to use:"));
 	}
 }
