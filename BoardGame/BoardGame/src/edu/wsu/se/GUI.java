@@ -20,6 +20,7 @@ import javax.swing.border.TitledBorder;
 
 public class GUI extends JFrame implements ActionListener{
 
+	Match match;
 	// Left, center, and right panels
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
@@ -53,9 +54,11 @@ public class GUI extends JFrame implements ActionListener{
 	
 	
 	// maybe insert player# in the constructor ex: GUI(player1);
-	public GUI() {
+	public GUI(Match m) {
 		super("\"Board\" Game"); // Frame title
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		match = m;
 		
 		panel1.setLayout((LayoutManager) new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel1.setBorder(BorderFactory.createEmptyBorder(2, 10, 10, 0));
@@ -106,8 +109,9 @@ public class GUI extends JFrame implements ActionListener{
 		
 		// set after every turn 
 		//this could be initial setup with the listener then doing change every turn
-		playerTurn.setText("Player "+ tempNumber +"'s Turn");
-		matrix.setText("MATRIX HERE"); // again, a temp text box for now
+		playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
+
+		matrix.setText(match.game.displayMatrix());
 		
 		// initially
 		listOfNum.setText(tempNumber + ", " + tempNumber + ", " + tempNumber);
@@ -162,7 +166,15 @@ public class GUI extends JFrame implements ActionListener{
 	        // commence update here
 			System.out.println("You choose " + newNum);
 			System.out.println("Time to update!");
+			
 			// set after thePlayer takes a turn
+			match.game.incrementTurn(); 
+			// SOMETHING THAT CHANGES THE TURN HERE
+			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
+			// TAKE THE ADDRESS OF THE PLAYER SOMEHOW AND UPDATE PLAYER'S HAND
+			// RECALCULATE THE MATRIX
+			matrix.setText(match.game.displayMatrix());
+			
 			listOfNum.setText(listOfNum.getText() + ", " + newNum);
 			// change turn and refresh matrix and player #'s turn
 			//isYourTurn = false;
