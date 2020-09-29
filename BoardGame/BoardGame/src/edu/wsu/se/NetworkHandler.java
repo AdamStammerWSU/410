@@ -12,7 +12,8 @@ public class NetworkHandler {
 	int port = 8080;
 	String ip = "";
 
-	int numberOfClients = 0;
+	// int numberOfClients = 0;
+	int myNumber = 1;
 
 	ServerSocket serverSoc = null;
 	Server server = null;
@@ -24,7 +25,7 @@ public class NetworkHandler {
 		this.port = port;
 
 		if (isServer) {
-			//setup server
+			// setup server
 			clients = new Client[3];
 			// start server
 			try {
@@ -36,20 +37,56 @@ public class NetworkHandler {
 			}
 
 			// wait for clients to connect
-			while (numberOfClients < 3) {
-				clients[numberOfClients] = new Client(numberOfClients);
-				clients[numberOfClients++].waitForConnection(serverSoc);
+			for (int i = 0; i < 3; i++) {
+				clients[i] = new Client(i + 2);
+				clients[i].waitForConnection(serverSoc);
+				// tell the client which player it is
+				clients[i].writeUTF("" + (i + 2));
 			}
 		} else {
 			// client setup
 			server = new Server(ip, port);
 			server.connectToServer();
+			myNumber = Integer.parseInt(server.readUTF());
 		}
 	}
 
 	public NetworkHandler(boolean isServer, int port) {
 		this(isServer, "localhost", port);
 	}
+
+	public void waitForClientConnection(int playerNumber) {
+		clients[playerNumber - 1] = new Client(playerNumber - 1);
+		clients[playerNumber - 1].waitForConnection(serverSoc);
+	}
+
+	public String readFromServer() {
+		return server.readUTF();
+	}
+
+	public void broadcast(String s) {
+		for (int i = 0; i < 3; i++) {
+			clients[i].writeUTF(s);
+		}
+	}
+
+	public boolean isServer() {
+		return isServer;
+	}
+
+	public int getMyNumber() {
+		return myNumber;
+	}
+
+//	public Player[] getPlayers() {
+//		Player[] p = new Player[4];
+//		p[0] = new Player(1); // the server as a player
+//		for(int i = 1; i < 4; i++) {
+//			//each of the clients as a player
+//			p[i] = new Player(clients[i - 1].getClientNumber());
+//		}
+//		return p;
+//	}
 
 	public class Client {
 
@@ -99,6 +136,10 @@ public class NetworkHandler {
 				e.printStackTrace();
 			}
 			System.out.println("message written");
+		}
+
+		public int getClientNumber() {
+			return clientNumber;
 		}
 
 	}
