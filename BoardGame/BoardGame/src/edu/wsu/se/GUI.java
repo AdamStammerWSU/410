@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -109,9 +110,9 @@ public class GUI extends JFrame implements ActionListener{
 		
 		// set after every turn 
 		//this could be initial setup with the listener then doing change every turn
-		playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
+		//playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 
-		matrix.setText(match.game.displayMatrix());
+		//matrix.setText(match.game.displayMatrix());
 		
 		// initially
 		listOfNum.setText(tempNumber + ", " + tempNumber + ", " + tempNumber);
@@ -155,8 +156,31 @@ public class GUI extends JFrame implements ActionListener{
 		pack();
 	}
 	
+	public void updateDisplay() {
+		System.out.println("updating gui 1");
+		
+		playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
+		System.out.println("updating gui 2");
+		matrix.setText(match.game.displayMatrix());
+		System.out.println("updating gui 3");
+		listOfNum.setText(match.players[match.netHandler.getMyNumber()-1].displayHand());
+		System.out.println("updating gui 4");
+		
+		if(match.game.getWhoseTurn() != match.netHandler.getMyNumber()) {
+			dropDown.setEnabled(false);
+			System.out.println("updating gui 5");
+
+		} else {
+			dropDown.setEnabled(true);
+			System.out.println("updating gui 6");
+		}
+		System.out.println("gui updated");
+	}
+
+	
 	@Override
-	public void actionPerformed(ActionEvent e) {		
+	public void actionPerformed(ActionEvent e) {	
+		System.out.println("action happened");
 		if (e.getSource() == dropDown) {
 			// Once a player chooses a number, listOfNum, the matrix, and playerTurn update
 			int newNum = (int) dropDown.getSelectedItem();
@@ -168,18 +192,26 @@ public class GUI extends JFrame implements ActionListener{
 			System.out.println("Time to update!");
 			
 			// set after thePlayer takes a turn
-			match.game.incrementTurn(); 
+			//match.game.incrementTurn(); 
 			// SOMETHING THAT CHANGES THE TURN HERE
 			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 			// TAKE THE ADDRESS OF THE PLAYER SOMEHOW AND UPDATE PLAYER'S HAND
 			// RECALCULATE THE MATRIX
 			matrix.setText(match.game.displayMatrix());
 			
-			listOfNum.setText(listOfNum.getText() + ", " + newNum);
+			//listOfNum.setText(listOfNum.getText() + ", " + newNum);
 			// change turn and refresh matrix and player #'s turn
 			//isYourTurn = false;
 			
+			if(match.netHandler.isServer()) {
+				match.netHandler.broadcast("" + newNum);
+			} else {
+				match.netHandler.sendToServer("" + newNum);
+			}
+			match.game.newTurn(match.netHandler.getMyNumber(), newNum);
+			//updateDisplay();
 		}
+		System.out.println("action processed");
 		
 		// other buttons/user input stuff goes here
 		// an ok clicked on a popup after someone wins could refresh the gui and go to the next

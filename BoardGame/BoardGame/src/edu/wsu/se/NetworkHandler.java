@@ -40,6 +40,7 @@ public class NetworkHandler {
 			for (int i = 0; i < 3; i++) {
 				clients[i] = new Client(i + 2);
 				clients[i].waitForConnection(serverSoc);
+				System.out.println("New Connection! Sending Player Number Back");
 				// tell the client which player it is
 				clients[i].writeUTF("" + (i + 2));
 			}
@@ -63,10 +64,25 @@ public class NetworkHandler {
 	public String readFromServer() {
 		return server.readUTF();
 	}
+	
+	public String readFromClient(int i) {
+		return clients[i].readUTF();
+	}
+	
+	public void sendToServer(String s) {
+		server.writeUTF(s);
+	}
 
 	public void broadcast(String s) {
 		for (int i = 0; i < 3; i++) {
 			clients[i].writeUTF(s);
+		}
+	}
+	
+	public void broadcastException(String s, int e) {
+		for (int i = 0; i < 3; i++) {
+			if(i != (e - 2))
+				clients[i].writeUTF(s);
 		}
 	}
 
@@ -155,8 +171,8 @@ public class NetworkHandler {
 		int port = 8080;
 
 		public Server(String ip, int port) {
-			this.ip = ip;
-			this.port = port;
+			this.ip = "localhost";
+			this.port = 25565;
 		}
 
 		public void connectToServer() {
