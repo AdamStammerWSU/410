@@ -1,10 +1,8 @@
 package edu.wsu.se;
 
-import java.awt.List;
-import java.util.LinkedList;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import edu.wsu.se.Match.Player;
 public class Game {
 /*
  * Contains
@@ -37,6 +35,11 @@ public class Game {
 		playerMatrix[1][1] = true;
 		playerMatrix[2][2] = true;
 		playerMatrix[3][3] = true;
+	}
+	
+/////////////////////////////////////////////////////////////////(A.2)Game Constructor
+	public Game(Player[] players) {
+		this(players[0].getHand(), players[1].getHand(), players[2].getHand(), players[3].getHand());
 	}
 ///////////////////////////////////////////////////(B)Matrix Display
 	public String displayMatrix(){
@@ -141,28 +144,28 @@ public class Game {
 public void newTurn(int player, int wanted,Set<Integer> p){
 	switch (whoseTurn) {
 		case 1:  whoseTurn = 1;
-			player1.add(wanted);
+			//player1.add(wanted);
 			updateMatrix(p);
 			checkWin();
 			checkgameEnd();
 			whoseTurn = 2;
 			break;
 		case 2:  whoseTurn = 2;	
-			player2.add(wanted);
+			//player2.add(wanted);
 			updateMatrix(p);
 			checkWin();
 			checkgameEnd();
 			whoseTurn = 3;
 			break;
 		case 3:  whoseTurn = 3;	
-			player3.add(wanted);
+			//player3.add(wanted);
 			updateMatrix(p);
 			checkWin();
 			checkgameEnd();
 			whoseTurn = 4;
 			break;
 		case 4:  whoseTurn = 4;	
-			player4.add(wanted);
+			//player4.add(wanted);
 			updateMatrix(p);
 			checkWin();
 			checkgameEnd();

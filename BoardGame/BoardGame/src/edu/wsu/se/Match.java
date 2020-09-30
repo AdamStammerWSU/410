@@ -14,110 +14,173 @@ public class Match {
 		Match match = new Match();
 	}
 
+	GUI gui = null;
+	NetworkHandler netHandler = null;
+
+	Player[] players = null;
+	int myPlayerNumber = -1;
+	boolean server = false;
+
 	public Match() {
 
-		// Real Start
-		Player p1 = new Player(1, "");
-		Player p2 = new Player(2, "");
-		Player p3 = new Player(3, "");
-		Player p4 = new Player(4, "");
-		// Dummy Start
-		//Player p1 = new Player(1, 3, false);
-		//Player p2 = new Player(2, 4, false);
-		//Player p3 = new Player(3, 5, false);
-		//Player p4 = new Player(4, 6, false);
 
-		game = new Game(p1.getHand(), p2.getHand(), p3.getHand(), p4.getHand());
-		
-
-		GUI gui = new GUI(this);
-		gui.PROMPT_FOR_SERVER();
-		// other prompts here
-		
-		// Other stuff shouldn't happen until prompts have their answer
+		// Display the window
+		// maybe insert player#/object in the constructor ex: GUI(player1);
+		// GUI results = new GUI();
+		gui = new GUI();
 		gui.setLocationRelativeTo(null);
 		gui.setSize(800, 500);
 		gui.setVisible(true);
-		
+
+		players = new Player[4];
+
+		server = gui.PROMPT_FOR_SERVER();
+		String ip = "localhost";
+		if (!server)
+			ip = gui.PROMPT_FOR_IP();
+
+		int port = gui.PROMPT_FOR_PORT();
+
+		if (server)
+			System.out.println("Starting as server");
+		else
+			System.out.println("Starting as client");
+
+		netHandler = new NetworkHandler(server, ip, port);
+
+		myPlayerNumber = netHandler.getMyNumber();
+		System.out.println("My Number is: " + myPlayerNumber);
+		gui.setTitle("Player " + myPlayerNumber);
+
+		for (int i = 0; i < 4; i++) {
+			players[i] = new Player(i + 1);
+		}
+
+		if (server) {
+			// send out message that all players are connected
+			netHandler.broadcast("All clear");
+		} else {
+			// clients need to wait to receive the message that everyone is connected
+			System.out.println(netHandler.readFromServer());
+		}
+
+		// A:
+		Game g = new Game(players);
+
+		// generate player hands
+		if (server) {
+			Random rand = new Random();
+			for (int x = 0; x < 4; x++) {
+				for (int y = 0; y < 3; y++) {
+					int i = rand.nextInt(20) + 1;
+					g.newTurn(x, i, players[x].getHand());
+					players[x].addNumber(i);
+					System.out.println("generating initial hands");
+					netHandler.broadcast(i+"");
+				}
+			}
+		} else {
+			for (int x = 0; x < 4; x++) {
+				for (int y = 0; y < 3; y++) {
+					int i = Integer.parseInt(netHandler.readFromServer());
+					g.newTurn(x, i, players[x].getHand());
+					players[x].addNumber(i);
+				}
+			}
+		}
+
+		// Real Start
+		// Player players[0] = new Player(1);
+		// Player players[1] = new Player(2);
+		// Player players[2] = new Player(3);
+		// Player players[3] = new Player(4);
+		// Dummy Start
+		// Player players[0] = new Player(1, 3, false);
+		// Player players[1] = new Player(2, 4, false);
+		// Player players[2] = new Player(3, 5, false);
+		// Player players[3] = new Player(4, 6, false);
+
+//		Game g = new Game(players[0].getHand(), players[1].getHand(), players[2].getHand(), players[3].getHand());
 		System.out.println("Start");
-		System.out.println("Turn Number: " + game.turnNumber);
-		System.out.println(p1.displayHand());
-		System.out.println(p2.displayHand());
-		System.out.println(p3.displayHand());
-		System.out.println(p4.displayHand());
-		System.out.println(game.displayMatrix());
-
-		// Turn 1
-		System.out.println("Turn 1");
-		System.out.println("Turn Number: " + game.turnNumber);
-		game.newTurn(1, 1, p1.getHand());
-		p1.addNumber(1);
-		game.newTurn(2, 7, p2.getHand());
-		p2.addNumber(1);
-		game.newTurn(3, 1, p3.getHand());
-		p3.addNumber(1);
-		game.newTurn(4, 1, p4.getHand());
-		p4.addNumber(1);
-		System.out.println(p1.displayHand());
-		System.out.println(p2.displayHand());
-		System.out.println(p3.displayHand());
-		System.out.println(p4.displayHand());
-		System.out.println(game.displayMatrix());
-
-		// Turn 2
-		System.out.println("Turn 2");
-		System.out.println("Turn Number: " + game.turnNumber);
-		game.newTurn(1, 1, p1.getHand());
-		p1.addNumber(1);
-		game.newTurn(2, 3, p2.getHand());
-		p2.addNumber(3);
-		game.newTurn(3, 1, p3.getHand());
-		p3.addNumber(1);
-		game.newTurn(4, 1, p4.getHand());
-		p4.addNumber(1);
-		System.out.println(p1.displayHand());
-		System.out.println(p2.displayHand());
-		System.out.println(p3.displayHand());
-		System.out.println(p4.displayHand());
-		System.out.println(game.displayMatrix());
-
-		// Turn 3
-		System.out.println("Turn 3");
-		System.out.println("Turn Number: " + game.turnNumber);
-		game.newTurn(1, 1, p1.getHand());
-		p1.addNumber(1);
-		game.newTurn(2, 5, p2.getHand());
-		p2.addNumber(5);
-		game.newTurn(3, 1, p3.getHand());
-		p3.addNumber(1);
-		game.newTurn(4, 1, p4.getHand());
-		p4.addNumber(1);
-		System.out.println(p1.displayHand());
-		System.out.println(p2.displayHand());
-		System.out.println(p3.displayHand());
-		System.out.println(p4.displayHand());
-		System.out.println(game.displayMatrix());
-
-		// Turn 4
-		System.out.println("Turn 4");
-		System.out.println("Turn Number: " + game.turnNumber);
-		game.newTurn(1, 1, p1.getHand());
-		p1.addNumber(1);
-		game.newTurn(2, 6, p2.getHand());
-		p2.addNumber(6);
-		game.newTurn(3, 1, p3.getHand());
-		p3.addNumber(1);
-		game.newTurn(4, 1, p4.getHand());
-		p4.addNumber(1);
-		System.out.println(p1.displayHand());
-		System.out.println(p2.displayHand());
-		System.out.println(p3.displayHand());
-		System.out.println(p4.displayHand());
-		System.out.println(game.displayMatrix());
+		System.out.println("Turn Number: " + g.turnNumber);
+		System.out.println(players[0].displayHand());
+		System.out.println(players[1].displayHand());
+		System.out.println(players[2].displayHand());
+		System.out.println(players[3].displayHand());
+		System.out.println(g.displayMatrix());
+//
+//		// Turn 1
+//		System.out.println("Turn 1");
+//		System.out.println("Turn Number: " + g.turnNumber);
+//		g.newTurn(1, 1, players[0].getHand());
+//		players[0].addNumber(1);
+//		g.newTurn(2, 7, players[1].getHand());
+//		players[1].addNumber(1);
+//		g.newTurn(3, 1, players[2].getHand());
+//		players[2].addNumber(1);
+//		g.newTurn(4, 1, players[3].getHand());
+//		players[3].addNumber(1);
+//		System.out.println(players[0].displayHand());
+//		System.out.println(players[1].displayHand());
+//		System.out.println(players[2].displayHand());
+//		System.out.println(players[3].displayHand());
+//		System.out.println(g.displayMatrix());
+//
+//		// Turn 2
+//		System.out.println("Turn 2");
+//		System.out.println("Turn Number: " + g.turnNumber);
+//		g.newTurn(1, 1, players[0].getHand());
+//		players[0].addNumber(1);
+//		g.newTurn(2, 3, players[1].getHand());
+//		players[1].addNumber(3);
+//		g.newTurn(3, 1, players[2].getHand());
+//		players[2].addNumber(1);
+//		g.newTurn(4, 1, players[3].getHand());
+//		players[3].addNumber(1);
+//		System.out.println(players[0].displayHand());
+//		System.out.println(players[1].displayHand());
+//		System.out.println(players[2].displayHand());
+//		System.out.println(players[3].displayHand());
+//		System.out.println(g.displayMatrix());
+//
+//		// Turn 3
+//		System.out.println("Turn 3");
+//		System.out.println("Turn Number: " + g.turnNumber);
+//		g.newTurn(1, 1, players[0].getHand());
+//		players[0].addNumber(1);
+//		g.newTurn(2, 5, players[1].getHand());
+//		players[1].addNumber(5);
+//		g.newTurn(3, 1, players[2].getHand());
+//		players[2].addNumber(1);
+//		g.newTurn(4, 1, players[3].getHand());
+//		players[3].addNumber(1);
+//		System.out.println(players[0].displayHand());
+//		System.out.println(players[1].displayHand());
+//		System.out.println(players[2].displayHand());
+//		System.out.println(players[3].displayHand());
+//		System.out.println(g.displayMatrix());
+//
+//		// Turn 4
+//		System.out.println("Turn 4");
+//		System.out.println("Turn Number: " + g.turnNumber);
+//		g.newTurn(1, 1, players[0].getHand());
+//		players[0].addNumber(1);
+//		g.newTurn(2, 6, players[1].getHand());
+//		players[1].addNumber(6);
+//		g.newTurn(3, 1, players[2].getHand());
+//		players[2].addNumber(1);
+//		g.newTurn(4, 1, players[3].getHand());
+//		players[3].addNumber(1);
+//		System.out.println(players[0].displayHand());
+//		System.out.println(players[1].displayHand());
+//		System.out.println(players[2].displayHand());
+//		System.out.println(players[3].displayHand());
+//		System.out.println(g.displayMatrix());
+		//
 
 	}
 
-	class Player {
+	public class Player {
 		/*
 		 * Contains (A)Player Constructor (B)Dummy Constructor (C)Add to Hand (D)Display
 		 * Hand (E)Misc. Setters and Getters
@@ -125,36 +188,36 @@ public class Match {
 		Set<Integer> hand = new TreeSet<Integer>();
 		int number;
 		int wins;
-		String ip_address;
 
 		//////////////////////////////////////////////// (A)Constructor
-		public Player(int number, String ip_address) {
+		public Player(int number) {
 			// Basic building blocks of player
 			this.number = number;
-			this.ip_address = ip_address;
 			wins = 0;
 			// Makes sure the new hand has all 3 randomized different numbers
-			int counter = 0;
-			Random rand = new Random();
-			while (counter < 3) {
-				Set<Integer> newNumber = new TreeSet<Integer>();
-				int newest = rand.nextInt(20) + 1;
-				newNumber.add(newest);
-				if (hand.containsAll(newNumber) == false) {
-					hand.add(newest);
-					counter++;
-				}
-			}
+//			int counter = 0;
+//			Random rand = new Random();
+//			// while (counter < 3) {
+//			for (int i = 0; i < 3; i++) {
+////				Set<Integer> newNumber = new TreeSet<Integer>();
+////				int newest = rand.nextInt(20) + 1;
+////				newNumber.add(newest);
+//				int random = rand.nextInt(20) + 1;
+//				if (!hand.contains(random)) {
+//					hand.add(random);
+//					// counter++;
+//				}
+//			}
 		}
 
 		//////////////////////////////////////////////// (B)Dummy Constructor
 		// Player used to test game
-		public Player(int number, int dummyNumber, boolean x) {
-			this.number = number;
-			hand.add(1);
-			hand.add(2);
-			hand.add(dummyNumber);
-		}
+//		public Player(int number, int dummyNumber, boolean x) {
+//			this.number = number;
+//			hand.add(1);
+//			hand.add(2);
+//			hand.add(dummyNumber);
+//		}
 
 		//////////////////////////////////////////////// (C)Add to Hand
 		// Add to players hand
@@ -180,14 +243,6 @@ public class Match {
 
 		public void setNumber(int number) {
 			this.number = number;
-		}
-
-		public String getIp_address() {
-			return ip_address;
-		}
-
-		public void setIp_address(String ip_address) {
-			this.ip_address = ip_address;
 		}
 
 		public int getWins() {
