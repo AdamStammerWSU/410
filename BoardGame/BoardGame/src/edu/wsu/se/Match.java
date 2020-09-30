@@ -27,7 +27,7 @@ public class Match {
 		// Display the window
 		// maybe insert player#/object in the constructor ex: GUI(player1);
 		// GUI results = new GUI();
-		gui = new GUI();
+		gui = new GUI(this);
 		gui.setLocationRelativeTo(null);
 		gui.setSize(800, 500);
 		gui.setVisible(true);
