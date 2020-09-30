@@ -171,8 +171,8 @@ public class NetworkHandler {
 		int port = 8080;
 
 		public Server(String ip, int port) {
-			this.ip = "localhost";
-			this.port = 25565;
+			this.ip = ip;
+			this.port = port;
 		}
 
 		public void connectToServer() {
