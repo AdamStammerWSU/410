@@ -6,6 +6,8 @@ import java.util.TreeSet;
 
 public class Match {
 
+	Game game;
+	
 	public static void main(String[] args) {
 		System.out.println("Howdy!");
 
@@ -20,6 +22,7 @@ public class Match {
 	boolean server = false;
 
 	public Match() {
+
 
 		// Display the window
 		// maybe insert player#/object in the constructor ex: GUI(player1);
@@ -174,6 +177,7 @@ public class Match {
 //		System.out.println(players[3].displayHand());
 //		System.out.println(g.displayMatrix());
 		//
+
 	}
 
 	public class Player {
