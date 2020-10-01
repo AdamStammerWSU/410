@@ -107,6 +107,8 @@ public class Game {
 		}
 		System.out.println("Game Over");
 		match.gui.updateDisplay();
+		match.gui.PROMPT_MESSAGE("Player " + whomWon + " won!");
+		System.exit(0);
 	}
 
 	public void updateMatrix() {

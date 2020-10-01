@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -17,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.border.TitledBorder;
 
 public class GUI extends JFrame implements ActionListener{
 
@@ -167,7 +165,11 @@ public class GUI extends JFrame implements ActionListener{
 		System.out.println("updating gui 3b: " + index);
 		String s = match.players[index].displayHand();
 		System.out.println("updating gui 3c: " + s);
-		listOfNum.setText(s);
+		try {
+			listOfNum.setText(s);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//matrix.setText(s);
 		
 		System.out.println("updating gui 4");
@@ -199,7 +201,7 @@ public class GUI extends JFrame implements ActionListener{
 			
 			// set after thePlayer takes a turn
 			//match.game.incrementTurn(); 
-			// SOMETHING THAT CHANGES THE TURN HERE
+			// SOMETHING THAT CHANGES THE TURN HERE 
 			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 			// TAKE THE ADDRESS OF THE PLAYER SOMEHOW AND UPDATE PLAYER'S HAND
 			// RECALCULATE THE MATRIX
@@ -225,10 +227,9 @@ public class GUI extends JFrame implements ActionListener{
 		// etc.
 	
 	}
-	
 
-	public void PROMPT_ERROR() {
-		JOptionPane.showMessageDialog(this, "Eggs are not supposed to be green.", "Inane error",
+	public void PROMPT_MESSAGE(String s) {
+		JOptionPane.showMessageDialog(this, s, "Message",
 				JOptionPane.ERROR_MESSAGE);
 	}
 
@@ -240,10 +241,18 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public String PROMPT_FOR_IP() {
-		return JOptionPane.showInputDialog(this, "IP to connect to:");
+		String s = JOptionPane.showInputDialog(this, "IP to connect to:");
+		if (s == null) {
+			return "localhost";
+		}
+		return s;
 	}
 	
 	public int PROMPT_FOR_PORT() {
-		return Integer.parseInt(JOptionPane.showInputDialog(this, "Port to use:"));
+		String s = JOptionPane.showInputDialog(this, "Port to use:");
+		if(s == null) {
+			return 25565;
+		}
+		return Integer.parseInt(s);
 	}
 }
