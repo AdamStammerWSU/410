@@ -91,6 +91,7 @@ public class NetworkHandler {
 	}
 
 	public int getMyNumber() {
+		System.out.println("Returning Number (Network)");
 		return myNumber;
 	}
 
@@ -135,6 +136,7 @@ public class NetworkHandler {
 			String s = "";
 			try {
 				s = dis.readUTF();
+				System.out.println("Read From Client: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to read message");
 				e.printStackTrace();
@@ -147,6 +149,7 @@ public class NetworkHandler {
 			System.out.println("Writing Message to (" + clientNumber + ")");
 			try {
 				dos.writeUTF(s);
+				System.out.println("Wrote to Client: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to write message");
 				e.printStackTrace();
@@ -194,6 +197,7 @@ public class NetworkHandler {
 			String s = "";
 			try {
 				s = dis.readUTF();
+				System.out.println("Read From Server: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to read message");
 				e.printStackTrace();
@@ -206,6 +210,8 @@ public class NetworkHandler {
 			System.out.println("Writing Message to Server");
 			try {
 				dos.writeUTF(s);
+
+				System.out.println("Writing To Server: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to write message");
 				e.printStackTrace();

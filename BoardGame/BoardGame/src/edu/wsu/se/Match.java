@@ -111,7 +111,9 @@ public class Match {
 				System.out.println("displayHand: " + i);
 				value += (" " + i);
 			}
+			System.out.println("Hand numbers done");
 			value += " ]";
+			System.out.println("Sending it back to the gui");
 			return value;
 		}
 
