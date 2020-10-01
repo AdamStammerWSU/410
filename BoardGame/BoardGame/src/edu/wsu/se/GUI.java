@@ -49,7 +49,7 @@ public class GUI extends JFrame implements ActionListener{
 	// On-screen components for panel3
 	JLabel thePlayer = new JLabel("Player #");
 	JTextArea listOfNum = new JTextArea("#, #, #");
-	TitledBorder border;
+	//TitledBorder border;
 	JLabel pickNum = new JLabel("Pick a Number");
 	JComboBox dropDown = new JComboBox();
 	
@@ -74,7 +74,7 @@ public class GUI extends JFrame implements ActionListener{
 		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
 		panel3.setBorder(BorderFactory.createEmptyBorder(2, 5, 10, 0));
 		thePlayer.setFont(bigFont);
-		border = BorderFactory.createTitledBorder("Your Numbers:");
+		//border = BorderFactory.createTitledBorder("Your Numbers:");
 		listOfNum.setBackground(getBackground());
 		
 		for (int i = 1; i <= 20; i++) {
@@ -142,7 +142,7 @@ public class GUI extends JFrame implements ActionListener{
 		panel3.add(thePlayer);
 		panel3.add(Box.createRigidArea(new Dimension(0,50)));
 			// The border should probably go on something that's not a JLabel
-		listOfNum.setBorder(border); // I'll change it later
+		//listOfNum.setBorder(border); // I'll change it later
 		panel3.add(listOfNum);
 		panel3.add(Box.createRigidArea(new Dimension(0,100)));
 		panel3.add(pickNum);
@@ -162,8 +162,14 @@ public class GUI extends JFrame implements ActionListener{
 		playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 		System.out.println("updating gui 2");
 		matrix.setText(match.game.displayMatrix());
-		System.out.println("updating gui 3");
-		listOfNum.setText(match.players[match.netHandler.getMyNumber()-1].displayHand());
+		System.out.println("updating gui 3a");
+		int index = match.netHandler.getMyNumber()-1;
+		System.out.println("updating gui 3b: " + index);
+		String s = match.players[index].displayHand();
+		System.out.println("updating gui 3c: " + s);
+		listOfNum.setText(s);
+		//matrix.setText(s);
+		
 		System.out.println("updating gui 4");
 		
 		if(match.game.getWhoseTurn() != match.netHandler.getMyNumber()) {

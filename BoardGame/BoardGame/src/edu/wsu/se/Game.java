@@ -92,10 +92,12 @@ public class Game {
 			} else {
 				// someone else's turn
 				if (match.netHandler.isServer()) {
+					System.out.println("Server Waiting For Client Choice");
 					int num = Integer.parseInt(match.netHandler.readFromClient(whoseTurn - 2));
 					match.netHandler.broadcastException(num + "", whoseTurn);
 					newTurn(whoseTurn, num);
 				} else {
+					System.out.println("Client Waiting For Server To Forward Other Client Choice");
 					int num = Integer.parseInt(match.netHandler.readFromServer());
 					newTurn(whoseTurn, num);
 				}
