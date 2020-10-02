@@ -1,5 +1,6 @@
 package edu.wsu.se;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -48,6 +49,7 @@ public class Match {
 		myPlayerNumber = netHandler.getMyNumber();
 		System.out.println("My Number is: " + myPlayerNumber);
 		gui.setTitle("Player " + myPlayerNumber);
+		gui.thePlayer.setText("Player " + netHandler.getMyNumber());
 
 		for (int i = 0; i < 4; i++) {
 			players[i] = new Player(i + 1);
@@ -66,7 +68,7 @@ public class Match {
 		game.start();
 
 		System.out.println("Start");
-		System.out.println("Turn Number: " + game.roundNumber);
+		System.out.println("Turn Number: " + game.gameNumber);
 		System.out.println(players[0].displayHand());
 		System.out.println(players[1].displayHand());
 		System.out.println(players[2].displayHand());
@@ -74,15 +76,24 @@ public class Match {
 		System.out.println(game.displayMatrix());
 	}
 
-	public int getWinner(boolean gameEnd) {
-		int winner = 0;
+	public ArrayList<Integer> getWinner(boolean gameEnd) {
+		ArrayList<Integer> winners = new ArrayList<Integer>();
+		int lowestScore = Integer.MAX_VALUE;
 		for (int i = 0; i < 4; i++) {
-			if (players[i].getScore() > players[winner].getScore())
-				winner = i + 1;
+			if(players[i].getScore() < lowestScore) {
+				lowestScore = players[i].getScore();
+			}
 		}
+		
+		for (int i = 0; i < 4; i++) {
+			if(players[i].getScore() == lowestScore) {
+				winners.add(i + 1);
+			}
+		}
+		
 		if (gameEnd)
-			return winner;
-		return -1;
+			return winners;
+		return new ArrayList<Integer>();
 	}
 
 	public class Player {
@@ -139,6 +150,10 @@ public class Match {
 		public void setWins(int wins) {
 			this.wins = wins;
 		}
+		
+		public void addWin() {
+			wins++;
+		}
 
 		public Set<Integer> getHand() {
 			return hand;
@@ -154,10 +169,13 @@ public class Match {
 
 		public void calculateScore(boolean win) {
 			if (win) {
-				wins++;
-				score += 10;
+				if(hand.size() > 9) {
+					score+=9;
+				} else {
+					score += hand.size();
+				}
 			} else {
-				score += 1;
+				score += 10;
 			}
 		}
 	}
