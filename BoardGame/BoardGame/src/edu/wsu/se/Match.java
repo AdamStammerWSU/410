@@ -23,8 +23,6 @@ public class Match {
 	public Match() {
 
 		// Display the window
-		// maybe insert player#/object in the constructor ex: GUI(player1);
-		// GUI results = new GUI();
 
 		gui = new GUI(this);
 		gui.setLocationRelativeTo(null);
@@ -44,7 +42,7 @@ public class Match {
 			System.out.println("Starting as server");
 		else
 			System.out.println("Starting as client");
-
+		gui.TITLE_MESSAGE("Waiting For Others To Connect...");
 		netHandler = new NetworkHandler(server, ip, port);
 
 		myPlayerNumber = netHandler.getMyNumber();
@@ -63,7 +61,6 @@ public class Match {
 			System.out.println(netHandler.readFromServer());
 		}
 
-		// A:
 		game = new Game(players, this);
 
 		game.start();
@@ -77,8 +74,15 @@ public class Match {
 		System.out.println(game.displayMatrix());
 	}
 
-	public void run() {
-
+	public int getWinner(boolean gameEnd) {
+		int winner = 0;
+		for (int i = 0; i < 4; i++) {
+			if (players[i].getScore() > players[winner].getScore())
+				winner = i + 1;
+		}
+		if (gameEnd)
+			return winner;
+		return -1;
 	}
 
 	public class Player {
@@ -89,6 +93,7 @@ public class Match {
 		Set<Integer> hand = new TreeSet<Integer>();
 		int number;
 		int wins;
+		int score = 0;
 
 		//////////////////////////////////////////////// (A)Constructor
 		public Player(int number) {
@@ -108,13 +113,14 @@ public class Match {
 		public String displayHand() {
 			String value = "[ ";
 			for (int i : hand) {
-				System.out.println("displayHand: " + i);
 				value += (" " + i);
 			}
-			System.out.println("Hand numbers done");
 			value += " ]";
-			System.out.println("Sending it back to the gui");
 			return value;
+		}
+
+		public void resetHand() {
+			hand = new TreeSet<Integer>();
 		}
 
 		/////////////////////////////////////////////// (E)Setters and Getters
@@ -140,6 +146,19 @@ public class Match {
 
 		public void setHand(Set<Integer> hand) {
 			this.hand = hand;
+		}
+
+		public int getScore() {
+			return score;
+		}
+
+		public void calculateScore(boolean win) {
+			if (win) {
+				wins++;
+				score += 10;
+			} else {
+				score += 1;
+			}
 		}
 	}
 }
