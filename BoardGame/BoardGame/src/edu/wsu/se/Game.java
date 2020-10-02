@@ -10,7 +10,6 @@ public class Game {
 	int roundNumber = 1;
 	int whoseTurn = 1;
 	int whomWon = -1;
-	boolean alreadyWon = false;
 	boolean[][] playerMatrix = new boolean[4][4];
 	Player[] players = null;
 	Match match = null;
@@ -20,20 +19,14 @@ public class Game {
 		this.players = players;
 		this.match = m;
 	}
+
 	public void resetGame() {
 		gameEnd = false;
 		roundNumber = 1;
 		whoseTurn = 1;
 		whomWon = -1;
-		alreadyWon = false;
 		for (int i = 0; i < 4; i++) {
-			players[i].hand.clear();
-			for (int j = 0; j < 4; j++) {
-				if (i == j)
-					playerMatrix[i][j] = true;
-				else
-					playerMatrix[i][j] = false;
-			}
+			players[i].resetHand();
 		}
 	}
 
@@ -62,56 +55,73 @@ public class Game {
 		return matrix;
 	}
 
+	public void calculateScores() {
+		boolean win = false;
+		for (int i = 0; i < 4; i++) {
+			if (i + 1 == getWhomWon())
+				win = true;
+			else
+				win = false;
+			players[i].calculateScore(win);
+		}
+
+	}
+
 	public void start() {
 
-		generateHands();
-		roundNumber = 1;
-		whoseTurn = 1;
-		gameEnd = false;
-
-		while (!gameEnd) {
-			System.out.println("starting");
-			// do a turn
-			if (match.netHandler.isServer()) {
-				System.out.println("starting-server");
-				match.netHandler.broadcast("" + whoseTurn);
-			} else {
-				// client
-
-				System.out.println("starting-client");
-				whoseTurn = Integer.parseInt(match.netHandler.readFromServer());
-			}
-
-			match.gui.updateDisplay();
-
-			if (whoseTurn == match.netHandler.getMyNumber()) {
-				int z = 0;
-				while (whoseTurn == match.netHandler.getMyNumber()) {
-					System.out.println(match.netHandler.getMyNumber() + " turn " + z++);
-				}
-			} else {
-				// someone else's turn
+		for (int i = 0; i < 3; i++) {
+			resetGame();
+			generateHands();
+			while (!gameEnd) {
+				// do a turn
 				if (match.netHandler.isServer()) {
-					System.out.println("Server Waiting For Client Choice");
-					int num = Integer.parseInt(match.netHandler.readFromClient(whoseTurn - 2));
-					match.netHandler.broadcastException(num + "", whoseTurn);
-					newTurn(whoseTurn, num);
+					match.netHandler.broadcast("" + whoseTurn);
 				} else {
-					System.out.println("Client Waiting For Server To Forward Other Client Choice");
-					int num = Integer.parseInt(match.netHandler.readFromServer());
-					newTurn(whoseTurn, num);
+					// client
+
+					System.out.println("starting-client");
+					whoseTurn = Integer.parseInt(match.netHandler.readFromServer());
+				}
+
+				match.gui.updateDisplay();
+
+				if (whoseTurn == match.netHandler.getMyNumber()) {
+					while (whoseTurn == match.netHandler.getMyNumber()) {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							match.gui.PROMPT_MESSAGE("Something Went Wrong! Game Closing!");
+							System.exit(0);
+						}
+					}
+				} else {
+					// someone else's turn
+					if (match.netHandler.isServer()) {
+						System.out.println("Server Waiting For Client Choice");
+						int num = Integer.parseInt(match.netHandler.readFromClient(whoseTurn - 2));
+						match.netHandler.broadcastException(num + "", whoseTurn);
+						newTurn(whoseTurn, num);
+					} else {
+						System.out.println("Client Waiting For Server To Forward Other Client Choice");
+						int num = Integer.parseInt(match.netHandler.readFromServer());
+						newTurn(whoseTurn, num);
+					}
 				}
 			}
-			
-			//match.gui.updateDisplay();
+			calculateScores();
+			match.gui.updateDisplay();
+			if (i != 2) {
+				match.gui.PROMPT_MESSAGE("Player " + whomWon + " won the game!");
+				match.gui.TITLE_MESSAGE("Waiting For Server...");
+			}
 		}
-		System.out.println("Game Over");
-		match.gui.updateDisplay();
-		match.gui.PROMPT_MESSAGE("Player " + whomWon + " won!");
+		match.gui.TITLE_MESSAGE("Game Finished!");
+		match.gui.PROMPT_MESSAGE("Player " + match.getWinner(gameEnd) + " won the match! Woo Hoo!");
 		System.exit(0);
 	}
 
 	public void updateMatrix() {
+
 		for (int i = 0; i < 4; i++) {
 			// for each player
 			for (int j = 0; j < 4; j++) {
@@ -134,12 +144,17 @@ public class Game {
 			for (int x = 0; x < 4; x++) {
 				for (int y = 0; y < 3; y++) {
 					int i = rand.nextInt(20) + 1;
+					//////////////////////////// END GAME TESTING
+//					if (x == 1) {
+//						i = y + 1;
+//					} else {
+//						i = y + 2;
+//					}
+					//////////////////////////// END GAME TESTING
 					if (players[x].getHand().contains(i)) {
 						y--;
 					} else {
 						newTurn(x + 1, i);
-						// players[x].addNumber(i);
-						System.out.println("generating initial hands");
 						handler.broadcast(i + "");
 					}
 				}
@@ -149,10 +164,10 @@ public class Game {
 				for (int y = 0; y < 3; y++) {
 					int i = Integer.parseInt(handler.readFromServer());
 					newTurn(x + 1, i);
-					// players[x].addNumber(i);
 				}
 			}
 		}
+		checkWin();
 	}
 
 ////////////////////////////////////////////////////////////////(D)New Turn
@@ -161,85 +176,29 @@ public class Game {
 		players[playerNum - 1].addNumber(wanted);
 		updateMatrix();
 		checkWin();
-		checkgameEnd();
 		whoseTurn++;
 		if (whoseTurn > 4) {
 			whoseTurn = 1;
 		}
-		
-//		switch (whoseTurn) {
-//		case 1:
-//			whoseTurn = 1;
-//			updateMatrix();
-//			checkWin();
-//			checkgameEnd();
-//			whoseTurn = 2;
-//			break;
-//		case 2:
-//			whoseTurn = 2;
-//			updateMatrix();
-//			checkWin();
-//			checkgameEnd();
-//			whoseTurn = 3;
-//			break;
-//		case 3:
-//			whoseTurn = 3;
-//			updateMatrix();
-//			checkWin();
-//			checkgameEnd();
-//			whoseTurn = 4;
-//			break;
-//		case 4:
-//			whoseTurn = 4;
-//			updateMatrix();
-//			checkWin();
-//			checkgameEnd();
-//			incrementTurn();
-//			whoseTurn = 1;
-//			break;
-//		}
+
 	}
 
 ///////////////////////////////////////////////////(E)Check If Wins
 	public void checkWin() {
-		if (playerMatrix[0][1] == true && playerMatrix[0][2] == true && playerMatrix[0][3] == true) {
-			whomWon = 1;
-			gameEnd = true;
-		}
-		if (playerMatrix[1][0] == true && playerMatrix[1][2] == true && playerMatrix[1][3] == true) {
-			whomWon = 2;
-			gameEnd = true;
-		}
-		if (playerMatrix[2][0] == true && playerMatrix[2][1] == true && playerMatrix[2][3] == true) {
-			whomWon = 3;
-			gameEnd = true;
-		}
-		if (playerMatrix[3][0] == true && playerMatrix[3][1] == true && playerMatrix[3][2] == true) {
-			whomWon = 4;
-			gameEnd = true;
-		}
-	}
 
-///////////////////////////////////////////////////(F)Game End
-	public boolean checkgameEnd() {
-		if (gameEnd == true) {
-			if (whoseTurn != -1 & alreadyWon == false) {
-				System.out.println("Player " + whoseTurn + " has won on turn " + roundNumber + "!");
-				alreadyWon = true;
-				displayMatrix();
-			} else if (whoseTurn == -1) {
-				System.out.println("The game has run out of turns");
+		gameEnd = false;
+		for (int i = 0; i < 4; i++) {
+			int playersBeat = 0;
+			for (int j = 0; j < 4; j++) {
+				if (playerMatrix[i][j]) {
+					playersBeat++;
+				}
 			}
-		}
-		return gameEnd;
-	}
-
-///////////////////////////////////////////////////(G)Increment Turn
-	public void incrementTurn() {
-		roundNumber++;
-		if (roundNumber >= 17) {
-			whoseTurn = -1;
-			gameEnd = true;
+			if (playersBeat >= 4) {
+				// this player won
+				whomWon = i + 1;
+				gameEnd = true;
+			}
 		}
 	}
 

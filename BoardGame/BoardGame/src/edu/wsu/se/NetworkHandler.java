@@ -11,8 +11,6 @@ public class NetworkHandler {
 	boolean isServer = false;
 	int port = 8080;
 	String ip = "";
-
-	// int numberOfClients = 0;
 	int myNumber = 1;
 
 	ServerSocket serverSoc = null;
@@ -40,7 +38,6 @@ public class NetworkHandler {
 			for (int i = 0; i < 3; i++) {
 				clients[i] = new Client(i + 2);
 				clients[i].waitForConnection(serverSoc);
-				System.out.println("New Connection! Sending Player Number Back");
 				// tell the client which player it is
 				clients[i].writeUTF("" + (i + 2));
 			}
@@ -64,11 +61,11 @@ public class NetworkHandler {
 	public String readFromServer() {
 		return server.readUTF();
 	}
-	
+
 	public String readFromClient(int i) {
 		return clients[i].readUTF();
 	}
-	
+
 	public void sendToServer(String s) {
 		server.writeUTF(s);
 	}
@@ -78,10 +75,10 @@ public class NetworkHandler {
 			clients[i].writeUTF(s);
 		}
 	}
-	
+
 	public void broadcastException(String s, int e) {
 		for (int i = 0; i < 3; i++) {
-			if(i != (e - 2))
+			if (i != (e - 2))
 				clients[i].writeUTF(s);
 		}
 	}
@@ -91,19 +88,8 @@ public class NetworkHandler {
 	}
 
 	public int getMyNumber() {
-		System.out.println("Returning Number (Network)");
 		return myNumber;
 	}
-
-//	public Player[] getPlayers() {
-//		Player[] p = new Player[4];
-//		p[0] = new Player(1); // the server as a player
-//		for(int i = 1; i < 4; i++) {
-//			//each of the clients as a player
-//			p[i] = new Player(clients[i - 1].getClientNumber());
-//		}
-//		return p;
-//	}
 
 	public class Client {
 
@@ -120,23 +106,21 @@ public class NetworkHandler {
 
 		public void waitForConnection(ServerSocket soc) {
 			try {
+				System.out.println("Waiting For Client To Connect");
 				socket = soc.accept();
 				dos = new DataOutputStream(socket.getOutputStream());
 				dis = new DataInputStream(socket.getInputStream());
-				System.out.println("Client Connected!");
 			} catch (IOException e) {
 				System.out.println("Client Failed To Connect");
-				e.printStackTrace();
+				//gui prompt
 				System.exit(0);
 			}
 		}
 
 		public String readUTF() {
-			System.out.println("Reading Message From (" + clientNumber + ")");
 			String s = "";
 			try {
 				s = dis.readUTF();
-				System.out.println("Read From Client: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to read message");
 				e.printStackTrace();
@@ -146,15 +130,13 @@ public class NetworkHandler {
 		}
 
 		public void writeUTF(String s) {
-			System.out.println("Writing Message to (" + clientNumber + ")");
 			try {
 				dos.writeUTF(s);
-				System.out.println("Wrote to Client: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to write message");
-				e.printStackTrace();
+				//gui prompt
+				System.exit(0);
 			}
-			System.out.println("message written");
 		}
 
 		public int getClientNumber() {
@@ -193,11 +175,9 @@ public class NetworkHandler {
 		}
 
 		public String readUTF() {
-			System.out.println("Reading Message From Server");
 			String s = "";
 			try {
 				s = dis.readUTF();
-				System.out.println("Read From Server: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to read message");
 				e.printStackTrace();
@@ -207,11 +187,8 @@ public class NetworkHandler {
 		}
 
 		public void writeUTF(String s) {
-			System.out.println("Writing Message to Server");
 			try {
 				dos.writeUTF(s);
-
-				System.out.println("Writing To Server: " + s);
 			} catch (IOException e) {
 				System.out.println("Failed to write message");
 				e.printStackTrace();

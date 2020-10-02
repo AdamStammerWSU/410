@@ -155,32 +155,34 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public void updateDisplay() {
-		System.out.println("updating gui 1");
 		
-		playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
-		System.out.println("updating gui 2");
+		if(match.game.getWhoseTurn() == match.netHandler.getMyNumber()) {
+			playerTurn.setText("Your Turn!");
+		} else {
+			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
+		}
 		matrix.setText(match.game.displayMatrix());
-		System.out.println("updating gui 3a");
 		int index = match.netHandler.getMyNumber()-1;
-		System.out.println("updating gui 3b: " + index);
 		String s = match.players[index].displayHand();
-		System.out.println("updating gui 3c: " + s);
 		try {
 			listOfNum.setText(s);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//matrix.setText(s);
 		
-		System.out.println("updating gui 4");
+		
+		//update scores
+		p1Score.setText("P1: " + match.game.players[0].getScore());
+		p2Score.setText("P2: " + match.game.players[1].getScore());
+		p3Score.setText("P3: " + match.game.players[2].getScore());
+		p4Score.setText("P4: " + match.game.players[3].getScore());
+		
 		
 		if(match.game.getWhoseTurn() != match.netHandler.getMyNumber()) {
 			dropDown.setEnabled(false);
-			System.out.println("updating gui 5");
 
 		} else {
 			dropDown.setEnabled(true);
-			System.out.println("updating gui 6");
 		}
 		System.out.println("gui updated");
 	}
@@ -200,16 +202,11 @@ public class GUI extends JFrame implements ActionListener{
 			System.out.println("Time to update!");
 			
 			// set after thePlayer takes a turn
-			//match.game.incrementTurn(); 
 			// SOMETHING THAT CHANGES THE TURN HERE 
 			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 			// TAKE THE ADDRESS OF THE PLAYER SOMEHOW AND UPDATE PLAYER'S HAND
 			// RECALCULATE THE MATRIX
 			matrix.setText(match.game.displayMatrix());
-			
-			//listOfNum.setText(listOfNum.getText() + ", " + newNum);
-			// change turn and refresh matrix and player #'s turn
-			//isYourTurn = false;
 			
 			if(match.netHandler.isServer()) {
 				match.netHandler.broadcast("" + newNum);
@@ -217,7 +214,6 @@ public class GUI extends JFrame implements ActionListener{
 				match.netHandler.sendToServer("" + newNum);
 			}
 			match.game.newTurn(match.netHandler.getMyNumber(), newNum);
-			//updateDisplay();
 		}
 		System.out.println("action processed");
 		
@@ -229,11 +225,13 @@ public class GUI extends JFrame implements ActionListener{
 	}
 
 	public void PROMPT_MESSAGE(String s) {
+		dropDown.setEnabled(false);
 		JOptionPane.showMessageDialog(this, s, "Message",
 				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public boolean PROMPT_FOR_SERVER() {
+		dropDown.setEnabled(false);
 		int r = JOptionPane.showConfirmDialog(this, "Are you hosting the game (SERVER)?");
 		if (r == JOptionPane.YES_OPTION)
 			return true;
@@ -241,6 +239,7 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public String PROMPT_FOR_IP() {
+		dropDown.setEnabled(false);
 		String s = JOptionPane.showInputDialog(this, "IP to connect to:");
 		if (s == null) {
 			return "localhost";
@@ -249,10 +248,16 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public int PROMPT_FOR_PORT() {
+		dropDown.setEnabled(false);
 		String s = JOptionPane.showInputDialog(this, "Port to use:");
 		if(s == null) {
 			return 25565;
 		}
 		return Integer.parseInt(s);
+	}
+	
+	public void TITLE_MESSAGE(String s) {
+		dropDown.setEnabled(false);
+		playerTurn.setText(s);
 	}
 }
