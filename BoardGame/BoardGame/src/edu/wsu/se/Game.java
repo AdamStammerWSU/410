@@ -1,5 +1,6 @@
 package edu.wsu.se;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import edu.wsu.se.Match.Player;
@@ -7,12 +8,14 @@ import edu.wsu.se.Match.Player;
 public class Game {
 
 	boolean gameEnd = false;
-	int roundNumber = 1;
+	int gameNumber = 0;
 	int whoseTurn = 1;
 	int whomWon = -1;
 	boolean[][] playerMatrix = new boolean[4][4];
 	Player[] players = null;
 	Match match = null;
+
+	int totalGames = 4;
 
 /////////////////////////////////////////////////////////////////(A.2)Game Constructor
 	public Game(Player[] players, Match m) {
@@ -21,9 +24,9 @@ public class Game {
 	}
 
 	public void resetGame() {
+		Random rand = new Random();
 		gameEnd = false;
-		roundNumber = 1;
-		whoseTurn = 1;
+		whoseTurn = 1 + rand.nextInt(4);
 		whomWon = -1;
 		for (int i = 0; i < 4; i++) {
 			players[i].resetHand();
@@ -69,7 +72,7 @@ public class Game {
 
 	public void start() {
 
-		for (int i = 0; i < 3; i++) {
+		while (gameNumber++ < totalGames) {
 			resetGame();
 			generateHands();
 			while (!gameEnd) {
@@ -77,12 +80,16 @@ public class Game {
 				match.gui.dropDown.setEnabled(false);
 				if (match.netHandler.isServer()) {
 					match.netHandler.broadcast("" + whoseTurn);
+					for (int i = 0; i < 3; i++) {
+						match.netHandler.readFromClient(i);
+					}
 				} else {
 					// client
 
 					System.out.println("starting-client");
 					
 					whoseTurn = Integer.parseInt(match.netHandler.readFromServer());
+					match.netHandler.sendToServer("howdy!");
 				}
 
 				match.gui.updateDisplay();
@@ -112,13 +119,23 @@ public class Game {
 			}
 			calculateScores();
 			match.gui.updateDisplay();
-			if (i != 2) {
-				match.gui.PROMPT_MESSAGE("Player " + whomWon + " won the game!");
-				match.gui.TITLE_MESSAGE("Waiting For Server...");
-			}
+
+			match.gui.PROMPT_MESSAGE("Player " + whomWon + " won the game!");
+			match.gui.TITLE_MESSAGE("Waiting For Server...");
+
 		}
 		match.gui.TITLE_MESSAGE("Game Finished!");
-		match.gui.PROMPT_MESSAGE("Player " + match.getWinner(gameEnd) + " won the match! Woo Hoo!");
+		ArrayList<Integer> winners = match.getWinner(gameEnd);
+		String s = "Player(s) " + winners.get(0);
+		for (int i = 1; i < winners.size(); i++) {
+			s += ", " + winners.get(i);
+		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			System.exit(0);
+		}
+		match.gui.PROMPT_MESSAGE(s + " won the match! Woo Hoo!");
 		System.exit(0);
 	}
 
@@ -146,16 +163,10 @@ public class Game {
 			for (int x = 0; x < 4; x++) {
 				for (int y = 0; y < 3; y++) {
 					int i = rand.nextInt(20) + 1;
-					//////////////////////////// END GAME TESTING
-//					if (x == 1) {
-//						i = y + 1;
-//					} else {
-//						i = y + 2;
-//					}
-					//////////////////////////// END GAME TESTING
 					if (players[x].getHand().contains(i)) {
 						y--;
 					} else {
+						
 						newTurn(x + 1, i);
 						handler.broadcast(i + "");
 					}
@@ -187,6 +198,8 @@ public class Game {
 
 ///////////////////////////////////////////////////(E)Check If Wins
 	public void checkWin() {
+		
+		boolean alreadyWon = false;
 
 		gameEnd = false;
 		for (int i = 0; i < 4; i++) {
@@ -198,20 +211,26 @@ public class Game {
 			}
 			if (playersBeat >= 4) {
 				// this player won
+				alreadyWon = true;
 				whomWon = i + 1;
 				gameEnd = true;
+				players[i].addWin();
 			}
+		}
+		
+		if(alreadyWon) {
+			whomWon = whoseTurn;
 		}
 	}
 
 /////////////////////////////////////////////////////(H)Getters and Setters
 /////////////////////////////////////////////////////Turn Number
 	public int getTurnNumber() {
-		return roundNumber;
+		return gameNumber;
 	}
 
 	public void setTurnNumber(int turnNumber) {
-		this.roundNumber = turnNumber;
+		this.gameNumber = turnNumber;
 	}
 
 /////////////////////////////////////////////////////Whose Turn
