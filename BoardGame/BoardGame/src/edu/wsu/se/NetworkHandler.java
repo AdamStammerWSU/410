@@ -108,11 +108,12 @@ public class NetworkHandler {
 			try {
 				System.out.println("Waiting For Client To Connect");
 				socket = soc.accept();
+				soc.setSoTimeout(1000 * 1000);
 				dos = new DataOutputStream(socket.getOutputStream());
 				dis = new DataInputStream(socket.getInputStream());
 			} catch (IOException e) {
 				System.out.println("Client Failed To Connect");
-				//gui prompt
+				// gui prompt
 				System.exit(0);
 			}
 		}
@@ -134,7 +135,7 @@ public class NetworkHandler {
 				dos.writeUTF(s);
 			} catch (IOException e) {
 				System.out.println("Failed to write message");
-				//gui prompt
+				// gui prompt
 				System.exit(0);
 			}
 		}
@@ -164,6 +165,7 @@ public class NetworkHandler {
 			try {
 				System.out.println("Trying to connect to server at " + ip + ":" + port);
 				socket = new Socket(ip, port);
+				socket.setSoTimeout(1000 * 1000);
 				dos = new DataOutputStream(socket.getOutputStream());
 				dis = new DataInputStream(socket.getInputStream());
 				System.out.println("Connected To Server");
