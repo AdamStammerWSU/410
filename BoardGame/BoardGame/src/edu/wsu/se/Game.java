@@ -163,6 +163,10 @@ public class Game {
 			for (int x = 0; x < 4; x++) {
 				for (int y = 0; y < 3; y++) {
 					int i = rand.nextInt(20) + 1;
+					if(!(x == 1)) {
+						i = y+1;
+					} else 
+						i = y+2;
 					if (players[x].getHand().contains(i)) {
 						y--;
 					} else {
