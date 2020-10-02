@@ -74,12 +74,14 @@ public class Game {
 			generateHands();
 			while (!gameEnd) {
 				// do a turn
+				match.gui.dropDown.setEnabled(false);
 				if (match.netHandler.isServer()) {
 					match.netHandler.broadcast("" + whoseTurn);
 				} else {
 					// client
 
 					System.out.println("starting-client");
+					
 					whoseTurn = Integer.parseInt(match.netHandler.readFromServer());
 				}
 
