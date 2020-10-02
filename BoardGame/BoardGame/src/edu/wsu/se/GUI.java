@@ -1,8 +1,11 @@
 package edu.wsu.se;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +27,7 @@ public class GUI extends JFrame implements ActionListener{
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
+//	JPanel panel4 = new JPanel();
 	
 	Font bigFont = new Font("Arial", Font.BOLD, 16);
 	
@@ -39,16 +43,19 @@ public class GUI extends JFrame implements ActionListener{
 	JLabel howToTitle = new JLabel("How to Play: ");
 	
 	// On-screen components for panel2
-	JLabel playerTurn = new JLabel("Player #'s Turn");
+	JLabel playerTurn = new JLabel("Waiting For Network");
 	// matrix with labeled sides
 	// and dots
-	JTextArea matrix = new JTextArea(5, 5); // temp until I figure out canvas for matrix and dots
+	//JTextArea matrix = new JTextArea(5, 5); // temp until I figure out canvas for matrix and dots
+	MyCanvas matrixCanvas = new MyCanvas();
 	
 	// On-screen components for panel3
 	JLabel thePlayer = new JLabel("Player #");
-	JTextArea listOfNum = new JTextArea("#, #, #");
+//	JTextArea listOfNum = new JTextArea("#, #, #");
+	JTextArea listOfNum = new JTextArea("Empty Hand");
 	//TitledBorder border;
 	JLabel pickNum = new JLabel("Pick a Number");
+	@SuppressWarnings("rawtypes")
 	JComboBox dropDown = new JComboBox();
 	
 	
@@ -67,10 +74,16 @@ public class GUI extends JFrame implements ActionListener{
 		panel2.setLayout((LayoutManager) new BoxLayout(panel2, BoxLayout.Y_AXIS));
 		panel2.setBorder(BorderFactory.createEmptyBorder(2, 5, 100, 0));
 		playerTurn.setFont(bigFont);
-		matrix.setEditable(false);
+		//matrix.setEditable(false);
 		
 		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
 		panel3.setBorder(BorderFactory.createEmptyBorder(2, 5, 10, 0));
+		
+		
+
+//		panel4.setLayout((LayoutManager) new BoxLayout(panel4, BoxLayout.Y_AXIS));
+//		panel4.setBorder(BorderFactory.createEmptyBorder(2, 5, 10, 100));
+		
 		thePlayer.setFont(bigFont);
 		//border = BorderFactory.createTitledBorder("Your Numbers:");
 		listOfNum.setBackground(getBackground());
@@ -95,16 +108,21 @@ public class GUI extends JFrame implements ActionListener{
 		 * Again, this should mostly be done by getters and setters
 		*/
 		
-		String tempNumber = "#";
+		//String tempNumber = "#";
 		// only needs to be set once
-		thePlayer.setText("Player: " + tempNumber);
+//		thePlayer.setText("Player: " + tempNumber);
+		//thePlayer.setText("Player: ");
 		
 		// set at the beginning of every game
-		gameNumber.setText("Game: " + tempNumber);
-		p1Score.setText("P1: " + tempNumber);
-		p2Score.setText("P2: " + tempNumber);
-		p3Score.setText("P3: " + tempNumber);
-		p4Score.setText("P4: " + tempNumber);
+//		gameNumber.setText("Game: " + tempNumber);
+//		p1Score.setText("P1: " + tempNumber);
+//		p2Score.setText("P2: " + tempNumber);
+//		p3Score.setText("P3: " + tempNumber);
+//		p4Score.setText("P4: " + tempNumber);
+		p1Score.setText("P1: 0");
+		p2Score.setText("P2: 0");
+		p3Score.setText("P3: 0");
+		p4Score.setText("P4: 0");
 		
 		// set after every turn 
 		//this could be initial setup with the listener then doing change every turn
@@ -113,7 +131,7 @@ public class GUI extends JFrame implements ActionListener{
 		//matrix.setText(match.game.displayMatrix());
 		
 		// initially
-		listOfNum.setText(tempNumber + ", " + tempNumber + ", " + tempNumber);
+		//listOfNum.setText(tempNumber + ", " + tempNumber + ", " + tempNumber);
 		
 		
 		//set isYourTurn either false or true
@@ -133,8 +151,10 @@ public class GUI extends JFrame implements ActionListener{
 		// Adds all the components to the second panel
 		panel2.add(playerTurn);
 		panel2.add(Box.createRigidArea(new Dimension(0,50)));
-		panel2.add(matrix);
+//		panel2.add(matrix);
+		panel2.add(matrixCanvas);
 		panel2.setPreferredSize(new Dimension(350, 500));
+//		panel2.setPreferredSize(new Dimension(250, 250));
 		
 		// Adds all the components to the third panel
 		panel3.add(thePlayer);
@@ -147,10 +167,21 @@ public class GUI extends JFrame implements ActionListener{
 		panel3.add(dropDown); // I have no clue why this is so far away from the item above it.
 		panel3.setPreferredSize(new Dimension(250, 500));
 		
+		
+		
+
+//		panel4.add(matrixCanvas);
+//		panel4.add(Box.createRigidArea(new Dimension(0,100)));
+//		panel4.setPreferredSize(new Dimension(250, 250));
+		
+		
 		// Panels' position on frame
 		add(panel1, BorderLayout.WEST);
 		add(panel2, BorderLayout.CENTER);
+//		add(matrixCanvas, BorderLayout.CENTER);
+//		add(panel2, BorderLayout.NORTH);
 		add(panel3, BorderLayout.EAST);
+//		add(panel4, BorderLayout.SOUTH);
 		pack();
 	}
 	
@@ -161,7 +192,10 @@ public class GUI extends JFrame implements ActionListener{
 		} else {
 			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 		}
-		matrix.setText(match.game.displayMatrix());
+		//matrix.setText(match.game.displayMatrix());
+		matrixCanvas.updateMatrix(match.game.getPlayerMatrix());
+		matrixCanvas.repaint();
+		
 		int index = match.netHandler.getMyNumber()-1;
 		String s = match.players[index].displayHand();
 		try {
@@ -170,6 +204,7 @@ public class GUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 		
+		gameNumber.setText("Game: "+match.game.gameNumber);
 		
 		//update scores
 		p1Score.setText("P1: " + match.game.players[0].getScore());
@@ -198,15 +233,15 @@ public class GUI extends JFrame implements ActionListener{
 			// popup if that number is already in their list and handling here
 			
 	        // commence update here
-			System.out.println("You choose " + newNum);
-			System.out.println("Time to update!");
+			//System.out.println("You choose " + newNum);
+			//System.out.println("Time to update!");
 			
 			// set after thePlayer takes a turn
 			// SOMETHING THAT CHANGES THE TURN HERE 
-			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
+			//playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 			// TAKE THE ADDRESS OF THE PLAYER SOMEHOW AND UPDATE PLAYER'S HAND
 			// RECALCULATE THE MATRIX
-			matrix.setText(match.game.displayMatrix());
+			//matrix.setText(match.game.displayMatrix());
 			
 			if(match.netHandler.isServer()) {
 				match.netHandler.broadcast("" + newNum);
@@ -215,7 +250,7 @@ public class GUI extends JFrame implements ActionListener{
 			}
 			match.game.newTurn(match.netHandler.getMyNumber(), newNum);
 		}
-		System.out.println("action processed");
+		//System.out.println("action processed");
 		
 		// other buttons/user input stuff goes here
 		// an ok clicked on a popup after someone wins could refresh the gui and go to the next
@@ -259,5 +294,48 @@ public class GUI extends JFrame implements ActionListener{
 	public void TITLE_MESSAGE(String s) {
 		dropDown.setEnabled(false);
 		playerTurn.setText(s);
+	}
+	
+	@SuppressWarnings("serial")
+	public class MyCanvas extends Canvas {
+		
+		boolean[][] matrix = null;
+		
+		public MyCanvas(boolean[][] m) {
+			this.matrix = m;
+			setSize(250, 250);
+		}
+		
+		public MyCanvas() {
+			this(new boolean[4][4]);
+		}
+		
+		public void updateMatrix(boolean[][] m) {
+			this.matrix = m;
+		}
+		
+		public void paint(Graphics g) {
+			//render player text
+			g.setColor(Color.black);
+			for (int i = 0; i < 4; i++) {
+				
+				//render player column text
+				g.drawString("P"+(i+1), 100 + (50*i), 25); //horizontal
+				g.drawString("P"+(i+1), 50, 70 + (50 * i)); //vertical
+			}
+			
+			for(int y = 0; y < 4; y++) {
+				for (int x = 0; x < 4; x++) {
+					//render grid
+					g.setColor(Color.black);
+					g.drawRect((int) (95.0 - (25.0/2.0)) + (50*x), (int) (50.0 - (25.0/2.0)) + (50*y), 50, 50);
+					//render coloured ovals
+					if(matrix[y][x])
+						g.setColor(Color.green);
+					else g.setColor(Color.red);
+					g.fillOval(95 + (50*x), 50 + (50*y), 25, 25);
+				}
+			}
+		}
 	}
 }
