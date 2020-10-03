@@ -70,7 +70,7 @@ public class GUI extends JFrame implements ActionListener{
 		listOfNum.setLineWrap(true);
 		
 		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
-		panel3.setBorder(BorderFactory.createEmptyBorder(2, 0, 10, 0));
+		panel3.setBorder(BorderFactory.createEmptyBorder(2, 0, 10, 5));
 		thePlayer.setAlignmentX(CENTER_ALIGNMENT);
 
 		thePlayer.setFont(bigFont);
@@ -106,7 +106,6 @@ public class GUI extends JFrame implements ActionListener{
 		panel2.add(Box.createRigidArea(new Dimension(0,50)));
 		panel2.add(matrixCanvas);
 		panel2.setPreferredSize(new Dimension(350, 500));
-		// panel2.setPreferredSize(new Dimension(250, 250));
 		
 		// Adds all the components to the third panel
 		panel3.add(thePlayer);
@@ -116,19 +115,11 @@ public class GUI extends JFrame implements ActionListener{
 		panel3.add(pickNum);
 		panel3.add(dropDown);
 		panel3.setPreferredSize(new Dimension(250, 500));
-
-//		panel4.add(matrixCanvas);
-//		panel4.add(Box.createRigidArea(new Dimension(0,100)));
-//		panel4.setPreferredSize(new Dimension(250, 250));
-		
 		
 		// Panels' position on frame
 		add(panel1, BorderLayout.WEST);
 		add(panel2, BorderLayout.CENTER);
-//		add(matrixCanvas, BorderLayout.CENTER);
-//		add(panel2, BorderLayout.NORTH);
 		add(panel3, BorderLayout.EAST);
-//		add(panel4, BorderLayout.SOUTH);
 		pack();
 	}
 	
@@ -176,6 +167,7 @@ public class GUI extends JFrame implements ActionListener{
 		System.out.println("action happened");
 		if (e.getSource() == dropDown) {
 			
+			// get the number they chose
 			int newNum = (int) dropDown.getSelectedItem();
 
 			if(match.netHandler.isServer()) {
@@ -183,6 +175,7 @@ public class GUI extends JFrame implements ActionListener{
 			} else {
 				match.netHandler.sendToServer("" + newNum);
 			}
+			// move on to next turn
 			match.game.newTurn(match.netHandler.getMyNumber(), newNum);
 		}
 	
