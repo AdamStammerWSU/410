@@ -9,7 +9,6 @@ public class Match {
 	Game game;
 
 	public static void main(String[] args) {
-		System.out.println("Howdy!");
 
 		Match match = new Match();
 	}
@@ -24,7 +23,6 @@ public class Match {
 	public Match() {
 
 		// Display the window
-
 		gui = new GUI(this);
 		gui.setLocationRelativeTo(null);
 		gui.setSize(800, 500);

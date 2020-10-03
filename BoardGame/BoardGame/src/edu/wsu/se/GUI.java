@@ -27,15 +27,12 @@ public class GUI extends JFrame implements ActionListener{
 	JPanel panel1 = new JPanel();
 	JPanel panel2 = new JPanel();
 	JPanel panel3 = new JPanel();
-//	JPanel panel4 = new JPanel();
 	
 	Font bigFont = new Font("Arial", Font.BOLD, 16);
 	
-	boolean isYourTurn = false; // combo box shouldn't be selectable when it's not your turn
-	
 	// On-screen components for panel1
 	JLabel gameNumber = new JLabel("Game: ");
-	JLabel currentScores = new JLabel("Curent Scores");// getting the data would happen later
+	JLabel currentScores = new JLabel("Curent Scores");
 	JLabel p1Score = new JLabel("P1: ");
 	JLabel p2Score = new JLabel("P2: ");
 	JLabel p3Score = new JLabel("P3: ");
@@ -44,24 +41,19 @@ public class GUI extends JFrame implements ActionListener{
 	
 	// On-screen components for panel2
 	JLabel playerTurn = new JLabel("Waiting For Network");
-	// matrix with labeled sides
-	// and dots
-	//JTextArea matrix = new JTextArea(5, 5); // temp until I figure out canvas for matrix and dots
+	// For the grid of dots
 	MyCanvas matrixCanvas = new MyCanvas();
 	
 	// On-screen components for panel3
 	JLabel thePlayer = new JLabel("Player #");
-//	JTextArea listOfNum = new JTextArea("#, #, #");
 	JTextArea listOfNum = new JTextArea("Empty Hand");
-	//TitledBorder border;
 	JLabel pickNum = new JLabel("Pick a Number");
 	@SuppressWarnings("rawtypes")
 	JComboBox dropDown = new JComboBox();
 	
-	
-	// maybe insert player# in the constructor ex: GUI(player1);
+	// create the initial GUI for each player
 	public GUI(Match m) {
-		super("\"Board\" Game"); // Frame title
+		super("\"Bored\" Game"); // Frame title
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		match = m;
@@ -72,69 +64,30 @@ public class GUI extends JFrame implements ActionListener{
 		currentScores.setFont(bigFont);
 		
 		panel2.setLayout((LayoutManager) new BoxLayout(panel2, BoxLayout.Y_AXIS));
-		panel2.setBorder(BorderFactory.createEmptyBorder(2, 5, 100, 0));
+		panel2.setBorder(BorderFactory.createEmptyBorder(2, 0, 100, 0));
 		playerTurn.setFont(bigFont);
-		//matrix.setEditable(false);
+		playerTurn.setAlignmentX(CENTER_ALIGNMENT);
+		listOfNum.setLineWrap(true);
 		
 		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
-		panel3.setBorder(BorderFactory.createEmptyBorder(2, 5, 10, 0));
-		
-		
+		panel3.setBorder(BorderFactory.createEmptyBorder(2, 0, 10, 0));
+		thePlayer.setAlignmentX(CENTER_ALIGNMENT);
 
-//		panel4.setLayout((LayoutManager) new BoxLayout(panel4, BoxLayout.Y_AXIS));
-//		panel4.setBorder(BorderFactory.createEmptyBorder(2, 5, 10, 100));
-		
 		thePlayer.setFont(bigFont);
-		//border = BorderFactory.createTitledBorder("Your Numbers:");
+		// This is so that the text area isn't bright white
 		listOfNum.setBackground(getBackground());
 		
+		// 20 numbers to select from
 		for (int i = 1; i <= 20; i++) {
 			dropDown.addItem(i);
 		}
 		
 		dropDown.addActionListener(this);
 		
-		// Values for each item should be gotten and set within the constructor
-		// ex: append the player's number to thePlayer
-		
-		/* What is all needed:
-		 * Current game number
-		 * scores for each player (0 for everyone to start)
-		 * the number of the player whose turn it is (first turn)
-		 * the players' starting numbers
-		 * the matrix
-		 * 
-		 * Only needs to be set once: what player the player is (ex: Player 1)
-		 * Again, this should mostly be done by getters and setters
-		*/
-		
-		//String tempNumber = "#";
-		// only needs to be set once
-//		thePlayer.setText("Player: " + tempNumber);
-		//thePlayer.setText("Player: ");
-		
-		// set at the beginning of every game
-//		gameNumber.setText("Game: " + tempNumber);
-//		p1Score.setText("P1: " + tempNumber);
-//		p2Score.setText("P2: " + tempNumber);
-//		p3Score.setText("P3: " + tempNumber);
-//		p4Score.setText("P4: " + tempNumber);
 		p1Score.setText("P1: 0");
 		p2Score.setText("P2: 0");
 		p3Score.setText("P3: 0");
 		p4Score.setText("P4: 0");
-		
-		// set after every turn 
-		//this could be initial setup with the listener then doing change every turn
-		//playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
-
-		//matrix.setText(match.game.displayMatrix());
-		
-		// initially
-		//listOfNum.setText(tempNumber + ", " + tempNumber + ", " + tempNumber);
-		
-		
-		//set isYourTurn either false or true
 		
 		// Adds all the components to the first panel
 		panel1.add(gameNumber);
@@ -151,24 +104,18 @@ public class GUI extends JFrame implements ActionListener{
 		// Adds all the components to the second panel
 		panel2.add(playerTurn);
 		panel2.add(Box.createRigidArea(new Dimension(0,50)));
-//		panel2.add(matrix);
 		panel2.add(matrixCanvas);
 		panel2.setPreferredSize(new Dimension(350, 500));
-//		panel2.setPreferredSize(new Dimension(250, 250));
+		// panel2.setPreferredSize(new Dimension(250, 250));
 		
 		// Adds all the components to the third panel
 		panel3.add(thePlayer);
 		panel3.add(Box.createRigidArea(new Dimension(0,50)));
-			// The border should probably go on something that's not a JLabel
-		//listOfNum.setBorder(border); // I'll change it later
 		panel3.add(listOfNum);
 		panel3.add(Box.createRigidArea(new Dimension(0,100)));
 		panel3.add(pickNum);
-		panel3.add(dropDown); // I have no clue why this is so far away from the item above it.
+		panel3.add(dropDown);
 		panel3.setPreferredSize(new Dimension(250, 500));
-		
-		
-		
 
 //		panel4.add(matrixCanvas);
 //		panel4.add(Box.createRigidArea(new Dimension(0,100)));
@@ -185,6 +132,7 @@ public class GUI extends JFrame implements ActionListener{
 		pack();
 	}
 	
+	// updates the display after a turn is taken, game finishes, etc.
 	public void updateDisplay() {
 		
 		if(match.game.getWhoseTurn() == match.netHandler.getMyNumber()) {
@@ -192,7 +140,7 @@ public class GUI extends JFrame implements ActionListener{
 		} else {
 			playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
 		}
-		//matrix.setText(match.game.displayMatrix());
+
 		matrixCanvas.updateMatrix(match.game.getPlayerMatrix());
 		matrixCanvas.repaint();
 		
@@ -222,27 +170,14 @@ public class GUI extends JFrame implements ActionListener{
 		System.out.println("gui updated");
 	}
 
-	
+	// When a player selects a number in the drop-down...
 	@Override
 	public void actionPerformed(ActionEvent e) {	
 		System.out.println("action happened");
 		if (e.getSource() == dropDown) {
-			// Once a player chooses a number, listOfNum, the matrix, and playerTurn update
+			
 			int newNum = (int) dropDown.getSelectedItem();
-			
-			// popup if that number is already in their list and handling here
-			
-	        // commence update here
-			//System.out.println("You choose " + newNum);
-			//System.out.println("Time to update!");
-			
-			// set after thePlayer takes a turn
-			// SOMETHING THAT CHANGES THE TURN HERE 
-			//playerTurn.setText("Player "+ match.game.getWhoseTurn() +"'s Turn");
-			// TAKE THE ADDRESS OF THE PLAYER SOMEHOW AND UPDATE PLAYER'S HAND
-			// RECALCULATE THE MATRIX
-			//matrix.setText(match.game.displayMatrix());
-			
+
 			if(match.netHandler.isServer()) {
 				match.netHandler.broadcast("" + newNum);
 			} else {
@@ -250,19 +185,13 @@ public class GUI extends JFrame implements ActionListener{
 			}
 			match.game.newTurn(match.netHandler.getMyNumber(), newNum);
 		}
-		//System.out.println("action processed");
-		
-		// other buttons/user input stuff goes here
-		// an ok clicked on a popup after someone wins could refresh the gui and go to the next
-		// game or say that all 10 games have been completed and the overall winner
-		// etc.
 	
 	}
 
 	public void PROMPT_MESSAGE(String s) {
 		dropDown.setEnabled(false);
 		JOptionPane.showMessageDialog(this, s, "Message",
-				JOptionPane.ERROR_MESSAGE);
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public boolean PROMPT_FOR_SERVER() {
@@ -329,7 +258,7 @@ public class GUI extends JFrame implements ActionListener{
 					//render grid
 					g.setColor(Color.black);
 					g.drawRect((int) (95.0 - (25.0/2.0)) + (50*x), (int) (50.0 - (25.0/2.0)) + (50*y), 50, 50);
-					//render coloured ovals
+					//render colored ovals
 					if(matrix[y][x])
 						g.setColor(Color.green);
 					else g.setColor(Color.red);
