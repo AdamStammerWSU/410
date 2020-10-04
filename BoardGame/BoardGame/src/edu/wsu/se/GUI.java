@@ -37,7 +37,6 @@ public class GUI extends JFrame implements ActionListener{
 	JLabel p2Score = new JLabel("P2: ");
 	JLabel p3Score = new JLabel("P3: ");
 	JLabel p4Score = new JLabel("P4: ");
-	JLabel howToTitle = new JLabel("How to Play: ");
 	
 	// On-screen components for panel2
 	JLabel playerTurn = new JLabel("Waiting For Network");
@@ -51,7 +50,7 @@ public class GUI extends JFrame implements ActionListener{
 	@SuppressWarnings("rawtypes")
 	JComboBox dropDown = new JComboBox();
 	
-	// create the initial GUI for each player
+	// Create the initial GUI for each player
 	public GUI(Match m) {
 		super("\"Bored\" Game"); // Frame title
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,6 +66,7 @@ public class GUI extends JFrame implements ActionListener{
 		panel2.setBorder(BorderFactory.createEmptyBorder(2, 0, 100, 0));
 		playerTurn.setFont(bigFont);
 		playerTurn.setAlignmentX(CENTER_ALIGNMENT);
+		// Wrap the numbers in the player's hand when they reach the edge of the screen
 		listOfNum.setLineWrap(true);
 		
 		panel3.setLayout((LayoutManager) new BoxLayout(panel3, BoxLayout.Y_AXIS));
@@ -97,8 +97,6 @@ public class GUI extends JFrame implements ActionListener{
 		panel1.add(p2Score);
 		panel1.add(p3Score);
 		panel1.add(p4Score);
-		panel1.add(Box.createVerticalGlue());
-		panel1.add(howToTitle);
 		panel1.setPreferredSize(new Dimension(200, 500));
 		
 		// Adds all the components to the second panel
