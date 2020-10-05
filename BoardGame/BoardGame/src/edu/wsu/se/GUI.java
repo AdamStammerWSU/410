@@ -220,6 +220,8 @@ public class GUI extends JFrame implements ActionListener {
 		int i = 10;
 		try {
 			i = Integer.parseInt(s);
+			if(i < 1 || i > 10)
+				i = 10;
 		} catch (Exception e) {
 			System.out.println("Input not understood or not in range. Defaulting to 10 games");
 			i = 10;
