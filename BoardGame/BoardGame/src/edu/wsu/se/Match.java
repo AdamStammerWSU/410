@@ -19,6 +19,7 @@ public class Match {
 	Player[] players = null;
 	int myPlayerNumber = -1;
 	boolean server = false;
+	int numberOfGames = 10;
 
 	public Match() {
 
@@ -28,8 +29,10 @@ public class Match {
 		gui.setSize(800, 500);
 		gui.setVisible(true);
 
+		// initialize player list
 		players = new Player[4];
 
+		// ask for connection type and information
 		server = gui.PROMPT_FOR_SERVER();
 		String ip = "localhost";
 		if (!server)
@@ -38,12 +41,16 @@ public class Match {
 		int port = gui.PROMPT_FOR_PORT();
 
 		if (server)
+			numberOfGames = gui.PROMPT_FOR_NUM_GAMES();
+
+		if (server)
 			System.out.println("Starting as server");
 		else
 			System.out.println("Starting as client");
 		gui.TITLE_MESSAGE("Waiting For Others To Connect...");
-		netHandler = new NetworkHandler(server, ip, port);
+		netHandler = new NetworkHandler(server, ip, port); // initialize network connection and process connection(s)
 
+		// setup game to start
 		myPlayerNumber = netHandler.getMyNumber();
 		System.out.println("My Number is: " + myPlayerNumber);
 		gui.setTitle("Player " + myPlayerNumber);
@@ -55,15 +62,22 @@ public class Match {
 
 		if (server) {
 			// send out message that all players are connected
-			netHandler.broadcast("All clear");
+			netHandler.broadcast(numberOfGames + "");
 		} else {
 			// clients need to wait to receive the message that everyone is connected
-			System.out.println(netHandler.readFromServer());
+			try {
+				numberOfGames = Integer.parseInt(netHandler.readFromServer());
+			} catch (Exception e) {
+				System.out.println("Unrecognized number of games from the server. Defaulting to 10 games");
+				numberOfGames = 10;
+			}
+			System.out.println("Number of Games in a Match: " + numberOfGames);
 		}
 
-		game = new Game(players, this);
+		// initialize game
+		game = new Game(players, numberOfGames, this);
 
-		game.start();
+		game.start();// start game
 
 		System.out.println("Start");
 		System.out.println("Turn Number: " + game.gameNumber);
@@ -75,20 +89,21 @@ public class Match {
 	}
 
 	public ArrayList<Integer> getWinner(boolean gameEnd) {
+		/// list of winners because of potential ties
 		ArrayList<Integer> winners = new ArrayList<Integer>();
 		int lowestScore = Integer.MAX_VALUE;
 		for (int i = 0; i < 4; i++) {
-			if(players[i].getScore() < lowestScore) {
+			if (players[i].getScore() < lowestScore) {
 				lowestScore = players[i].getScore();
 			}
 		}
-		
+
 		for (int i = 0; i < 4; i++) {
-			if(players[i].getScore() == lowestScore) {
+			if (players[i].getScore() == lowestScore) {
 				winners.add(i + 1);
 			}
 		}
-		
+
 		if (gameEnd)
 			return winners;
 		return new ArrayList<Integer>();
@@ -148,7 +163,7 @@ public class Match {
 		public void setWins(int wins) {
 			this.wins = wins;
 		}
-		
+
 		public void addWin() {
 			wins++;
 		}
@@ -167,8 +182,8 @@ public class Match {
 
 		public void calculateScore(boolean win) {
 			if (win) {
-				if(hand.size() > 9) {
-					score+=9;
+				if (hand.size() > 9) {
+					score += 9;
 				} else {
 					score += hand.size();
 				}

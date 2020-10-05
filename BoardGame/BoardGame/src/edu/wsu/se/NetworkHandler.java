@@ -124,7 +124,6 @@ public class NetworkHandler {
 				s = dis.readUTF();
 			} catch (IOException e) {
 				System.out.println("Failed to read message");
-				e.printStackTrace();
 				System.exit(0);
 			}
 			return s;
@@ -171,7 +170,6 @@ public class NetworkHandler {
 				System.out.println("Connected To Server");
 			} catch (IOException e) {
 				System.out.println("Failed to connect to server");
-				e.printStackTrace();
 				System.exit(0);
 			}
 		}
@@ -182,7 +180,6 @@ public class NetworkHandler {
 				s = dis.readUTF();
 			} catch (IOException e) {
 				System.out.println("Failed to read message");
-				e.printStackTrace();
 				System.exit(0);
 			}
 			return s;
@@ -193,7 +190,7 @@ public class NetworkHandler {
 				dos.writeUTF(s);
 			} catch (IOException e) {
 				System.out.println("Failed to write message");
-				e.printStackTrace();
+				System.exit(0);
 			}
 			System.out.println("message written");
 		}
