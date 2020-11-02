@@ -11,9 +11,6 @@ public class FileManager {
 		
 	}
 	
-	
-	
-	
 	//Image Conversions
 	public void PNGtoPDF() {
 		
@@ -22,6 +19,7 @@ public class FileManager {
 	public void PDFtoPNG() {
 		
 	}
+	
 	
 	//Layout Methods
 	public void saveLayout() {
