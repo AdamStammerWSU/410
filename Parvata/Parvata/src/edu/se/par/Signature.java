@@ -4,17 +4,25 @@ import java.awt.image.BufferedImage;
 
 public class Signature {
 	
+	Layout layout;
+	int inputPageOffset, outputPageOffset;
+	InputPage inputPages[];
+	OutputPage outputPage;
 	
-	
-	public Signature() {
-		
+	public Signature(Layout layout, int inputPageOffset, int outputPageOffset) {
+		this.layout = layout;
+		this.inputPageOffset = inputPageOffset;
+		this.outputPageOffset = outputPageOffset;
+		String numberString = "";
+		for(int i = 0; i < layout.getInputPageCount(); i++) {
+			numberString = String.format("%04d", i+inputPageOffset);
+			inputPages[i] = new InputPage("/input"+numberString);
+		}
 	}
 	
-	
-	
-	
-	
-	
+	public void impose() {
+		
+	}
 	
 	class InputPage {
 		
