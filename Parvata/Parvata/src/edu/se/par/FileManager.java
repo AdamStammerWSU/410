@@ -1,5 +1,7 @@
 package edu.se.par;
 
+import java.awt.image.BufferedImage;
+
 public class FileManager {
 
 	//Image Load/Save
@@ -7,8 +9,12 @@ public class FileManager {
 		
 	}
 	
-	public void loadImage() {
+	public BufferedImage loadImage(String fileLocation) {
 		
+		BufferedImage image = null;
+		
+		
+		return image;
 	}
 	
 	//Image Conversions
