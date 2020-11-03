@@ -5,11 +5,11 @@ import java.awt.image.BufferedImage;
 public class FileManager {
 
 	//Image Load/Save
-	public void saveImage() {
+	static void saveImage() {
 		
 	}
 	
-	public BufferedImage loadImage(String fileLocation) {
+	static BufferedImage loadImage(String fileLocation) {
 		
 		BufferedImage image = null;
 		
@@ -18,21 +18,21 @@ public class FileManager {
 	}
 	
 	//Image Conversions
-	public void PNGtoPDF() {
+	static void PNGtoPDF() {
 		
 	}
 	
-	public void PDFtoPNG() {
+	static void PDFtoPNG() {
 		
 	}
 	
 	
 	//Layout Methods
-	public void saveLayout() {
+	static void saveLayout() {
 			
 	}
 	
-	public void loadLayout() {
+	static void loadLayout() {
 			
 	}
 	
