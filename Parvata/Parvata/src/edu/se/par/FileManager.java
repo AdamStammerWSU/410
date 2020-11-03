@@ -5,11 +5,16 @@ import java.awt.image.BufferedImage;
 public class FileManager {
 
 	//Image Load/Save
-	static void saveImage() {
+	static void saveImage(BufferedImage page, String fileLocation) {
+		
+		page = null;
+		fileLocation = "";
+		
 		
 	}
 	
 	static BufferedImage loadImage(String fileLocation) {
+		
 		
 		BufferedImage image = null;
 		
