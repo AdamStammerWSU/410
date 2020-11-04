@@ -42,15 +42,6 @@ public class GUI extends JFrame implements ActionListener {
 	JButton saveFile = new JButton("Save File to...");
 	JTextArea newFilePath = new JTextArea("Imposed File path", 1, 10);
 	
-	public static void main(String[] args) {
-		System.out.println("Howdy");
-		GUI gui = new GUI();
-		gui.setSize(500, 500);
-		gui.setLocationRelativeTo(null); // this isn't working either, for some reason...
-		gui.setVisible(true);
-	}
-	
-	
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
