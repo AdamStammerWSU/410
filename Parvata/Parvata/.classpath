@@ -6,30 +6,10 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/kd7933mc/Documents/GitHub/410/Parvata/PDFBOX/fontbox-2.0.21 (1).jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/kd7933mc/Documents/GitHub/410/Parvata/PDFBOX/pdfbox-2.0.21 (1).jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/kd7933mc/Documents/GitHub/410/Parvata/PDFBOX/pdfbox-tools-2.0.21 (1).jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/kd7933mc/Documents/GitHub/410/Parvata/PDFBOX/preflight-2.0.21 (1).jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/kd7933mc/Documents/GitHub/410/Parvata/PDFBOX/xmpbox-2.0.21 (1).jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/fontbox-2.0.21 (1).jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-2.0.21 (1).jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-tools-2.0.21 (1).jar"/>
+	<classpathentry kind="lib" path="lib/preflight-2.0.21 (1).jar"/>
+	<classpathentry kind="lib" path="lib/xmpbox-2.0.21 (1).jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
