@@ -1,6 +1,7 @@
 package edu.se.par;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
@@ -44,12 +45,15 @@ public class GUI extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 		System.out.println("Howdy");
 		GUI gui = new GUI();
+		gui.setSize(500, 500);
+		gui.setLocationRelativeTo(null); // this isn't working either, for some reason...
+		gui.setVisible(true);
 	}
 	
 	
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 500);
+		
 		setTitle("Parvata Book Imposer");
 		
 		title.setFont(titleFont);
@@ -60,20 +64,24 @@ public class GUI extends JFrame implements ActionListener {
 		
 		// Adds components to the top panel
 		panelTop.add(title);
+		panelTop.setPreferredSize(new Dimension(500, 100)); // I don't know why none of these are working or what makes them different from the last two projects
 		
 		// Adds components to the left panel
 		panelLeft.add(enterLayout);
 		panelLeft.add(layout);
+		panelLeft.setPreferredSize(new Dimension(300, 300));
 		
 		// Adds components to the right panel
 		panelRight.add(tba);
 		panelRight.add(impose);
+		panelLeft.setPreferredSize(new Dimension(200, 300));
 		
 		// Adds components to the bottom panel
 		panelBottom.add(openFile);
 		panelBottom.add(filePath);
 		panelBottom.add(saveFile);
 		panelBottom.add(newFilePath);
+		panelBottom.setPreferredSize(new Dimension(500, 100));
 		
 		
 		//openFile.addActionListener(this);
@@ -82,16 +90,13 @@ public class GUI extends JFrame implements ActionListener {
 		
 		
 		
-		
-		
 		// Panels' position on frame
 		add(panelTop, BorderLayout.NORTH);
 		add(panelLeft, BorderLayout.WEST);
 		add(panelRight, BorderLayout.EAST);
 		add(panelBottom, BorderLayout.SOUTH);
+		pack();
 		
-		//pack();
-		setVisible(true);
 	}
 
 
@@ -104,9 +109,9 @@ public class GUI extends JFrame implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Do stuff
 			}
-		}
-		
-		if (e.getSource() == saveFile) {
+		} else if (e.getSource() == saveFile){
+			// Do stuff
+		} else if (e.getSource() == impose) {
 			// Do stuff
 		}
 	}
