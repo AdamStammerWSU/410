@@ -12,7 +12,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 
 
 
-public class FileManager {
+class FileManager {
 
 	//Image Save
 	static void saveImage(BufferedImage page, String fileLocation) {
@@ -43,12 +43,18 @@ public class FileManager {
 	
 	static void PDFtoPNG(String fileLocation) throws IOException {
 		
-		File file = new File(fileLocation);
+		Runtime rt = Runtime.getRuntime();
+		Process pr = rt.exec("CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 file:///Users/kd7933mc/Desktop/th.PNG");
+		
+		
+		
+		
+		/*File file = new File(fileLocation);
 		PDDocument document = PDDocument.load(file);
 		PDFRenderer renderer = new PDFRenderer(document);
 		BufferedImage image = renderer.renderImage(0);		//index
 	    ImageIO.write(image, "JPEG", new File(fileLocation));
-	    document.close();
+	    document.close();*/
 		
 	}
 	
