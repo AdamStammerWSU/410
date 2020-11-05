@@ -60,7 +60,7 @@ public class Signature {
 			this.fileLocation = loc;
 		}
 
-		public void addPage(int x, int, y, float rotation) {
+		public void addPage(int x, int y, float rotation) {
 			
 		}
 
