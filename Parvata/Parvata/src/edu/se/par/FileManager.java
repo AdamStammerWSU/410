@@ -44,7 +44,7 @@ class FileManager {
 		//Works inside terminal
 		//ImageMagik
 		//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
-		//PDFBOX
+		//
 		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG
 		
 		String command = "CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG";
