@@ -28,8 +28,6 @@ class FileManager {
 	//Image Load
 	static BufferedImage loadImage(String fileLocation) throws IOException {
 		
-		
-		
 		//unused
 		BufferedImage page = null;
 		return page;
@@ -44,7 +42,11 @@ class FileManager {
 	static void PDFtoPNG(String fileLocation) throws IOException {
 		
 		//Works inside terminal
-		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th2.PNG
+		//ImageMagik
+		//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
+		//PDFBOX
+		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG
+		
 		String command = "CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG";
 		Runtime r = Runtime.getRuntime(); 
         r.exec(command); 
