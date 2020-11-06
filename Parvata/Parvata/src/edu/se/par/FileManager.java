@@ -31,8 +31,8 @@ class FileManager {
 		
 		
 		//unused
-		BufferedImage image = null;
-		return image;
+		BufferedImage page = null;
+		return page;
 		//unused
 	}
 	
@@ -43,19 +43,11 @@ class FileManager {
 	
 	static void PDFtoPNG(String fileLocation) throws IOException {
 		
-		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 file:///Users/kd7933mc/Desktop/th.PNG");
-		
-		
-		
-		
-		/*File file = new File(fileLocation);
-		PDDocument document = PDDocument.load(file);
-		PDFRenderer renderer = new PDFRenderer(document);
-		BufferedImage image = renderer.renderImage(0);		//index
-	    ImageIO.write(image, "JPEG", new File(fileLocation));
-	    document.close();*/
-		
+		//Works inside terminal
+		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th2.PNG
+		String command = "CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG";
+		Runtime r = Runtime.getRuntime(); 
+        r.exec(command); 
 	}
 	
 	
