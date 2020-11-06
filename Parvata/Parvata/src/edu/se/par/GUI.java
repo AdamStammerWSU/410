@@ -1,9 +1,11 @@
 package edu.se.par;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,23 +22,25 @@ import javax.swing.JTextArea;
 
 public class GUI extends JFrame implements ActionListener {
 	
-	// Top, left, right, and bottom panels
+	// Top, center (left), right, and bottom panels
 	JPanel panelTop = new JPanel();
-	JPanel panelLeft = new JPanel();
+	JPanel panelCenter = new JPanel();
 	JPanel panelRight = new JPanel();
 	JPanel panelBottom = new JPanel();
 	
 	Font titleFont = new Font("SansSerif", Font.BOLD, 30);
+	Font bigFont = new Font("SansSerif", Font.PLAIN, 20);
+	Font mediumFont = new Font("SansSerif", Font.PLAIN, 16); // might use for something later
 		
 	// On-screen component for panelTop
 	JLabel title = new JLabel("Parvata Book Imposer");
 	
-	// On-screen components for panelLeft
+	// On-screen components for panelCenter
 	JLabel enterLayout = new JLabel("Enter Page Layout");
 	JTextArea layout = new JTextArea("EXAMPLE LAYOUT HERE", 10, 15);
 	
 	// On-screen components for panelRight
-	JLabel tba = new JLabel("panel TBA");
+	JLabel tba = new JLabel("loading progress (so would start blank)");
 	JButton impose = new JButton("Impose");
 	
 	// On-screen components for panelBottom
@@ -50,7 +54,7 @@ public class GUI extends JFrame implements ActionListener {
 		System.out.println("Howdy");
 		GUI gui = new GUI();
 		gui.setSize(500, 500);
-		gui.setLocationRelativeTo(null); // this isn't working either, for some reason...
+		gui.setLocationRelativeTo(null);
 		gui.setVisible(true);
 	}
 	
@@ -60,30 +64,40 @@ public class GUI extends JFrame implements ActionListener {
 		
 		setTitle("Parvata Book Imposer");
 		
+		panelTop.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+		panelTop.setBackground(Color.LIGHT_GRAY); // To see size of panel
 		title.setFont(titleFont);
 		
-		panelTop.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		
-		panelLeft.setLayout((LayoutManager) new FlowLayout());
-		panelLeft.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 0));
+		panelCenter.setLayout((LayoutManager) new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
+		panelCenter.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
+		//panelCenter.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
+		enterLayout.setFont(bigFont);
+		enterLayout.setAlignmentX(CENTER_ALIGNMENT);
 		
 		panelRight.setLayout((LayoutManager) new BoxLayout(panelRight, BoxLayout.Y_AXIS));
+		panelRight.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
+		//panelRight.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
+		tba.setAlignmentX(CENTER_ALIGNMENT);
+		
+		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10)); // Might change to a different layout
+		panelBottom.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 		
 		
 		// Adds components to the top panel
 		panelTop.add(title);
-		panelTop.setPreferredSize(new Dimension(500, 80)); // I don't know why none of these are working or what makes them different from the last two projects
+		panelTop.setPreferredSize(new Dimension(500, 70));
 		
-		// Adds components to the left panel
-		panelLeft.add(enterLayout);
-		panelLeft.add(Box.createRigidArea(new Dimension(0, 20)));
-		panelLeft.add(layout);
-		panelLeft.setPreferredSize(new Dimension(300, 300));
+		// Adds components to the center (left) panel
+		panelCenter.add(enterLayout);
+		//panelLeft.add(Box.createRigidArea(new Dimension(0, 20)));
+		panelCenter.add(layout);
+		panelCenter.setPreferredSize(new Dimension(300, 300));
 		
 		// Adds components to the right panel
+		//panelRight.add(Box.createRigidArea(new Dimension(0, 150)));
 		panelRight.add(tba);
 		panelRight.add(impose);
-		panelLeft.setPreferredSize(new Dimension(200, 300));
+		panelCenter.setPreferredSize(new Dimension(200, 300));
 		
 		// Adds components to the bottom panel
 		panelBottom.add(openFile);
@@ -99,7 +113,7 @@ public class GUI extends JFrame implements ActionListener {
 		
 		// Panels' position on frame
 		add(panelTop, BorderLayout.NORTH);
-		add(panelLeft, BorderLayout.WEST);
+		add(panelCenter, BorderLayout.CENTER);
 		add(panelRight, BorderLayout.EAST);
 		add(panelBottom, BorderLayout.SOUTH);
 		pack();
