@@ -18,6 +18,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class GUI extends JFrame implements ActionListener {
@@ -37,18 +38,22 @@ public class GUI extends JFrame implements ActionListener {
 	
 	// On-screen components for panelCenter
 	JLabel enterLayout = new JLabel("Enter Page Layout");
-	JTextArea layout = new JTextArea("EXAMPLE LAYOUT HERE", 10, 15);
+	JTextArea layout = new JTextArea("EXAMPLE LAYOUT HERE", 10, 15); // Maybe add a scroll bar
+	JScrollPane scrollLayout = new JScrollPane(layout);
 	
 	// On-screen components for panelRight
-	JLabel tba = new JLabel("loading progress (so would start blank)");
 	JButton impose = new JButton("Impose");
+	JLabel tba = new JLabel("loading progress");
 	
 	// On-screen components for panelBottom
 	JButton openFile = new JButton("Open File");
 	JFileChooser fc;
+	JFileChooser fc2;
 	JTextArea filePath = new JTextArea("File path", 1, 10);
+	JScrollPane scrollPath1= new JScrollPane(filePath);
 	JButton saveFile = new JButton("Save File to...");
 	JTextArea newFilePath = new JTextArea("Imposed File path", 1, 10);
+	JScrollPane scrollPath2= new JScrollPane(newFilePath);
 	
 	public static void main(String[] args) {
 		System.out.println("Howdy");
@@ -69,15 +74,20 @@ public class GUI extends JFrame implements ActionListener {
 		title.setFont(titleFont);
 		
 		panelCenter.setLayout((LayoutManager) new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
-		panelCenter.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
+		panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 		//panelCenter.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
 		enterLayout.setFont(bigFont);
 		enterLayout.setAlignmentX(CENTER_ALIGNMENT);
 		
 		panelRight.setLayout((LayoutManager) new BoxLayout(panelRight, BoxLayout.Y_AXIS));
-		panelRight.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 10));
+		//panelRight.setLayout((LayoutManager) new GridLayout(3,1));
+		panelRight.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 10));
 		//panelRight.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
+		//impose.setPreferredSize(new Dimension(20,20));
+		//impose.setMinimumSize(new Dimension(50, 20));
+		//impose.setMaximumSize(new Dimension(50, 50));
 		tba.setAlignmentX(CENTER_ALIGNMENT);
+		impose.setAlignmentX(CENTER_ALIGNMENT);
 		
 		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10)); // Might change to a different layout
 		panelBottom.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
@@ -89,22 +99,23 @@ public class GUI extends JFrame implements ActionListener {
 		
 		// Adds components to the center (left) panel
 		panelCenter.add(enterLayout);
-		//panelLeft.add(Box.createRigidArea(new Dimension(0, 20)));
-		panelCenter.add(layout);
-		panelCenter.setPreferredSize(new Dimension(300, 300));
+		panelCenter.add(Box.createRigidArea(new Dimension(0, 5)));
+		panelCenter.add(scrollLayout);
+		panelCenter.setPreferredSize(new Dimension(325, 300));
 		
 		// Adds components to the right panel
-		//panelRight.add(Box.createRigidArea(new Dimension(0, 150)));
+		panelRight.add(Box.createVerticalGlue());
 		panelRight.add(tba);
 		panelRight.add(impose);
-		panelCenter.setPreferredSize(new Dimension(200, 300));
+		panelRight.add(Box.createVerticalGlue());
+		panelRight.setPreferredSize(new Dimension(175, 300));
 		
 		// Adds components to the bottom panel
 		panelBottom.add(openFile);
-		panelBottom.add(filePath);
+		panelBottom.add(scrollPath1);
 		panelBottom.add(saveFile);
-		panelBottom.add(newFilePath);
-		panelBottom.setPreferredSize(new Dimension(500, 100));
+		panelBottom.add(scrollPath2);
+		panelBottom.setPreferredSize(new Dimension(500, 92));
 		
 		impose.addActionListener(this);
 		openFile.addActionListener(this);
@@ -126,10 +137,11 @@ public class GUI extends JFrame implements ActionListener {
 		// Open File is clicked
 		if (e.getSource() == openFile) {
 			int returnVal = fc.showOpenDialog(GUI.this);
-
+			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// Do stuff
+				filePath.setText(fc.getSelectedFile().toString());
 				System.out.println("You picked a file");
+				// For use, either take what fc gives directly or the path given in filePath
 			} else {
 				// User choose cancel
 			}
