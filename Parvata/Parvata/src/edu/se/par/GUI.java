@@ -2,13 +2,13 @@ package edu.se.par;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -38,7 +38,7 @@ public class GUI extends JFrame implements ActionListener {
 	
 	// On-screen components for panelCenter
 	JLabel enterLayout = new JLabel("Enter Page Layout");
-	JTextArea layout = new JTextArea("EXAMPLE LAYOUT HERE", 10, 15); // Maybe add a scroll bar
+	JTextArea layout = new JTextArea("EXAMPLE LAYOUT HERE", 10, 15); 
 	JScrollPane scrollLayout = new JScrollPane(layout);
 	
 	// On-screen components for panelRight
@@ -49,7 +49,7 @@ public class GUI extends JFrame implements ActionListener {
 	JButton openFile = new JButton("Open File");
 	JFileChooser fc;
 	JFileChooser fc2;
-	JTextArea filePath = new JTextArea("File path", 1, 10);
+	JTextArea filePath = new JTextArea("File path", 1, 10); // Should the file text areas be editable?
 	JScrollPane scrollPath1= new JScrollPane(filePath);
 	JButton saveFile = new JButton("Save File to...");
 	JTextArea newFilePath = new JTextArea("Imposed File path", 1, 10);
@@ -141,7 +141,6 @@ public class GUI extends JFrame implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				filePath.setText(fc.getSelectedFile().toString());
 				System.out.println("You picked a file");
-				// For use, either take what fc gives directly or the path given in filePath
 			} else {
 				// User choose cancel
 			}
@@ -154,4 +153,25 @@ public class GUI extends JFrame implements ActionListener {
 			System.out.println("You clicked Impose");
 		}
 	}
+	
+	// These getters are subject to change
+	
+	/**
+	 * Returns the File that is to be opened, chosen by the user
+	 */
+	public File getOpenFilePath() {
+		return fc.getSelectedFile();
+	}
+	
+	/*public File getSaveFilePath() {
+		return fc2.getSelectedFile();
+	}*/
+	
+	/**
+	 * Returns the page layout specified by the user
+	 */
+	public String getPageLayout() {
+		return layout.getText();
+	}
+	
 }
