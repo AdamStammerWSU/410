@@ -1,10 +1,15 @@
 package edu.se.par;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
 
@@ -20,48 +25,62 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
 
 
+
 class FileManager {
 
-	//Image Save
+//////////////////////////////////////////////////////////////////////////Image Save & Load
 	static void saveImage(BufferedImage page, String fileLocation) {
 		//unused
 		page = null;
 		//unused
-		
-		
-		
-		
-		
 	}
 	//Image Load
 	static BufferedImage loadImage(String fileLocation) throws IOException {
-		
-		
-			
-		//PDImageXObject pdImage = PDImageXObject.createFromFile(fileLocation, document);
-		//contentStream.drawImage(pdImage, 20f, 20f); 
 		//unused
 		BufferedImage page = null;
 		return page;
 		//unused
 	}
-	
-	//Image Conversions
+//////////////////////////////////////////////////////////////////////////Image Conversions
 	static void PNGtoPDF() {
 		
 	}
 	
-	static void PDFtoPNG(String fileLocation) throws IOException {
+	static void PDFtoPNG(String fileLocation) throws IOException, InterruptedException {
 		
-		PDDocument document = PDDocument.load(new File(fileLocation));
-		PDFRenderer pdfRenderer = new PDFRenderer(document);
+	}
+	
+//////////////////////////////////////////////////////////////////////////Layout Methods
+	static void saveLayout() {
+				
+	}
 		
-		for (int page = 0; page < document.getNumberOfPages(); ++page)
-		{ 
-		    BufferedImage buffimage = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
-		    ImageIOUtil.writeImage(buffimage, "file-" + (page+1) + ".png", 300);
+	static void loadLayout() {
+				
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////Open Image
+	public void openImage(String fileLocation) throws IOException, InterruptedException {
+		
+		boolean isWindows = System.getProperty("os.name")
+	    		  .toLowerCase().startsWith("windows");
+		
+		String homeDirectory = System.getProperty("user.home");
+		//fileLocation = "file:///Users/kd7933mc/Desktop/th.PDF";
+		
+		Process process;
+		ProcessBuilder builder = new ProcessBuilder();
+		if (isWindows) {
+		   builder.command("cmd.exe", "/c", "dir");
+		} else {
+		    builder.command("sh", "-c", "open " + fileLocation);
 		}
-		document.close();
+		builder.directory(new File(System.getProperty("user.home")));
+		
+		process = builder.start();
+		StreamRead streamGobbler = new StreamRead(process.getInputStream(), System.out::println);
+		Executors.newSingleThreadExecutor().submit(streamGobbler);
+		int exitCode = process.waitFor();
+		assert exitCode == 0;
 		
 		/*
 		//Works inside terminal
@@ -69,21 +88,26 @@ class FileManager {
 		//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
 		//
 		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG
+		*/
 		
-		String command = "CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG";
-		Runtime r = Runtime.getRuntime(); 
-        r.exec(command); 
-        */
+	}
+	static class StreamRead implements Runnable {
+	    
+		private InputStream inputStream;
+	    private Consumer<String> consumer;
+	 
+	    public StreamRead(InputStream inputStream, Consumer<String> consumer) {
+	        this.inputStream = inputStream;
+	        this.consumer = consumer;
+	    }
+	
+	    @Override
+	    public void run() {
+	    	//BufferedReader read; read = 
+	    	new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
+	    }
 	}
 	
 	
-	//Layout Methods
-	static void saveLayout() {
-			
-	}
-	
-	static void loadLayout() {
-			
-	}
 	
 }
