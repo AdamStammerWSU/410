@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,7 +42,7 @@ public class GUI extends JFrame implements ActionListener {
 	
 	// On-screen components for panelRight
 	JButton impose = new JButton("Impose");
-	JLabel tba = new JLabel("loading progress");
+	JLabel loadingProgress = new JLabel("");
 	
 	// On-screen components for panelBottom
 	JButton openFile = new JButton("Open File");
@@ -54,6 +53,7 @@ public class GUI extends JFrame implements ActionListener {
 	JButton saveFile = new JButton("Save File to...");
 	JTextArea newFilePath = new JTextArea("Imposed File path", 1, 10);
 	JScrollPane scrollPath2= new JScrollPane(newFilePath);
+	
 	
 	public static void main(String[] args) {
 		System.out.println("Howdy");
@@ -86,7 +86,7 @@ public class GUI extends JFrame implements ActionListener {
 		//impose.setPreferredSize(new Dimension(20,20));
 		//impose.setMinimumSize(new Dimension(50, 20));
 		//impose.setMaximumSize(new Dimension(50, 50));
-		tba.setAlignmentX(CENTER_ALIGNMENT);
+		loadingProgress.setAlignmentX(CENTER_ALIGNMENT);
 		impose.setAlignmentX(CENTER_ALIGNMENT);
 		
 		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10)); // Might change to a different layout
@@ -105,7 +105,7 @@ public class GUI extends JFrame implements ActionListener {
 		
 		// Adds components to the right panel
 		panelRight.add(Box.createVerticalGlue());
-		panelRight.add(tba);
+		panelRight.add(loadingProgress);
 		panelRight.add(impose);
 		panelRight.add(Box.createVerticalGlue());
 		panelRight.setPreferredSize(new Dimension(175, 300));
@@ -121,6 +121,7 @@ public class GUI extends JFrame implements ActionListener {
 		openFile.addActionListener(this);
 		fc = new JFileChooser();
 		saveFile.addActionListener(this);
+		fc2 = new JFileChooser();
 		
 		// Panels' position on frame
 		add(panelTop, BorderLayout.NORTH);
@@ -134,7 +135,7 @@ public class GUI extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// Open File is clicked
+		// When buttons get clicked...
 		if (e.getSource() == openFile) {
 			int returnVal = fc.showOpenDialog(GUI.this);
 			
@@ -142,36 +143,54 @@ public class GUI extends JFrame implements ActionListener {
 				filePath.setText(fc.getSelectedFile().toString());
 				System.out.println("You picked a file");
 			} else {
-				// User choose cancel
+				// User chose cancel
 			}
+			
 		} else if (e.getSource() == saveFile){
-			// Do stuff
-			System.out.println("You clicked Save File");
+			int returnVal = fc2.showSaveDialog(GUI.this);
+			
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                newFilePath.setText(fc2.getSelectedFile().toString());
+                System.out.println("You picked a save path");
+            } else {
+                // User chose cancel
+            }
 			
 		} else if (e.getSource() == impose) {
 			// Do stuff
 			System.out.println("You clicked Impose");
+			// If everything is entered in properly, example of what could be done:
+			setLoadingProgress("Now imposing...");
+			
 		}
 	}
 	
-	// These getters are subject to change
-	
 	/**
-	 * Returns the File that is to be opened, chosen by the user
+	 * Returns the file path that is to be opened, chosen by the user
 	 */
-	public File getOpenFilePath() {
-		return fc.getSelectedFile();
+	public String getOpenFilePath() {
+		return filePath.getText();
 	}
 	
-	/*public File getSaveFilePath() {
-		return fc2.getSelectedFile();
-	}*/
+	/**
+	 * Returns the new file path that the output is to be saved to, chosen by the user
+	 */
+	public String getSaveFilePath() {
+		return newFilePath.getText();
+	}
 	
 	/**
 	 * Returns the page layout specified by the user
 	 */
 	public String getPageLayout() {
 		return layout.getText();
+	}
+	
+	/**
+	 * Sets the loadingProgress JLabel's text to whatever status is given
+	 */
+	public void setLoadingProgress(String status) {
+		loadingProgress.setText(status);
 	}
 	
 }
