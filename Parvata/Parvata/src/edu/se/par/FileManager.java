@@ -59,19 +59,22 @@ class FileManager {
 				
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
+	//Write fileLocation as Desktop/image.pdf
+	
 	public void openImage(String fileLocation) throws IOException, InterruptedException {
 		
 		boolean isWindows = System.getProperty("os.name")
 	    		  .toLowerCase().startsWith("windows");
 		
 		String homeDirectory = System.getProperty("user.home");
-		//fileLocation = "file:///Users/kd7933mc/Desktop/th.PDF";
+		//fileLocation = "Desktop/th.PDF";
 		
 		Process process;
 		ProcessBuilder builder = new ProcessBuilder();
 		if (isWindows) {
 		   builder.command("cmd.exe", "/c", "dir");
 		} else {
+			builder.directory(new File(System.getProperty("user.home")));
 		    builder.command("sh", "-c", "open " + fileLocation);
 		}
 		builder.directory(new File(System.getProperty("user.home")));
@@ -87,7 +90,9 @@ class FileManager {
 		//ImageMagik
 		//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
 		//
-		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:\th4.PNG
+		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:th2.PNG
+		 * 
+		 * CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 file:///Users/kd7933mc/Desktop/th2.PNG
 		*/
 		
 	}
