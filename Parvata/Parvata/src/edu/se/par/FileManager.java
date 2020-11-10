@@ -25,7 +25,6 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
 
 
-
 class FileManager {
 
 //////////////////////////////////////////////////////////////////////////Image Save & Load
@@ -34,12 +33,23 @@ class FileManager {
 		page = null;
 		//unused
 	}
-	//Image Load
-	static BufferedImage loadImage(String fileLocation) throws IOException {
-		//unused
-		BufferedImage page = null;
-		return page;
-		//unused
+	//This retrieves images in [images/th2.PNG]
+	
+	static BufferedImage loadImage(String vampDen) throws IOException {
+		
+		System.out.println(new File(vampDen).getCanonicalFile());
+		BufferedImage buffy = null;
+		
+		try {
+			buffy = ImageIO.read(new File(vampDen));
+		}catch(IOException e) {
+			e.getMessage();
+		}
+		if(buffy == null) {
+			System.out.println("Nest not cleared");
+		}
+		
+		return buffy;
 	}
 //////////////////////////////////////////////////////////////////////////Image Conversions
 	static void PNGtoPDF() {
@@ -59,7 +69,7 @@ class FileManager {
 				
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
-	//Write fileLocation as Desktop/image.pdf
+	//Write fileLocation as Desktop/th.pdf
 	
 	public void openImage(String fileLocation) throws IOException, InterruptedException {
 		
@@ -85,15 +95,7 @@ class FileManager {
 		int exitCode = process.waitFor();
 		assert exitCode == 0;
 		
-		/*
-		//Works inside terminal
-		//ImageMagik
-		//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
-		//
-		//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:th2.PNG
-		 * 
-		 * CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 file:///Users/kd7933mc/Desktop/th2.PNG
-		*/
+		
 		
 	}
 	static class StreamRead implements Runnable {
@@ -113,6 +115,14 @@ class FileManager {
 	    }
 	}
 	
-	
+	/*
+	//Works inside terminal
+	//ImageMagik
+	//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
+	//
+	//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:th2.PNG
+	 * 
+	 * CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 file:///Users/kd7933mc/Desktop/th2.PNG
+	*/
 	
 }
