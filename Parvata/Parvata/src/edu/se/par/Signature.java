@@ -48,12 +48,12 @@ public class Signature {
 				outputPages[i].addPage(0, 0, 0);
 
 				// unload the input page
-				inputPages[i].unload();
+				inputPages[i].cleanup();
 
 			}
 		}
 	}
-
+	
 	class InputPage {
 
 		BufferedImage pageImage = null;
@@ -69,13 +69,18 @@ public class Signature {
 				pageImage = FileManager.loadImage(fileLocation);
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			loaded = true;
 		}
 
-		public void unload() {
+		public void cleanup() {
 			pageImage = null;
 			loaded = false;
+			//delete the image file
+			//todo
 		}
 
 		public boolean isLoaded() {
