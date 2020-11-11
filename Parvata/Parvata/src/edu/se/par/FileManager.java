@@ -109,7 +109,6 @@ class FileManager {
 	    		  .toLowerCase().startsWith("windows");
 		
 		String homeDirectory = System.getProperty("user.home");
-		//fileLocation = "Desktop/th.PDF";
 		
 		Process process;
 		ProcessBuilder builder = new ProcessBuilder();
@@ -139,7 +138,6 @@ class FileManager {
 	    }
 	    @Override
 	    public void run() {
-	    	//BufferedReader read; read = 
 	    	new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
 	    }
 	}
