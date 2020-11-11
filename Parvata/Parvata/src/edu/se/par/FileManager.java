@@ -22,9 +22,6 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.PDFToImage;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
-
-
-
 class FileManager {
 	
 //////////////////////////////////////////////////////////////////////////Image Save
