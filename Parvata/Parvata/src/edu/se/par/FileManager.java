@@ -26,31 +26,64 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
 
 class FileManager {
-
-//////////////////////////////////////////////////////////////////////////Image Save & Load
-	static void saveImage(BufferedImage page, String fileLocation) {
-		//unused
-		page = null;
-		//unused
-	}
-	//This retrieves images in [images/th2.PNG]
 	
-	static BufferedImage loadImage(String vampDen) throws IOException {
-		
-		System.out.println(new File(vampDen).getCanonicalFile());
-		BufferedImage buffy = null;
-		
-		try {
-			buffy = ImageIO.read(new File(vampDen));
-		}catch(IOException e) {
-			e.getMessage();
+//////////////////////////////////////////////////////////////////////////Image Save
+	//Just use image name for fileLocation right now for example newFile.png
+	
+		static void saveImage(BufferedImage buffy, String fileLocation) {
+			
+			System.out.println("LEAP");
+			
+			try {
+				BufferedImage slayer = buffy;
+				File outputFile = new File(fileLocation);
+				
+				boolean didCreate = false;
+				int n = fileLocation.length();
+				char last = fileLocation.charAt(n - 1);
+				char secondLast = fileLocation.charAt(n - 2);
+				
+				if(Character.compare(last,'f') == 0 || Character.compare(last,'F') == 0 ) {
+					didCreate = ImageIO.write(buffy, "pdf", outputFile);
+				}
+				else {
+					if(Character.compare(secondLast,'n') == 0|| Character.compare(secondLast,'N') == 0)
+						didCreate = ImageIO.write(buffy, "png", outputFile);
+					}
+				
+				if(didCreate == true)
+					System.out.println("Saved " + outputFile + " file.");
+				
+			} catch (IOException e) {
+				e.getMessage();
+			}
+			
 		}
-		if(buffy == null) {
-			System.out.println("Nest not cleared");
-		}
+//////////////////////////////////////////////////////////////////////////Image Load
+		//Input as images/fileName.PNG
 		
-		return buffy;
-	}
+		static BufferedImage loadImage(String fileLocation) throws Exception{
+			
+			//Get location
+			System.out.println(new File(fileLocation).getCanonicalFile());
+			BufferedImage originalImage = null;
+			
+			//Loag Image
+			try {
+			originalImage = ImageIO.read(new File(fileLocation));
+			}catch(IOException e) {
+				e.getMessage();
+			}
+			
+			//Output in terminal
+			if(originalImage == null) {
+				System.out.println("Image "+fileLocation+" has NOT been loaded.");
+			}else {
+				System.out.println("Image "+fileLocation+" has been loaded.");
+			}
+			
+			return originalImage;
+		}
 //////////////////////////////////////////////////////////////////////////Image Conversions
 	static void PNGtoPDF() {
 		
@@ -70,7 +103,6 @@ class FileManager {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
 	//Write fileLocation as Desktop/th.pdf
-	
 	public void openImage(String fileLocation) throws IOException, InterruptedException {
 		
 		boolean isWindows = System.getProperty("os.name")
@@ -95,8 +127,6 @@ class FileManager {
 		int exitCode = process.waitFor();
 		assert exitCode == 0;
 		
-		
-		
 	}
 	static class StreamRead implements Runnable {
 	    
@@ -107,22 +137,10 @@ class FileManager {
 	        this.inputStream = inputStream;
 	        this.consumer = consumer;
 	    }
-	
 	    @Override
 	    public void run() {
 	    	//BufferedReader read; read = 
 	    	new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
 	    }
 	}
-	
-	/*
-	//Works inside terminal
-	//ImageMagik
-	//convert -density 300 file:///Users/kd7933mc/Desktop/th.PDF -resize 25% a.png
-	//
-	//CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 F:th2.PNG
-	 * 
-	 * CONVERT file:///Users/kd7933mc/Desktop/th.PDF -quality 100 file:///Users/kd7933mc/Desktop/th2.PNG
-	*/
-	
 }
