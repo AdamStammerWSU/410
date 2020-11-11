@@ -22,66 +22,74 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.PDFToImage;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
-
-
-
 class FileManager {
 	
 //////////////////////////////////////////////////////////////////////////Image Save
-	//Just use image name for fileLocation right now for example newFile.png
-	
-		static void saveImage(BufferedImage buffy, String fileLocation) {
+	//Just use image name for fileLocation right now for example NEWFILE.png
+	//(IMAGE IS IN FOLDER ON DESKTOP CALLED BOOK)
+	static void saveImage(BufferedImage buffy, String fileLocation) {
+		
+		boolean isWindows = System.getProperty("os.name")
+	    		  .toLowerCase().startsWith("windows");
+		
+		String homeDirectory = System.getProperty("user.home");
+		Process process;
+		ProcessBuilder builder = new ProcessBuilder();
+		
+		try {
+			BufferedImage slayer = buffy;
+			File outputFile = new File(homeDirectory+"/Desktop/BOOK/"+fileLocation);//homeDirectory+"/Desktop/TESTER/"
 			
-			System.out.println("LEAP");
+			boolean didCreate = false;
+			int n = fileLocation.length();
+			char last = fileLocation.charAt(n - 1);
+			char secondLast = fileLocation.charAt(n - 2);
 			
-			try {
-				BufferedImage slayer = buffy;
-				File outputFile = new File(fileLocation);
-				
-				boolean didCreate = false;
-				int n = fileLocation.length();
-				char last = fileLocation.charAt(n - 1);
-				char secondLast = fileLocation.charAt(n - 2);
-				
-				if(Character.compare(last,'f') == 0 || Character.compare(last,'F') == 0 ) {
-					didCreate = ImageIO.write(buffy, "pdf", outputFile);
+			if(Character.compare(last,'f') == 0 || Character.compare(last,'F') == 0 ) {
+				didCreate = ImageIO.write(buffy, "pdf", outputFile);
+			}
+			else {
+				if(Character.compare(secondLast,'n') == 0|| Character.compare(secondLast,'N') == 0)
+					didCreate = ImageIO.write(buffy, "png", outputFile);
 				}
-				else {
-					if(Character.compare(secondLast,'n') == 0|| Character.compare(secondLast,'N') == 0)
-						didCreate = ImageIO.write(buffy, "png", outputFile);
-					}
-				
-				if(didCreate == true)
-					System.out.println("Saved " + outputFile + " file.");
-				
-			} catch (IOException e) {
-				e.getMessage();
+			
+			if(didCreate == true)
+				System.out.println("Saved " + outputFile + " file successfully.");
+			else {
+				System.out.println("Did NOT save " + outputFile + " file successfully.");
 			}
 			
+		} catch (IOException e) {
+			e.getMessage();
 		}
+	}
+
 //////////////////////////////////////////////////////////////////////////Image Load
-		//Input as images/fileName.PNG
+		//Input as fileName.PNG 
+		//(IMAGE MUST BE IN IMAGES FOLDER ON DESKTOP CALLED BOOK)
 		
 		static BufferedImage loadImage(String fileLocation) throws Exception{
 			
-			//Get location
-			System.out.println(new File(fileLocation).getCanonicalFile());
-			BufferedImage originalImage = null;
+			//System.out.println("Canonical: "+new File(fileLocation).getCanonicalFile());
+			boolean isWindows = System.getProperty("os.name")
+		    		  .toLowerCase().startsWith("windows");
 			
-			//Loag Image
+			String homeDirectory = System.getProperty("user.home");
+			Process process;
+			ProcessBuilder builder = new ProcessBuilder();
+			
+			BufferedImage originalImage = null;
 			try {
-			originalImage = ImageIO.read(new File(fileLocation));
+			
+			originalImage = ImageIO.read(new File(homeDirectory+"/Desktop/BOOK/"+fileLocation));
 			}catch(IOException e) {
 				e.getMessage();
 			}
-			
-			//Output in terminal
 			if(originalImage == null) {
-				System.out.println("Image "+fileLocation+" has NOT been loaded.");
+				System.out.println("Did NOT load "+ fileLocation+ " file successfully.");
 			}else {
-				System.out.println("Image "+fileLocation+" has been loaded.");
+				System.out.println("Loaded "+ fileLocation+ " file successfully.");
 			}
-			
 			return originalImage;
 		}
 //////////////////////////////////////////////////////////////////////////Image Conversions
@@ -109,17 +117,17 @@ class FileManager {
 	    		  .toLowerCase().startsWith("windows");
 		
 		String homeDirectory = System.getProperty("user.home");
-		
 		Process process;
 		ProcessBuilder builder = new ProcessBuilder();
+		
 		if (isWindows) {
 		   builder.command("cmd.exe", "/c", "dir");
 		} else {
 			builder.directory(new File(System.getProperty("user.home")));
 		    builder.command("sh", "-c", "open " + fileLocation);
 		}
-		builder.directory(new File(System.getProperty("user.home")));
 		
+		builder.directory(new File(System.getProperty("user.home")+"/Desktop/BOOK/"));
 		process = builder.start();
 		StreamRead streamGobbler = new StreamRead(process.getInputStream(), System.out::println);
 		Executors.newSingleThreadExecutor().submit(streamGobbler);
