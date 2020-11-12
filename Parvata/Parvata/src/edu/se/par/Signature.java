@@ -70,7 +70,7 @@ public class Signature {
 				inputPages[pageIndex].load();
 
 				// render the input page
-				g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * (j / outputCols), inputPages[pageIndex].getHeight() * (j / outputRows), null);
+				g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * (j % outputCols), inputPages[pageIndex].getHeight() * (j % outputRows), null);
 
 				// unload the input page
 				inputPages[pageIndex].cleanup();

@@ -1,6 +1,6 @@
 package edu.se.par;
 
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Imposer {
 
@@ -14,15 +14,11 @@ public class Imposer {
 
 	public void impose() {
 		// generate images
-		// FileManager.PDFtoPNG("");
-		BufferedImage buf = null;
 		try {
-			buf = FileManager.loadImage(gui.getOpenFilePath());
-		} catch (Exception e) {
-			e.printStackTrace();
+			FileManager.PDFtoPNG(gui.getOpenFilePath());
+		} catch (IOException | InterruptedException e1) {
+
 		}
-		
-		FileManager.saveImage(buf, gui.getSaveFilePath());
 		// create the signature
 		Signature sig = new Signature(layout, 0, 0);
 
@@ -30,11 +26,7 @@ public class Imposer {
 		sig.impose();
 
 		// compile pdf
-//		try {
-//			FileManager.PNGtoPDF("");
-//		} catch (IOException | InterruptedException e) {
-//			gui.PROMPT_ERROR("Failed to compile pdf");
-//		}
+		FileManager.PNGtoPDF("output-", gui.getSaveFilePath());
 	}
 
 }
