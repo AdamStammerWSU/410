@@ -7,7 +7,7 @@ public class Layout {
 	String layout;
 	String layoutArray [][];
 	
-	public Layout() {
+	public Layout(String layoutText) {
 		
 	}
 	

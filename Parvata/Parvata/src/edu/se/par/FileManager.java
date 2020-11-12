@@ -38,7 +38,9 @@ class FileManager {
 		
 		try {
 			BufferedImage slayer = buffy;
-			File outputFile = new File(homeDirectory+"/Desktop/BOOK/"+fileLocation);//homeDirectory+"/Desktop/TESTER/"
+//			File outputFile = new File(homeDirectory+"/Desktop/BOOK/"+fileLocation);//homeDirectory+"/Desktop/TESTER/"
+
+			File outputFile = new File(fileLocation);//homeDirectory+"/Desktop/TESTER/"
 			
 			boolean didCreate = false;
 			int n = fileLocation.length();
@@ -81,7 +83,8 @@ class FileManager {
 			BufferedImage originalImage = null;
 			try {
 			
-			originalImage = ImageIO.read(new File(homeDirectory+"/Desktop/BOOK/"+fileLocation));
+			//originalImage = ImageIO.read(new File(homeDirectory+"/Desktop/BOOK/"+fileLocation));
+			originalImage = ImageIO.read(new File(fileLocation));
 			}catch(IOException e) {
 				e.getMessage();
 			}

@@ -29,8 +29,9 @@ public class Signature {
 		String numberString = "";
 		for (int i = 0; i < layout.getInputPageCount(); i++) {
 			numberString = String.format("%04d", i + inputPageOffset);
-			inputPages[i] = new InputPage("/input" + numberString);
+			inputPages[i] = new InputPage("input-" + numberString+".png");
 		}
+		inputPages[0].load();
 	}
 
 	public void impose() {
@@ -41,14 +42,15 @@ public class Signature {
 		int outputRows = 2;
 		int outputCols = 2;
 		String numberString = "";
+		
 
 		for (int i = 0; i < layout.getLayout().length; i++) {
 			// for each output page
 
 			// initialize the output page
 			numberString = String.format("%04d", i);
-			outputPages[i] = new OutputPage("output" + numberString, outputCols * inputPages[i].getWidth(),
-					outputRows * inputPages[i].getHeight());
+			outputPages[i] = new OutputPage("output-" + numberString + ".png", outputCols * inputPages[0].getWidth(),
+					outputRows * inputPages[0].getHeight());
 			Graphics g = outputPages[i].pageImage.getGraphics();
 			for (int j = 0; j < layout.getLayout()[i].length; j++) {
 				// for each input page
@@ -56,7 +58,8 @@ public class Signature {
 				//get the index of the next input page
 				String iPage = layout.getLayout()[i][j];
 				float rotation = 0;
-				if(iPage.substring(iPage.length() - 1) == "u") {
+				System.out.println(iPage);
+				if(iPage.substring(iPage.length() - 1).compareTo("u") == 0) {
 					//the page needs to be upsidedown
 					rotation = 180;
 					iPage = iPage.substring(0, iPage.length() - 1);
@@ -67,7 +70,7 @@ public class Signature {
 				inputPages[pageIndex].load();
 
 				// render the input page
-				g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * (i / outputCols), inputPages[pageIndex].getHeight() * (i / outputRows), null);
+				g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * (j / outputCols), inputPages[pageIndex].getHeight() * (j / outputRows), null);
 
 				// unload the input page
 				inputPages[pageIndex].cleanup();
@@ -85,7 +88,6 @@ public class Signature {
 
 		BufferedImage pageImage = null;
 		String fileLocation = "";
-		boolean loaded = false;
 
 		public InputPage(String loc) {
 			this.fileLocation = loc;
@@ -94,18 +96,14 @@ public class Signature {
 		public void load() {
 			try {
 				pageImage = FileManager.loadImage(fileLocation);
-			} catch (IOException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.out.println("Failed to load inputpage");
 				e.printStackTrace();
 			}
-			loaded = true;
 		}
 
 		public void cleanup() {
 			pageImage = null;
-			loaded = false;
 			// delete the image file
 			// todo
 		}
@@ -128,21 +126,11 @@ public class Signature {
 			pageImage = op.filter(pageImage, null);
 		}
 
-		public boolean isLoaded() {
-			return loaded;
-		}
-
 		public int getHeight() {
-			if (!loaded) {
-				return 0;
-			}
 			return pageImage.getHeight();
 		}
 
 		public int getWidth() {
-			if (!loaded) {
-				return 0;
-			}
 			return pageImage.getWidth();
 		}
 	}

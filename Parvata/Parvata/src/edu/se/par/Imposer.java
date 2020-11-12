@@ -1,6 +1,6 @@
 package edu.se.par;
 
-import java.io.IOException;
+import java.awt.image.BufferedImage;
 
 public class Imposer {
 
@@ -15,7 +15,14 @@ public class Imposer {
 	public void impose() {
 		// generate images
 		// FileManager.PDFtoPNG("");
-
+		BufferedImage buf = null;
+		try {
+			buf = FileManager.loadImage(gui.getOpenFilePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		FileManager.saveImage(buf, gui.getSaveFilePath());
 		// create the signature
 		Signature sig = new Signature(layout, 0, 0);
 
