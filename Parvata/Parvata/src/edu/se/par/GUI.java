@@ -38,7 +38,7 @@ public class GUI extends JFrame implements ActionListener {
 	
 	// On-screen components for panelCenter
 	JLabel enterLayout = new JLabel("Enter Page Layout");
-	String defaultLayoutString = "2 2\n5u 12u 4 3\n11u 6u 14 3\n7u 10u 2 15\n9u 8u 16 1";
+	String defaultLayoutString = "2 2\n5u 12u 4 13\n11u 6u 14 3\n7u 10u 2 15\n9u 8u 16 1";
 			//new String[][] { { "5u", "12u", "4", "3" }, { "11u", "6u", "14", "3" },
 		//{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
 	JTextArea layout = new JTextArea(defaultLayoutString, 10, 15); 
@@ -165,8 +165,15 @@ public class GUI extends JFrame implements ActionListener {
 			System.out.println("You clicked Impose");
 			// If everything is entered in properly, example of what could be done:
 			setLoadingProgress("Now imposing...");
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			Imposer imposer = new Imposer(this, new Layout(getPageLayout()));
 			imposer.impose();
+			PROMPT_MESSAGE("Done Imposing!");
 		}
 	}
 	
@@ -200,6 +207,11 @@ public class GUI extends JFrame implements ActionListener {
 	
 	public void PROMPT_ERROR(String s) {
 		JOptionPane.showMessageDialog(this, s, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	
+	public void PROMPT_MESSAGE(String s) {
+		JOptionPane.showMessageDialog(this, s, "Message", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 }

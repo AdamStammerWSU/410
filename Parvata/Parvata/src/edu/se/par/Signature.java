@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Signature {
 
@@ -17,10 +16,10 @@ public class Signature {
 	public Signature(Layout layout, int inputPageOffset, int outputPageOffset) {
 		this.layout = layout;
 		/////////////////
-		layout.layoutArray = new String[][] { { "5u", "12u", "4", "3" }, { "11u", "6u", "14", "3" },
-				{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
-		layout.inputPageCount = 16;
-		layout.outputPageCount = 4;
+//		layout.layoutArray = new String[][] { { "5u", "12u", "4", "33" }, { "11u", "6u", "14", "3" },
+//				{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
+//		layout.inputPageCount = 16;
+//		layout.outputPageCount = 4;
 		/////////////////
 		this.inputPageOffset = inputPageOffset;
 		this.outputPageOffset = outputPageOffset;
@@ -29,7 +28,7 @@ public class Signature {
 		String numberString = "";
 		for (int i = 0; i < layout.getInputPageCount(); i++) {
 			numberString = String.format("%04d", i + inputPageOffset);
-			inputPages[i] = new InputPage("input-" + numberString+".png");
+			inputPages[i] = new InputPage("input-" + numberString + ".png");
 		}
 		inputPages[0].load();
 	}
@@ -42,7 +41,6 @@ public class Signature {
 		int outputRows = 2;
 		int outputCols = 2;
 		String numberString = "";
-		
 
 		for (int i = 0; i < layout.getLayout().length; i++) {
 			// for each output page
@@ -52,34 +50,50 @@ public class Signature {
 			outputPages[i] = new OutputPage("output-" + numberString + ".png", outputCols * inputPages[0].getWidth(),
 					outputRows * inputPages[0].getHeight());
 			Graphics g = outputPages[i].pageImage.getGraphics();
-			for (int j = 0; j < layout.getLayout()[i].length; j++) {
+//			for (int j = 0; j < layout.getLayout()[i].length; j++) {
 				// for each input page
-				
-				//get the index of the next input page
-				String iPage = layout.getLayout()[i][j];
-				float rotation = 0;
-				System.out.println(iPage);
-				if(iPage.substring(iPage.length() - 1).compareTo("u") == 0) {
-					//the page needs to be upsidedown
-					rotation = 180;
-					iPage = iPage.substring(0, iPage.length() - 1);
-				}
-				int pageIndex = Integer.parseInt(iPage) - 1;
-				
-				// load the input page
-				inputPages[pageIndex].load();
+
+				// get the index of the next input page
 
 				// render the input page
-				g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * (j % outputCols), inputPages[pageIndex].getHeight() * (j % outputRows), null);
+				// g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth()
+				// * (j % outputCols), inputPages[pageIndex].getHeight() * (j % outputRows),
+				// null);
+
+				for (int x = 0; x < outputRows; x++) {
+					// for each row
+					for (int z = 0; z < outputCols; z++) {
+						// for each column
+						String iPage = layout.getLayout()[i][x * outputRows + z];
+						float rotation = 0;
+						System.out.println(iPage);
+						if (iPage.substring(iPage.length() - 1).compareTo("u") == 0) {
+							// the page needs to be upsidedown
+							rotation = 180;
+							iPage = iPage.substring(0, iPage.length() - 1);
+						}
+						int pageIndex = Integer.parseInt(iPage) - 1;
+						
+						// load the input page
+						inputPages[pageIndex].load();
+						
+						// flip image if necessary
+						if(rotation == 180)
+							inputPages[pageIndex].flipImage((byte)0b11);
+						
+						//render the input page to the output page
+						g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * z, inputPages[pageIndex].getHeight() * x, null);
+					}
+				}
 
 				// unload the input page
-				inputPages[pageIndex].cleanup();
+//				inputPages[pageIndex].cleanup();
 
-			}
-			//render the output page
+//			}
+			// render the output page
 			FileManager.saveImage(outputPages[i].pageImage, outputPages[i].fileLocation);
-			
-			//unload the output page
+
+			// unload the output page
 			outputPages[i].unload();
 		}
 	}
@@ -107,7 +121,7 @@ public class Signature {
 			// delete the image file
 			// todo
 		}
-		
+
 		public void flipImage(byte axis) {
 			// 0 -> no flip
 			// 1 -> vertical flip
