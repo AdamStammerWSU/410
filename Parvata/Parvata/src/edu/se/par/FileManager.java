@@ -27,6 +27,7 @@ class FileManager {
 //////////////////////////////////////////////////////////////////////////Image Save
 	//Just use image name for fileLocation right now for example NEWFILE.png
 	//(IMAGE IS IN FOLDER ON DESKTOP CALLED BOOK)
+	
 	static void saveImage(BufferedImage buffy, String fileLocation) {
 		
 		boolean isWindows = System.getProperty("os.name")
@@ -109,6 +110,7 @@ class FileManager {
 	static void loadLayout() {
 				
 	}
+	
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
 	//Write fileLocation as Desktop/th.pdf
 	public void openImage(String fileLocation) throws IOException, InterruptedException {
