@@ -39,7 +39,9 @@ class FileManager {
 		
 		try {
 			BufferedImage slayer = buffy;
-			File outputFile = new File(homeDirectory+"/Desktop/BOOK/"+fileLocation);//homeDirectory+"/Desktop/TESTER/"
+//			File outputFile = new File(homeDirectory+"/Desktop/BOOK/"+fileLocation);//homeDirectory+"/Desktop/TESTER/"
+
+			File outputFile = new File(fileLocation);//homeDirectory+"/Desktop/TESTER/"
 			
 			boolean didCreate = false;
 			int n = fileLocation.length();
@@ -82,7 +84,8 @@ class FileManager {
 			BufferedImage originalImage = null;
 			try {
 			
-			originalImage = ImageIO.read(new File(homeDirectory+"/Desktop/BOOK/"+fileLocation));
+			//originalImage = ImageIO.read(new File(homeDirectory+"/Desktop/BOOK/"+fileLocation));
+			originalImage = ImageIO.read(new File(fileLocation));
 			}catch(IOException e) {
 				e.getMessage();
 			}
@@ -94,12 +97,39 @@ class FileManager {
 			return originalImage;
 		}
 //////////////////////////////////////////////////////////////////////////Image Conversions
-	static void PNGtoPDF() {
+	static void PNGtoPDF(String prefix, String fileLocation) {
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec("cmd /c convert " + prefix + "* " + fileLocation);
+		} catch (IOException e) {
+			System.out.println("Failed to compile pdf");
+		}
 		
+		while(p.isAlive()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				System.out.println("Failed to compile pdf");
+			}
+		}
 	}
 	
 	static void PDFtoPNG(String fileLocation) throws IOException, InterruptedException {
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec("cmd /c convert -density 300 " + fileLocation + " input-%04d.png");
+		} catch (IOException e) {
+			System.out.println("Failed to decompile pdf");
+			e.printStackTrace();
+		}
 		
+		while(p.isAlive()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				System.out.println("Failed to decompile pdf");
+			}
+		}
 	}
 	
 //////////////////////////////////////////////////////////////////////////Layout Methods
