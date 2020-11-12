@@ -1,9 +1,7 @@
 package edu.se.par;
 
-import java.awt.Graphics;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Signature {
 
@@ -15,12 +13,6 @@ public class Signature {
 
 	public Signature(Layout layout, int inputPageOffset, int outputPageOffset) {
 		this.layout = layout;
-		/////////////////
-//		layout.layoutArray = new String[][] { { "5u", "12u", "4", "33" }, { "11u", "6u", "14", "3" },
-//				{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
-//		layout.inputPageCount = 16;
-//		layout.outputPageCount = 4;
-		/////////////////
 		this.inputPageOffset = inputPageOffset;
 		this.outputPageOffset = outputPageOffset;
 		inputPages = new InputPage[layout.getLayout().length * layout.getLayout()[0].length];
@@ -28,9 +20,8 @@ public class Signature {
 		String numberString = "";
 		for (int i = 0; i < layout.getInputPageCount(); i++) {
 			numberString = String.format("%04d", i + inputPageOffset);
-			inputPages[i] = new InputPage("input-" + numberString + ".png");
+			inputPages[i] = new InputPage("/input" + numberString);
 		}
-		inputPages[0].load();
 	}
 
 	public void impose() {
@@ -40,61 +31,26 @@ public class Signature {
 		// int outputCols = layout.getOutputPageCols();
 		int outputRows = 2;
 		int outputCols = 2;
-		String numberString = "";
 
 		for (int i = 0; i < layout.getLayout().length; i++) {
 			// for each output page
 
 			// initialize the output page
-			numberString = String.format("%04d", i);
-			outputPages[i] = new OutputPage("output-" + numberString + ".png", outputCols * inputPages[0].getWidth(),
-					outputRows * inputPages[0].getHeight());
-			Graphics g = outputPages[i].pageImage.getGraphics();
-//			for (int j = 0; j < layout.getLayout()[i].length; j++) {
+			outputPages[i] = new OutputPage("output", outputCols * inputPages[i].getWidth(),
+					outputRows * inputPages[i].getHeight());
+			for (int j = 0; j < layout.getLayout()[i].length; j++) {
 				// for each input page
 
-				// get the index of the next input page
+				// load the input page
+				inputPages[i * inputPagesPerOutputPages + j].load();
 
 				// render the input page
-				// g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth()
-				// * (j % outputCols), inputPages[pageIndex].getHeight() * (j % outputRows),
-				// null);
-
-				for (int x = 0; x < outputRows; x++) {
-					// for each row
-					for (int z = 0; z < outputCols; z++) {
-						// for each column
-						String iPage = layout.getLayout()[i][x * outputRows + z];
-						float rotation = 0;
-						System.out.println(iPage);
-						if (iPage.substring(iPage.length() - 1).compareTo("u") == 0) {
-							// the page needs to be upsidedown
-							rotation = 180;
-							iPage = iPage.substring(0, iPage.length() - 1);
-						}
-						int pageIndex = Integer.parseInt(iPage) - 1;
-						
-						// load the input page
-						inputPages[pageIndex].load();
-						
-						// flip image if necessary
-						if(rotation == 180)
-							inputPages[pageIndex].flipImage((byte)0b11);
-						
-						//render the input page to the output page
-						g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * z, inputPages[pageIndex].getHeight() * x, null);
-					}
-				}
+				outputPages[i].addPage(0, 0, 0);
 
 				// unload the input page
-//				inputPages[pageIndex].cleanup();
+				inputPages[i].unload();
 
-//			}
-			// render the output page
-			FileManager.saveImage(outputPages[i].pageImage, outputPages[i].fileLocation);
-
-			// unload the output page
-			outputPages[i].unload();
+			}
 		}
 	}
 
@@ -102,6 +58,7 @@ public class Signature {
 
 		BufferedImage pageImage = null;
 		String fileLocation = "";
+		boolean loaded = false;
 
 		public InputPage(String loc) {
 			this.fileLocation = loc;
@@ -110,41 +67,32 @@ public class Signature {
 		public void load() {
 			try {
 				pageImage = FileManager.loadImage(fileLocation);
-			} catch (Exception e) {
-				System.out.println("Failed to load inputpage");
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			loaded = true;
 		}
 
-		public void cleanup() {
+		public void unload() {
 			pageImage = null;
-			// delete the image file
-			// todo
+			loaded = false;
 		}
 
-		public void flipImage(byte axis) {
-			// 0 -> no flip
-			// 1 -> vertical flip
-			// 2 -> horizontal flip
-			// 3 -> both flip (equal to 180 degree rotation)
-
-			int scaleHo = (((axis >> 1) % 2) == 1) ? -1 : 1;
-			int scaleV = ((axis % 2) == 1) ? -1 : 1;
-
-			int scaleWidth = -pageImage.getWidth() * ((axis >> 1) % 2);
-			int scaleHeight = -pageImage.getHeight() * (axis % 2);
-
-			AffineTransform tx = AffineTransform.getScaleInstance(scaleHo, scaleV);
-			tx.translate(scaleWidth, scaleHeight);
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			pageImage = op.filter(pageImage, null);
+		public boolean isLoaded() {
+			return loaded;
 		}
 
 		public int getHeight() {
+			if (!loaded) {
+				return 0;
+			}
 			return pageImage.getHeight();
 		}
 
 		public int getWidth() {
+			if (!loaded) {
+				return 0;
+			}
 			return pageImage.getWidth();
 		}
 	}
@@ -155,7 +103,10 @@ public class Signature {
 
 		public OutputPage(String loc, int width, int height) {
 			this.fileLocation = loc;
-			pageImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		}
+
+		public void addPage(int x, int y, float rotation) {
+
 		}
 
 		public void renderPage() {
