@@ -1,5 +1,4 @@
 package edu.se.par;
-
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
 import javax.imageio.ImageIO;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,7 +20,6 @@ import org.apache.pdfbox.tools.PDFToImage;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
 class FileManager {
-	
 //////////////////////////////////////////////////////////////////////////Image Save
 	static void saveImage(BufferedImage buffy, String fileLocation) {
 
