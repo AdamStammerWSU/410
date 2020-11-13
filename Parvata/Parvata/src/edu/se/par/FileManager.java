@@ -25,17 +25,9 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 class FileManager {
 	
 //////////////////////////////////////////////////////////////////////////Image Save
-	//Just use image name for fileLocation right now for example NEWFILE.png
-	//(IMAGE IS IN FOLDER ON DESKTOP CALLED BOOK)
+
 	static void saveImage(BufferedImage buffy, String fileLocation) {
-		
-		//boolean isWindows = System.getProperty("os.name")
-	    //		  .toLowerCase().startsWith("windows");
-		
-		//String homeDirectory = System.getProperty("user.home");
-		
-		//Process process;
-		//ProcessBuilder builder = new ProcessBuilder();
+
 		boolean isWindows = isWindows();
 		
 		try {
@@ -68,18 +60,8 @@ class FileManager {
 	}
 
 //////////////////////////////////////////////////////////////////////////Image Load
-		//Input as fileName.PNG 
-		//(IMAGE MUST BE IN IMAGES FOLDER ON DESKTOP CALLED BOOK)
 		
 		static BufferedImage loadImage(String fileLocation) throws Exception{
-			
-			
-			/*boolean isWindows = System.getProperty("os.name")
-		    		  .toLowerCase().startsWith("windows");
-			
-			String homeDirectory = System.getProperty("user.home");
-			Process process;
-			ProcessBuilder builder = new ProcessBuilder();*/
 			
 			BufferedImage originalImage = null;
 			try {
@@ -95,7 +77,7 @@ class FileManager {
 			}
 			return originalImage;
 		}
-//////////////////////////////////////////////////////////////////////////Image Conversions
+//////////////////////////////////////////////////////////////////////////Image PNG to PDF
 	static void PNGtoPDF(String prefix, String fileLocation) {
 		
 		boolean isWindows = isWindows();
@@ -119,7 +101,7 @@ class FileManager {
 			}
 		}
 	}
-	
+//////////////////////////////////////////////////////////////////////////Image PDF to PNG
 	static void PDFtoPNG(String fileLocation) throws IOException, InterruptedException {
 		
 		boolean isWindows = isWindows();
