@@ -165,15 +165,11 @@ public class GUI extends JFrame implements ActionListener {
 			System.out.println("You clicked Impose");
 			// If everything is entered in properly, example of what could be done:
 			setLoadingProgress("Now imposing...");
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			Imposer imposer = new Imposer(this, new Layout(getPageLayout()));
 			imposer.impose();
 			PROMPT_MESSAGE("Done Imposing!");
+
+			setLoadingProgress("");
 		}
 	}
 	
