@@ -15,7 +15,7 @@ public class Signature {
 
 	public Signature(Layout layout, int inputPageOffset, int outputPageOffset) {
 		this.layout = layout;
-		/////////////////
+		/////////////////   TEST LAYOUT
 //		layout.layoutArray = new String[][] { { "5u", "12u", "4", "33" }, { "11u", "6u", "14", "3" },
 //				{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
 //		layout.inputPageCount = 16;
