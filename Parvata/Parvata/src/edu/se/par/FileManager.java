@@ -25,7 +25,6 @@ import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 class FileManager {
 	
 //////////////////////////////////////////////////////////////////////////Image Save
-
 	static void saveImage(BufferedImage buffy, String fileLocation) {
 
 		boolean isWindows = isWindows();
@@ -58,9 +57,7 @@ class FileManager {
 			e.getMessage();
 		}
 	}
-
 //////////////////////////////////////////////////////////////////////////Image Load
-		
 		static BufferedImage loadImage(String fileLocation) throws Exception{
 			
 			BufferedImage originalImage = null;
@@ -135,7 +132,7 @@ class FileManager {
 	static void loadLayout() {
 				
 	}
-	
+////////////////////////////////////////////////////////////////////////// Helper Method(s)
 	static boolean isWindows()
 	{
 		boolean isWindows = System.getProperty("os.name")
