@@ -1,5 +1,4 @@
 package edu.se.par;
-
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,9 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-
 import javax.imageio.ImageIO;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,24 +20,13 @@ import org.apache.pdfbox.tools.PDFToImage;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 
 class FileManager {
-	
 //////////////////////////////////////////////////////////////////////////Image Save
-	//Just use image name for fileLocation right now for example NEWFILE.png
-	//(IMAGE IS IN FOLDER ON DESKTOP CALLED BOOK)
 	static void saveImage(BufferedImage buffy, String fileLocation) {
-		
-		boolean isWindows = System.getProperty("os.name")
-	    		  .toLowerCase().startsWith("windows");
-		
-		String homeDirectory = System.getProperty("user.home");
-		Process process;
-		ProcessBuilder builder = new ProcessBuilder();
-		
+
+		boolean isWindows = isWindows();
 		try {
 			BufferedImage slayer = buffy;
-//			File outputFile = new File(homeDirectory+"/Desktop/BOOK/"+fileLocation);//homeDirectory+"/Desktop/TESTER/"
-
-			File outputFile = new File(fileLocation);//homeDirectory+"/Desktop/TESTER/"
+			File outputFile = new File(fileLocation);
 			
 			boolean didCreate = false;
 			int n = fileLocation.length();
@@ -65,25 +51,11 @@ class FileManager {
 			e.getMessage();
 		}
 	}
-
 //////////////////////////////////////////////////////////////////////////Image Load
-		//Input as fileName.PNG 
-		//(IMAGE MUST BE IN IMAGES FOLDER ON DESKTOP CALLED BOOK)
-		
 		static BufferedImage loadImage(String fileLocation) throws Exception{
-			
-			//System.out.println("Canonical: "+new File(fileLocation).getCanonicalFile());
-			boolean isWindows = System.getProperty("os.name")
-		    		  .toLowerCase().startsWith("windows");
-			
-			String homeDirectory = System.getProperty("user.home");
-			Process process;
-			ProcessBuilder builder = new ProcessBuilder();
 			
 			BufferedImage originalImage = null;
 			try {
-			
-			//originalImage = ImageIO.read(new File(homeDirectory+"/Desktop/BOOK/"+fileLocation));
 			originalImage = ImageIO.read(new File(fileLocation));
 			}catch(IOException e) {
 				e.getMessage();
@@ -95,11 +67,18 @@ class FileManager {
 			}
 			return originalImage;
 		}
-//////////////////////////////////////////////////////////////////////////Image Conversions
+//////////////////////////////////////////////////////////////////////////Image PNG to PDF
 	static void PNGtoPDF(String prefix, String fileLocation) {
+		
+		boolean isWindows = isWindows();
+		
 		Process p = null;
 		try {
-			p = Runtime.getRuntime().exec("cmd /c convert " + prefix + "* " + fileLocation);
+			if(isWindows == true)
+				p = Runtime.getRuntime().exec("cmd /c convert " + prefix + "* " + fileLocation);
+			else
+				p = Runtime.getRuntime().exec("sh -c convert " + prefix + "* " + fileLocation);
+			
 		} catch (IOException e) {
 			System.out.println("Failed to compile pdf");
 		}
@@ -112,11 +91,18 @@ class FileManager {
 			}
 		}
 	}
-	
+//////////////////////////////////////////////////////////////////////////Image PDF to PNG
 	static void PDFtoPNG(String fileLocation) throws IOException, InterruptedException {
+		
+		boolean isWindows = isWindows();
+		
 		Process p = null;
 		try {
-			p = Runtime.getRuntime().exec("cmd /c convert -density 300 " + fileLocation + " input-%04d.png");
+			if(isWindows == true)
+				p = Runtime.getRuntime().exec("cmd /c convert -density 300 " + fileLocation + " input-%04d.png");
+			else
+				p = Runtime.getRuntime().exec("sh -c convert -density 300 " + fileLocation + " input-%04d.png");
+			
 		} catch (IOException e) {
 			System.out.println("Failed to decompile pdf");
 			e.printStackTrace();
@@ -130,7 +116,6 @@ class FileManager {
 			}
 		}
 	}
-	
 //////////////////////////////////////////////////////////////////////////Layout Methods
 	static void saveLayout() {
 				
@@ -139,9 +124,20 @@ class FileManager {
 	static void loadLayout() {
 				
 	}
+////////////////////////////////////////////////////////////////////////// Helper Method(s)
+	static boolean isWindows()
+	{
+		boolean isWindows = System.getProperty("os.name")
+	    		  .toLowerCase().startsWith("windows");
+		
+		if(isWindows == true)
+			return true;
+		else
+			return false;
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
 	//Write fileLocation as Desktop/th.pdf
-	public void openImage(String fileLocation) throws IOException, InterruptedException {
+	/*public void openImage(String fileLocation) throws IOException, InterruptedException {
 		
 		boolean isWindows = System.getProperty("os.name")
 	    		  .toLowerCase().startsWith("windows");
@@ -157,7 +153,7 @@ class FileManager {
 		    builder.command("sh", "-c", "open " + fileLocation);
 		}
 		
-		builder.directory(new File(System.getProperty("user.home")+"/Desktop/BOOK/"));
+		builder.directory(new File(System.getProperty("user.home")+"\\));
 		process = builder.start();
 		StreamRead streamGobbler = new StreamRead(process.getInputStream(), System.out::println);
 		Executors.newSingleThreadExecutor().submit(streamGobbler);
@@ -178,5 +174,5 @@ class FileManager {
 	    public void run() {
 	    	new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(consumer);
 	    }
-	}
+	}*/
 }
