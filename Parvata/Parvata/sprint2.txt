@@ -4,7 +4,6 @@ Sprint 2
 - Optimization (Memory)
 - Layout Save/Load
 - Layout Tweaks
-- PDF (De)Composition
 - File Filtering
 
 Beyond
