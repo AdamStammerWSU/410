@@ -28,10 +28,8 @@ class FileManager {
 	static void saveImage(BufferedImage buffy, String fileLocation) {
 
 		boolean isWindows = isWindows();
-		
 		try {
 			BufferedImage slayer = buffy;
-
 			File outputFile = new File(fileLocation);
 			
 			boolean didCreate = false;
@@ -62,7 +60,6 @@ class FileManager {
 			
 			BufferedImage originalImage = null;
 			try {
-			
 			originalImage = ImageIO.read(new File(fileLocation));
 			}catch(IOException e) {
 				e.getMessage();
@@ -123,7 +120,6 @@ class FileManager {
 			}
 		}
 	}
-	
 //////////////////////////////////////////////////////////////////////////Layout Methods
 	static void saveLayout() {
 				
