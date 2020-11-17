@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GUI extends JFrame implements ActionListener {
 	
@@ -46,12 +47,16 @@ public class GUI extends JFrame implements ActionListener {
 	
 	// On-screen components for panelRight
 	JButton impose = new JButton("Impose");
-	JLabel loadingProgress = new JLabel("");
+	//JLabel loadingProgress = new JLabel("");
+	JButton loadLayout = new JButton("Load Layout");
+	JButton saveLayout = new JButton("Save Layout");
 	
 	// On-screen components for panelBottom
 	JButton openFile = new JButton("Open File");
 	JFileChooser fc;
 	JFileChooser fc2;
+	JFileChooser fc3;
+	JFileChooser fc4;
 	JTextArea filePath = new JTextArea("File path", 1, 10); // Should the file text areas be editable?
 	JScrollPane scrollPath1= new JScrollPane(filePath);
 	JButton saveFile = new JButton("Save File to...");
@@ -78,19 +83,19 @@ public class GUI extends JFrame implements ActionListener {
 		title.setFont(titleFont);
 		
 		panelCenter.setLayout((LayoutManager) new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
-		panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+		panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
 		//panelCenter.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
 		enterLayout.setFont(bigFont);
 		enterLayout.setAlignmentX(CENTER_ALIGNMENT);
 		
-		panelRight.setLayout((LayoutManager) new BoxLayout(panelRight, BoxLayout.Y_AXIS));
-		//panelRight.setLayout((LayoutManager) new GridLayout(3,1));
-		panelRight.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 10));
+		//panelRight.setLayout((LayoutManager) new BoxLayout(panelRight, BoxLayout.Y_AXIS));
+		panelRight.setLayout((LayoutManager) new GridLayout(3, 1, 0, 20));
+		panelRight.setBorder(BorderFactory.createEmptyBorder(32, 10, 5, 15));
 		//panelRight.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
 		//impose.setPreferredSize(new Dimension(20,20));
 		//impose.setMinimumSize(new Dimension(50, 20));
 		//impose.setMaximumSize(new Dimension(50, 50));
-		loadingProgress.setAlignmentX(CENTER_ALIGNMENT);
+		//loadingProgress.setAlignmentX(CENTER_ALIGNMENT);
 		impose.setAlignmentX(CENTER_ALIGNMENT);
 		
 		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10)); // Might change to a different layout
@@ -108,11 +113,27 @@ public class GUI extends JFrame implements ActionListener {
 		panelCenter.setPreferredSize(new Dimension(325, 300));
 		
 		// Adds components to the right panel
-		panelRight.add(Box.createVerticalGlue());
-		panelRight.add(loadingProgress);
+		//panelRight.add(Box.createVerticalGlue());
+		//panelRight.add(loadingProgress);
 		panelRight.add(impose);
-		panelRight.add(Box.createVerticalGlue());
+		panelRight.add(loadLayout);
+		panelRight.add(saveLayout);
+		//panelRight.add(Box.createVerticalGlue());
 		panelRight.setPreferredSize(new Dimension(175, 300));
+		
+		impose.addActionListener(this);
+		loadLayout.addActionListener(this);
+		saveLayout.addActionListener(this);
+		
+		FileNameExtensionFilter filterText = new FileNameExtensionFilter("text file", "txt", "text");
+		fc3 = new JFileChooser();
+		fc3.setFileFilter(filterText);
+		fc3.setAcceptAllFileFilterUsed(false); // Only the what the filter specifies is allowed
+		
+		fc4 = new JFileChooser();
+		fc4.setFileFilter(filterText);
+		fc4.setAcceptAllFileFilterUsed(false); // Doesn't stop the user from typing whatever extension however...
+		
 		
 		// Adds components to the bottom panel
 		panelBottom.add(openFile);
@@ -121,11 +142,17 @@ public class GUI extends JFrame implements ActionListener {
 		panelBottom.add(scrollPath2);
 		panelBottom.setPreferredSize(new Dimension(500, 92));
 		
-		impose.addActionListener(this);
 		openFile.addActionListener(this);
-		fc = new JFileChooser();
 		saveFile.addActionListener(this);
+		
+		FileNameExtensionFilter filterPdf = new FileNameExtensionFilter("PDF file", "pdf");
+		fc = new JFileChooser();
+		fc.setFileFilter(filterPdf);
+		fc.setAcceptAllFileFilterUsed(false); // Only the what the filter specifies is allowed
+		
 		fc2 = new JFileChooser();
+		fc2.setFileFilter(filterPdf);
+		fc2.setAcceptAllFileFilterUsed(false); // Doesn't stop the user from typing whatever extension however...
 		
 		// Panels' position on frame
 		add(panelTop, BorderLayout.NORTH);
@@ -170,6 +197,28 @@ public class GUI extends JFrame implements ActionListener {
 			PROMPT_MESSAGE("Done Imposing!");
 
 			setLoadingProgress("");
+			
+		} else if (e.getSource() == loadLayout) {
+			int returnVal = fc3.showOpenDialog(GUI.this);
+			
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				// Load the text file into layout immediately HERE
+				System.out.println(fc3.getSelectedFile().toString());
+				System.out.println("You picked a layout from a file");
+			} else {
+				// User chose cancel
+			}
+			
+		} else if (e.getSource() == saveLayout) {
+			int returnVal = fc4.showSaveDialog(GUI.this);
+			
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				// Save the text from layout immediately HERE
+				System.out.println(fc4.getSelectedFile().toString());
+				System.out.println("You attempted to save the layout to a file");
+			} else {
+				// User chose cancel
+			}
 		}
 	}
 	
@@ -198,7 +247,7 @@ public class GUI extends JFrame implements ActionListener {
 	 * Sets the loadingProgress JLabel's text to whatever status is given
 	 */
 	public void setLoadingProgress(String status) {
-		loadingProgress.setText(status);
+		//loadingProgress.setText(status);
 	}
 	
 	public void PROMPT_ERROR(String s) {
