@@ -8,6 +8,11 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -46,10 +51,11 @@ public class GUI extends JFrame implements ActionListener {
 	JScrollPane scrollLayout = new JScrollPane(layout);
 	
 	// On-screen components for panelRight
-	JButton impose = new JButton("Impose");
+	
 	//JLabel loadingProgress = new JLabel("");
 	JButton loadLayout = new JButton("Load Layout");
 	JButton saveLayout = new JButton("Save Layout");
+	JButton impose = new JButton("Impose");
 	
 	// On-screen components for panelBottom
 	JButton openFile = new JButton("Open File");
@@ -115,15 +121,15 @@ public class GUI extends JFrame implements ActionListener {
 		// Adds components to the right panel
 		//panelRight.add(Box.createVerticalGlue());
 		//panelRight.add(loadingProgress);
-		panelRight.add(impose);
 		panelRight.add(loadLayout);
 		panelRight.add(saveLayout);
+		panelRight.add(impose);
 		//panelRight.add(Box.createVerticalGlue());
 		panelRight.setPreferredSize(new Dimension(175, 300));
 		
-		impose.addActionListener(this);
 		loadLayout.addActionListener(this);
 		saveLayout.addActionListener(this);
+		impose.addActionListener(this);
 		
 		FileNameExtensionFilter filterText = new FileNameExtensionFilter("text file", "txt", "text");
 		fc3 = new JFileChooser();
@@ -202,8 +208,8 @@ public class GUI extends JFrame implements ActionListener {
 			int returnVal = fc3.showOpenDialog(GUI.this);
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// Load the text file into layout immediately HERE
-				System.out.println(fc3.getSelectedFile().toString());
+				// Load the text file into layout immediately
+				layout.setText(getLayoutFileContents(fc3.getSelectedFile().toString()));
 				System.out.println("You picked a layout from a file");
 			} else {
 				// User chose cancel
@@ -241,6 +247,39 @@ public class GUI extends JFrame implements ActionListener {
 	 */
 	public String getPageLayout() {
 		return layout.getText();
+	}
+	
+	/**
+	 * Gets the contents of a text file that the user wants to load in for a book layout
+	 */
+	//Should this be in a different class? Like the layout class?
+	public String getLayoutFileContents(String fileLocation) {
+		File file = new File(fileLocation); // create file
+		BufferedReader reader = null; // create reader
+		try {
+			reader = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found (" + fileLocation + ")");
+		}
+
+		String dataLine = ""; // place to store each line of data
+		String data = ""; // place to store all data
+		try {
+			// read in data line by line until there are not more lines to read
+			while ((dataLine = reader.readLine()) != null) {
+				data += dataLine + "\n";
+			}
+		} catch (IOException e) {
+			System.out.println("Failed to read from the file");
+		}
+
+		return data;	
+	}
+	/**
+	 * Saves the current layout text as a text file, specified where the user wants it to be. WIP
+	 */
+	public void saveLayoutFile() {
+		
 	}
 	
 	/**
