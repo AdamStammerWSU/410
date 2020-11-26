@@ -40,13 +40,11 @@ class FileManager {
 				if(Character.compare(secondLast,'n') == 0|| Character.compare(secondLast,'N') == 0)
 					didCreate = ImageIO.write(buffy, "png", outputFile);
 				}
-			
 			if(didCreate == true)
 				System.out.println("Saved " + outputFile + " file successfully.");
 			else {
 				System.out.println("Did NOT save " + outputFile + " file successfully.");
 			}
-			
 		} catch (IOException e) {
 			e.getMessage();
 		}
@@ -71,18 +69,16 @@ class FileManager {
 	static void PNGtoPDF(String prefix, String fileLocation) {
 		
 		boolean isWindows = isWindows();
-		
 		Process p = null;
+		
 		try {
 			if(isWindows == true)
 				p = Runtime.getRuntime().exec("cmd /c convert " + prefix + "* " + fileLocation);
 			else
 				p = Runtime.getRuntime().exec("sh -c convert " + prefix + "* " + fileLocation);
-			
 		} catch (IOException e) {
 			System.out.println("Failed to compile pdf");
 		}
-		
 		while(p.isAlive()) {
 			try {
 				Thread.sleep(100);
@@ -95,8 +91,8 @@ class FileManager {
 	static void PDFtoPNG(String fileLocation) throws IOException, InterruptedException {
 		
 		boolean isWindows = isWindows();
-		
 		Process p = null;
+		
 		try {
 			if(isWindows == true)
 				p = Runtime.getRuntime().exec("cmd /c convert -density 300 " + fileLocation + " input-%04d.png");
@@ -107,7 +103,6 @@ class FileManager {
 			System.out.println("Failed to decompile pdf");
 			e.printStackTrace();
 		}
-		
 		while(p.isAlive()) {
 			try {
 				Thread.sleep(100);
@@ -117,12 +112,12 @@ class FileManager {
 		}
 	}
 //////////////////////////////////////////////////////////////////////////Layout Methods
-	static void saveLayout() {
-				
+	static void saveLayout(File saveFile) {
+		
 	}
 		
-	static void loadLayout() {
-				
+	static void loadLayout(String fileName) {
+		
 	}
 ////////////////////////////////////////////////////////////////////////// Helper Method(s)
 	static boolean isWindows()
@@ -134,6 +129,10 @@ class FileManager {
 			return true;
 		else
 			return false;
+	}
+	static void deleteRemainingFiles() {
+		
+	
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
 	//Write fileLocation as Desktop/th.pdf
