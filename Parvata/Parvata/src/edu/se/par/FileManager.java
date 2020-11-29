@@ -1,11 +1,19 @@
 package edu.se.par;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -52,7 +60,7 @@ class FileManager {
 //////////////////////////////////////////////////////////////////////////Image Load
 		static BufferedImage loadImage(String fileLocation) throws Exception{
 			
-			boolean isWindows = isWindows();
+			//boolean isWindows = isWindows();
 			
 			BufferedImage originalImage = null;
 			try {
@@ -114,12 +122,22 @@ class FileManager {
 		}
 	}
 //////////////////////////////////////////////////////////////////////////Layout Methods
-	static void saveLayout(File saveFile) {
+	static void saveLayout(String fileLocation, String content) throws IOException {
+		File file = new File (fileLocation);
 		
+		BufferedWriter out = new BufferedWriter(new FileWriter(file)); 
+		out.write(content);
+		out.close();
 	}
-		
-	static void loadLayout(String fileName) {
-		
+	static String loadLayout(String fileLocation) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
+		String line;
+		StringBuilder sb = new StringBuilder();
+		while ((line = reader.readLine()) != null){
+			sb.append(line + "\n");
+		}
+		reader.close();
+		return sb.toString();
 	}
 ////////////////////////////////////////////////////////////////////////// Helper Method(s)
 	static boolean isWindows()
@@ -137,6 +155,18 @@ class FileManager {
 	
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
+	/*static void saveLayout(String fileLocation, byte[] fileBytes) throws IOException {
+	OutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(fileLocation));
+	InputStream inputStream = new ByteArrayInputStream(fileBytes);
+	int token = -1;
+
+	while((token = inputStream.read()) != -1){
+	  bufferedOutputStream.write(token);
+	}
+	bufferedOutputStream.flush();
+	bufferedOutputStream.close();
+	inputStream.close();
+}*/
 	//Write fileLocation as Desktop/th.pdf
 	/*public void openImage(String fileLocation) throws IOException, InterruptedException {
 		
