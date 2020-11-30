@@ -61,7 +61,6 @@ class FileManager {
 		static BufferedImage loadImage(String fileLocation) throws Exception{
 			
 			//boolean isWindows = isWindows();
-			
 			BufferedImage originalImage = null;
 			originalImage = ImageIO.read(new File(fileLocation));
 			if(originalImage == null) {
