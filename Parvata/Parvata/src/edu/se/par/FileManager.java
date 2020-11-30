@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -145,8 +146,29 @@ class FileManager {
 		else
 			return false;
 	}
-	static void deleteRemainingFiles() {
+	static void cleanupTempFiles() {
+		File folder = new File(".");
+		File[] files = folder.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(final File dir, final String name) {
+				return name.matches("input-.....png");
+			}
+		});
 		
+		for(int i = 0; i < files.length; i++) {
+			files[i].delete();
+		}
+		
+		files = folder.listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(final File dir, final String name) {
+				return name.matches("output-.....png");
+			}
+		});
+		
+		for(int i = 0; i < files.length; i++) {
+			files[i].delete();
+		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
 	/*static void saveLayout(String fileLocation, byte[] fileBytes) throws IOException {

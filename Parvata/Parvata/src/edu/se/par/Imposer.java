@@ -25,10 +25,10 @@ public class Imposer {
 
 		// count pages to determine how many signatures are necessary
 		File folder = new File(".");
-		String[] filess = folder.list();
-		for (int i = 0; i < filess.length; i++) {
-			System.out.println(filess[i]);
-		}
+		//String[] filess = folder.list();
+		//for (int i = 0; i < filess.length; i++) {
+		//	System.out.println(filess[i]);
+		//}
 		final String[] files = folder.list(new FilenameFilter() {
 			@Override
 			public boolean accept(final File dir, final String name) {
@@ -50,6 +50,8 @@ public class Imposer {
 
 		// compile pdf
 		FileManager.PNGtoPDF("output-", gui.getSaveFilePath());
+		
+		FileManager.cleanupTempFiles();
 	}
 
 }
