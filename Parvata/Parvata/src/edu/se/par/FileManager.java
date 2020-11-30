@@ -120,10 +120,13 @@ class FileManager {
 //////////////////////////////////////////////////////////////////////////Layout Methods
 	static void saveLayout(Layout layout,String fileLocation) throws IOException {
 		
-		File file = new File (fileLocation);
-		//BufferedWriter out = new BufferedWriter(new FileWriter(file)); 
-		//out.write(content);
-		//out.close();
+		try {
+            FileWriter writer = new FileWriter(fileLocation, true);
+            writer.write(layout.getLayoutString());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 	static Layout loadLayout(String fileLocation) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
