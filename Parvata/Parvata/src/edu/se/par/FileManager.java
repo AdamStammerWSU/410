@@ -121,7 +121,7 @@ class FileManager {
 	static void saveLayout(Layout layout,String fileLocation) throws IOException {
 		
 		try {
-            FileWriter writer = new FileWriter(fileLocation, true);
+            FileWriter writer = new FileWriter(fileLocation, false);
             writer.write(layout.getLayoutString());
             writer.close();
         } catch (IOException e) {
