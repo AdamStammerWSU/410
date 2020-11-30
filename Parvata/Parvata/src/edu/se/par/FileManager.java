@@ -117,12 +117,12 @@ class FileManager {
 		}
 	}
 //////////////////////////////////////////////////////////////////////////Layout Methods
-	static void saveLayout(String fileLocation, String content) throws IOException {
-		File file = new File (fileLocation);
+	static void saveLayout(Layout layout,String fileLocation) throws IOException {
 		
-		BufferedWriter out = new BufferedWriter(new FileWriter(file)); 
-		out.write(content);
-		out.close();
+		File file = new File (fileLocation);
+		//BufferedWriter out = new BufferedWriter(new FileWriter(file)); 
+		//out.write(content);
+		//out.close();
 	}
 	static String loadLayout(String fileLocation) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
@@ -147,7 +147,6 @@ class FileManager {
 	}
 	static void deleteRemainingFiles() {
 		
-	
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////Open Image
 	/*static void saveLayout(String fileLocation, byte[] fileBytes) throws IOException {
