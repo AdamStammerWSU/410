@@ -46,7 +46,7 @@ public class Signature {
 			// for each output page
 
 			// initialize the output page
-			numberString = String.format("%04d", i);
+			numberString = String.format("%04d", i+outputPageOffset);
 			outputPages[i] = new OutputPage("output-" + numberString + ".png", outputCols * inputPages[0].getWidth(),
 					outputRows * inputPages[0].getHeight());
 			Graphics g = outputPages[i].pageImage.getGraphics();
@@ -73,24 +73,20 @@ public class Signature {
 						iPage = iPage.substring(0, iPage.length() - 1);
 					}
 					int pageIndex = Integer.parseInt(iPage) - 1;
-					InputPage currentPage = null;
 					// load the input page
-					try {
-						inputPages[pageIndex].load();
-						currentPage = inputPages[pageIndex];
-						
-					} catch (ArrayIndexOutOfBoundsException e) {
-						currentPage = new InputPage("");
-						currentPage.pageImage = new BufferedImage(inputPages[0].getWidth(), inputPages[0].getHeight(), BufferedImage.TYPE_INT_ARGB);
+					inputPages[pageIndex].load();
+					
+					//create blank page if necessary
+					if(inputPages[pageIndex].pageImage == null) {
+						inputPages[pageIndex].pageImage = new BufferedImage(inputPages[0].getWidth(), inputPages[0].getHeight(), BufferedImage.TYPE_INT_ARGB);
 					}
 
 					// flip image if necessary
 					if (rotation == 180)
-						currentPage.flipImage((byte) 0b11);
+						inputPages[pageIndex].flipImage((byte) 0b11);
 
 					// render the input page to the output page
-					g.drawImage(currentPage.pageImage, currentPage.getWidth() * z,
-							currentPage.getHeight() * x, null);
+					g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * z, inputPages[pageIndex].getHeight() * x, null);
 				}
 			}
 
@@ -119,8 +115,8 @@ public class Signature {
 			try {
 				pageImage = FileManager.loadImage(fileLocation);
 			} catch (Exception e) {
-				System.out.println("Failed to load inputpage");
-				e.printStackTrace();
+				System.out.println("Failed to load inputpage......flagging for blank page");
+				pageImage = null;
 			}
 		}
 

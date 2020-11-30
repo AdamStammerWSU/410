@@ -63,11 +63,7 @@ class FileManager {
 			//boolean isWindows = isWindows();
 			
 			BufferedImage originalImage = null;
-			try {
 			originalImage = ImageIO.read(new File(fileLocation));
-			}catch(IOException e) {
-				e.getMessage();
-			}
 			if(originalImage == null) {
 				System.out.println("Did NOT load "+ fileLocation+ " file successfully.");
 			}else {
