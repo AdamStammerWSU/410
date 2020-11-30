@@ -125,7 +125,7 @@ class FileManager {
 		//out.write(content);
 		//out.close();
 	}
-	static String loadLayout(String fileLocation) throws IOException {
+	static Layout loadLayout(String fileLocation) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(fileLocation));
 		String line;
 		StringBuilder sb = new StringBuilder();
@@ -133,7 +133,7 @@ class FileManager {
 			sb.append(line + "\n");
 		}
 		reader.close();
-		return sb.toString();
+		return new Layout(sb.toString());
 	}
 ////////////////////////////////////////////////////////////////////////// Helper Method(s)
 	static boolean isWindows()

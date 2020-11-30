@@ -218,8 +218,8 @@ public class GUI extends JFrame implements ActionListener {
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Load the text file into layout immediately
-				layout.setText(getLayoutFileContents(fc3.getSelectedFile().toString()));
-				System.out.println("You picked a layout from a file");
+				loadLayout();
+				//System.out.println("You picked a layout from a file");
 			} else {
 				// User chose cancel
 			}
@@ -268,33 +268,31 @@ public class GUI extends JFrame implements ActionListener {
 	 * Gets the contents of a text file that the user wants to load in for a book layout
 	 */
 	//Should this be in a different class? Like the layout class?
-	public String getLayoutFileContents(String fileLocation) {
-		File file = new File(fileLocation); // create file
-		BufferedReader reader = null; // create reader
+//	public String getLayoutFileContents(String fileLocation) {
+//	
+//	}
+	
+	public void loadLayout() {
 		try {
-			reader = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found (" + fileLocation + ")");
-		}
-
-		String dataLine = ""; // place to store each line of data
-		String data = ""; // place to store all data
-		try {
-			// read in data line by line until there are not more lines to read
-			while ((dataLine = reader.readLine()) != null) {
-				data += dataLine + "\n";
-			}
+			setLayout(FileManager.loadLayout(fc3.getSelectedFile().toString()));
 		} catch (IOException e) {
-			System.out.println("Failed to read from the file");
+			System.out.println("Failed To Load Layout");
 		}
-
-		return data;	
+		
+	}
+	
+	public void setLayout(Layout loadedLayout) {
+		layout.setText(loadedLayout.getLayoutString());
 	}
 	/**
 	 * Saves the current layout text as a text file, specified where the user wants it to be. WIP
 	 */
 	public void saveLayoutFile() {
-		
+		try {
+			FileManager.saveLayout(new Layout(layout.getText()), fc4.getSelectedFile().toString());
+		} catch (IOException e) {
+			System.out.println("Failed To Save Layout");
+		}
 	}
 	
 	/**

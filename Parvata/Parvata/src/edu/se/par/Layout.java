@@ -12,16 +12,22 @@ public class Layout {
 	public Layout(String layoutText) {
 		this.layoutText = layoutText;
 		// process the layoutText String
-		String[] lines = layoutText.split("\n");
-		outputCols = Integer.parseInt(lines[0].split(" ")[0]);
-		outputRows = Integer.parseInt(lines[0].split(" ")[1]);
-		layoutArray = new String[lines.length - 1][lines[1].split(" ").length];
-		for (int i = 1; i < lines.length; i++) {
-			layoutArray[i - 1] = lines[i].split(" ");
-		}
+		try {
+			String[] lines = layoutText.split("\n");
+			outputCols = Integer.parseInt(lines[0].split(" ")[0]);
+			outputRows = Integer.parseInt(lines[0].split(" ")[1]);
+			layoutArray = new String[lines.length - 1][lines[1].split(" ").length];
+			for (int i = 1; i < lines.length; i++) {
+				layoutArray[i - 1] = lines[i].split(" ");
+			}
 
-		inputPageCount = layoutArray.length * layoutArray[0].length;
-		outputPageCount = layoutArray.length;
+			inputPageCount = layoutArray.length * layoutArray[0].length;
+			outputPageCount = layoutArray.length;
+		} catch (Exception e) {
+			System.out.println("Bad Layout File");
+			layoutText = "hee hee";
+			//load in default layout
+		}
 	}
 
 	public int getInputPageCount() {
