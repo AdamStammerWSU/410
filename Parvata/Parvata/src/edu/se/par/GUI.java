@@ -231,6 +231,8 @@ public class GUI extends JFrame implements ActionListener {
 				// Save the text from layout immediately HERE
 				System.out.println(fc4.getSelectedFile().toString());
 				System.out.println("You attempted to save the layout to a file");
+				Layout tempLayout = new Layout(layout.getText());
+				FileManager.saveLayout(tempLayout, fc4.getSelectedFile().toString());
 			} else {
 				// User chose cancel
 			}
