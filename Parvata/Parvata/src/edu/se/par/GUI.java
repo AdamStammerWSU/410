@@ -8,10 +8,6 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
@@ -39,7 +35,6 @@ public class GUI extends JFrame implements ActionListener {
 	
 	Font titleFont = new Font("SansSerif", Font.BOLD, 30);
 	Font bigFont = new Font("SansSerif", Font.PLAIN, 20);
-	Font mediumFont = new Font("SansSerif", Font.PLAIN, 16); // might use for something later
 		
 	// On-screen component for panelTop
 	JLabel title = new JLabel("Parvata Book Imposer");
@@ -47,14 +42,10 @@ public class GUI extends JFrame implements ActionListener {
 	// On-screen components for panelCenter
 	JLabel enterLayout = new JLabel("Enter Page Layout");
 	String defaultLayoutString = "2 2\n5u 12u 4 13\n11u 6u 14 3\n7u 10u 2 15\n9u 8u 16 1";
-			//new String[][] { { "5u", "12u", "4", "3" }, { "11u", "6u", "14", "3" },
-		//{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
 	JTextArea layout = new JTextArea(defaultLayoutString, 10, 15); 
 	JScrollPane scrollLayout = new JScrollPane(layout);
 	
 	// On-screen components for panelRight
-	
-	//JLabel loadingProgress = new JLabel("");
 	JButton loadLayout = new JButton("Load Layout");
 	JButton saveLayout = new JButton("Save Layout");
 	JButton impose = new JButton("Impose");
@@ -65,7 +56,7 @@ public class GUI extends JFrame implements ActionListener {
 	JFileChooser fc2;
 	JFileChooser fc3;
 	JFileChooser fc4;
-	JTextArea filePath = new JTextArea("File path", 1, 10); // Should the file text areas be editable?
+	JTextArea filePath = new JTextArea("File path", 1, 10); // Text areas are editable
 	JScrollPane scrollPath1= new JScrollPane(filePath);
 	JButton saveFile = new JButton("Save File to...");
 	JTextArea newFilePath = new JTextArea("Imposed File path", 1, 10);
@@ -74,13 +65,12 @@ public class GUI extends JFrame implements ActionListener {
 	
 	public static void main(String[] args) {
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // For the GUI appearence
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // For the GUI appearance
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Howdy");
+
 		GUI gui = new GUI();
 		gui.setSize(500, 500);
 		gui.setLocationRelativeTo(null);
@@ -90,30 +80,26 @@ public class GUI extends JFrame implements ActionListener {
 	
 	public GUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		setTitle("Parvata Book Imposer");
 		
+		// Modify top panel elements
 		panelTop.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		panelTop.setBackground(Color.LIGHT_GRAY); // To see size of panel
+		panelTop.setBackground(Color.LIGHT_GRAY);
 		title.setFont(titleFont);
 		
+		// Modify center (left) panel elements
 		panelCenter.setLayout((LayoutManager) new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
 		panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
-		//panelCenter.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
 		enterLayout.setFont(bigFont);
 		enterLayout.setAlignmentX(CENTER_ALIGNMENT);
 		
-		//panelRight.setLayout((LayoutManager) new BoxLayout(panelRight, BoxLayout.Y_AXIS));
+		// Modify right panel elements
 		panelRight.setLayout((LayoutManager) new GridLayout(3, 1, 0, 20));
 		panelRight.setBorder(BorderFactory.createEmptyBorder(32, 10, 5, 15));
-		//panelRight.setBackground(Color.LIGHT_GRAY); // To see what size the panel is ending up at
-		//impose.setPreferredSize(new Dimension(20,20));
-		//impose.setMinimumSize(new Dimension(50, 20));
-		//impose.setMaximumSize(new Dimension(50, 50));
-		//loadingProgress.setAlignmentX(CENTER_ALIGNMENT);
 		impose.setAlignmentX(CENTER_ALIGNMENT);
 		
-		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10)); // Might change to a different layout
+		// Modify bottom panel elements
+		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10));
 		panelBottom.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 		
 		
@@ -128,12 +114,9 @@ public class GUI extends JFrame implements ActionListener {
 		panelCenter.setPreferredSize(new Dimension(325, 300));
 		
 		// Adds components to the right panel
-		//panelRight.add(Box.createVerticalGlue());
-		//panelRight.add(loadingProgress);
 		panelRight.add(loadLayout);
 		panelRight.add(saveLayout);
 		panelRight.add(impose);
-		//panelRight.add(Box.createVerticalGlue());
 		panelRight.setPreferredSize(new Dimension(175, 300));
 		
 		loadLayout.addActionListener(this);
@@ -143,11 +126,11 @@ public class GUI extends JFrame implements ActionListener {
 		FileNameExtensionFilter filterText = new FileNameExtensionFilter("text file", "txt", "text");
 		fc3 = new JFileChooser();
 		fc3.setFileFilter(filterText);
-		fc3.setAcceptAllFileFilterUsed(false); // Only the what the filter specifies is allowed
+		fc3.setAcceptAllFileFilterUsed(false); // Only what the filter specifies is allowed
 		
 		fc4 = new JFileChooser();
 		fc4.setFileFilter(filterText);
-		fc4.setAcceptAllFileFilterUsed(false); // Doesn't stop the user from typing whatever extension however...
+		fc4.setAcceptAllFileFilterUsed(false); // Doesn't stop the user from typing whatever extension however
 		
 		
 		// Adds components to the bottom panel
@@ -203,15 +186,11 @@ public class GUI extends JFrame implements ActionListener {
             }
 			
 		} else if (e.getSource() == impose) {
-			// Do stuff
+			// Call for the actual imposing and let the user know when it's done
 			System.out.println("You clicked Impose");
-			// If everything is entered in properly, example of what could be done:
-			setLoadingProgress("Now imposing...");
 			Imposer imposer = new Imposer(this, new Layout(getPageLayout()));
 			imposer.impose();
 			PROMPT_MESSAGE("Done Imposing!");
-
-			setLoadingProgress("");
 			
 		} else if (e.getSource() == loadLayout) {
 			int returnVal = fc3.showOpenDialog(GUI.this);
@@ -219,7 +198,7 @@ public class GUI extends JFrame implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Load the text file into layout immediately
 				loadLayout();
-				//System.out.println("You picked a layout from a file");
+				System.out.println("You picked a layout from a file");
 			} else {
 				// User chose cancel
 			}
@@ -228,7 +207,7 @@ public class GUI extends JFrame implements ActionListener {
 			int returnVal = fc4.showSaveDialog(GUI.this);
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// Save the text from layout immediately HERE
+				// Save the text from layout immediately
 				System.out.println(fc4.getSelectedFile().toString());
 				System.out.println("You attempted to save the layout to a file");
 				Layout tempLayout = new Layout(layout.getText());
@@ -265,27 +244,25 @@ public class GUI extends JFrame implements ActionListener {
 	}
 	
 	/**
-	 * Gets the contents of a text file that the user wants to load in for a book layout
+	 * Attempts to load the layout from a file chosen by the user
 	 */
-	//Should this be in a different class? Like the layout class?
-//	public String getLayoutFileContents(String fileLocation) {
-//	
-//	}
-	
 	public void loadLayout() {
 		try {
 			setLayout(FileManager.loadLayout(fc3.getSelectedFile().toString()));
 		} catch (IOException e) {
 			System.out.println("Failed To Load Layout");
 		}
-		
 	}
 	
+	/**
+	 * Sets the text in the layout text area to a previously created layout
+	 */
 	public void setLayout(Layout loadedLayout) {
 		layout.setText(loadedLayout.getLayoutString());
 	}
+	
 	/**
-	 * Saves the current layout text as a text file, specified where the user wants it to be. WIP
+	 * Saves the current layout text as a text file, specified where the user wants it to be
 	 */
 	public void saveLayoutFile() {
 		try {
@@ -293,13 +270,6 @@ public class GUI extends JFrame implements ActionListener {
 		} catch (IOException e) {
 			System.out.println("Failed To Save Layout");
 		}
-	}
-	
-	/**
-	 * Sets the loadingProgress JLabel's text to whatever status is given
-	 */
-	public void setLoadingProgress(String status) {
-		//loadingProgress.setText(status);
 	}
 	
 	public void PROMPT_ERROR(String s) {
