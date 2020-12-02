@@ -49,11 +49,6 @@ class FileManager {
 				if(Character.compare(secondLast,'n') == 0|| Character.compare(secondLast,'N') == 0)
 					didCreate = ImageIO.write(buffy, "png", outputFile);
 				}
-			if(didCreate == true)
-				System.out.println("Saved " + outputFile + " file successfully.");
-			else {
-				System.out.println("Did NOT save " + outputFile + " file successfully.");
-			}
 		} catch (IOException e) {
 			e.getMessage();
 		}
@@ -64,11 +59,6 @@ class FileManager {
 			//boolean isWindows = isWindows();
 			BufferedImage originalImage = null;
 			originalImage = ImageIO.read(new File(fileLocation));
-			if(originalImage == null) {
-				System.out.println("Did NOT load "+ fileLocation+ " file successfully.");
-			}else {
-				System.out.println("Loaded "+ fileLocation+ " file successfully.");
-			}
 			return originalImage;
 		}
 //////////////////////////////////////////////////////////////////////////Image PNG to PDF

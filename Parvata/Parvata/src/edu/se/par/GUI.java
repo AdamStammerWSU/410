@@ -174,7 +174,7 @@ public class GUI extends JFrame implements ActionListener {
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				filePath.setText(fc.getSelectedFile().toString());
-				System.out.println("You picked a file");
+				//System.out.println("You picked a file");
 			} else {
 				// User chose cancel
 			}
@@ -184,14 +184,14 @@ public class GUI extends JFrame implements ActionListener {
 			
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 newFilePath.setText(fc2.getSelectedFile().toString());
-                System.out.println("You picked a save path");
+                //System.out.println("You picked a save path");
             } else {
                 // User chose cancel
             }
 			
 		} else if (e.getSource() == impose) {
 			// Call for the actual imposing and let the user know when it's done
-			System.out.println("You clicked Impose");
+			//System.out.println("You clicked Impose");
 			Imposer imposer = new Imposer(this, new Layout(getPageLayout()));
 			imposer.impose();
 			PROMPT_MESSAGE("Done Imposing!");
@@ -202,7 +202,7 @@ public class GUI extends JFrame implements ActionListener {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Load the text file into layout immediately
 				loadLayout();
-				System.out.println("You picked a layout from a file");
+				//System.out.println("You picked a layout from a file");
 			} else {
 				// User chose cancel
 			}
@@ -212,8 +212,8 @@ public class GUI extends JFrame implements ActionListener {
 			
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Save the text from layout immediately
-				System.out.println(fc4.getSelectedFile().toString());
-				System.out.println("You attempted to save the layout to a file");
+				//System.out.println(fc4.getSelectedFile().toString());
+				//System.out.println("You attempted to save the layout to a file");
 				Layout tempLayout = new Layout(layout.getText());
 				try {
 					FileManager.saveLayout(tempLayout, fc4.getSelectedFile().toString());

@@ -97,7 +97,7 @@ public class Signature {
 			try {
 				pageImage = FileManager.loadImage(fileLocation);
 			} catch (Exception e) {
-				System.out.println("Failed to load inputpage......flagging for blank page");
+				//flag for blank page
 				pageImage = null;
 			}
 		}
