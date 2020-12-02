@@ -15,31 +15,21 @@ public class Signature {
 
 	public Signature(Layout layout, int inputPageOffset, int outputPageOffset) {
 		this.layout = layout;
-		///////////////// TEST LAYOUT
-//		layout.layoutArray = new String[][] { { "5u", "12u", "4", "33" }, { "11u", "6u", "14", "3" },
-//				{ "7u", "10u", "2", "15" }, { "9u", "8u", "16", "1" } };
-//		layout.inputPageCount = 16;
-//		layout.outputPageCount = 4;
-		/////////////////
 		this.inputPageOffset = inputPageOffset;
 		this.outputPageOffset = outputPageOffset;
 		inputPages = new InputPage[layout.getLayout().length * layout.getLayout()[0].length];
 		outputPages = new OutputPage[layout.getInputPageCount()];
+		//initialize all the input pages by name
 		String numberString = "";
 		for (int i = 0; i < layout.getInputPageCount(); i++) {
 			numberString = String.format("%04d", i + inputPageOffset);
 			inputPages[i] = new InputPage("input-" + numberString + ".png");
 		}
+		//load the first page so that we know the size of the pages
 		inputPages[0].load();
 	}
 
 	public void impose() {
-
-		int inputPagesPerOutputPages = layout.getLayout()[0].length;
-		// int outputRows = layout.getOutputPageRows();
-		// int outputCols = layout.getOutputPageCols();
-		int outputRows = 2;
-		int outputCols = 2;
 		String numberString = "";
 
 		for (int i = 0; i < layout.getLayout().length; i++) {
@@ -47,31 +37,23 @@ public class Signature {
 
 			// initialize the output page
 			numberString = String.format("%04d", i+outputPageOffset);
-			outputPages[i] = new OutputPage("output-" + numberString + ".png", outputCols * inputPages[0].getWidth(),
-					outputRows * inputPages[0].getHeight());
-			Graphics g = outputPages[i].pageImage.getGraphics();
-//			for (int j = 0; j < layout.getLayout()[i].length; j++) {
-			// for each input page
+			outputPages[i] = new OutputPage("output-" + numberString + ".png", layout.getOutputCols() * inputPages[0].getWidth(),
+					layout.getOutputRows() * inputPages[0].getHeight());
+			Graphics g = outputPages[i].pageImage.getGraphics(); //get the graphics of the output image
 
-			// get the index of the next input page
-
-			// render the input page
-			// g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth()
-			// * (j % outputCols), inputPages[pageIndex].getHeight() * (j % outputRows),
-			// null);
-
-			for (int x = 0; x < outputRows; x++) {
+			for (int x = 0; x < layout.getOutputRows(); x++) {
 				// for each row
-				for (int z = 0; z < outputCols; z++) {
+				for (int z = 0; z < layout.getOutputCols(); z++) {
 					// for each column
-					String iPage = layout.getLayout()[i][x * outputRows + z];
+					String iPage = layout.getLayout()[i][x * layout.getOutputRows() + z];
+					//check to see if the page needs to be rotated
 					float rotation = 0;
-					System.out.println(iPage);
 					if (iPage.substring(iPage.length() - 1).compareTo("u") == 0) {
-						// the page needs to be upsidedown
+						// the page needs to be upside-down
 						rotation = 180;
 						iPage = iPage.substring(0, iPage.length() - 1);
 					}
+					//process the input page index
 					int pageIndex = Integer.parseInt(iPage) - 1;
 					// load the input page
 					inputPages[pageIndex].load();
@@ -87,11 +69,11 @@ public class Signature {
 
 					// render the input page to the output page
 					g.drawImage(inputPages[pageIndex].pageImage, inputPages[pageIndex].getWidth() * z, inputPages[pageIndex].getHeight() * x, null);
+					
+					//unload the input page
+					inputPages[pageIndex].cleanup();
 				}
 			}
-
-			// unload the input page
-//				inputPages[pageIndex].cleanup();
 
 //			}
 			// render the output page
@@ -122,8 +104,7 @@ public class Signature {
 
 		public void cleanup() {
 			pageImage = null;
-			// delete the image file
-			// todo
+			// free the image memory
 		}
 
 		public void flipImage(byte axis) {
