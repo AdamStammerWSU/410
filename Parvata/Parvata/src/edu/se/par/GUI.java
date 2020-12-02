@@ -35,6 +35,7 @@ public class GUI extends JFrame implements ActionListener {
 	
 	Font titleFont = new Font("SansSerif", Font.BOLD, 30);
 	Font bigFont = new Font("SansSerif", Font.PLAIN, 20);
+	Font normalFont = new Font("SansSerif", Font.PLAIN, 13);
 		
 	// On-screen component for panelTop
 	JLabel title = new JLabel("Parvata Book Imposer");
@@ -92,6 +93,7 @@ public class GUI extends JFrame implements ActionListener {
 		panelCenter.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 5));
 		enterLayout.setFont(bigFont);
 		enterLayout.setAlignmentX(CENTER_ALIGNMENT);
+		layout.setFont(normalFont);
 		
 		// Modify right panel elements
 		panelRight.setLayout((LayoutManager) new GridLayout(3, 1, 0, 20));
@@ -101,6 +103,8 @@ public class GUI extends JFrame implements ActionListener {
 		// Modify bottom panel elements
 		panelBottom.setLayout((LayoutManager) new GridLayout(2, 2, 5, 10));
 		panelBottom.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+		filePath.setFont(normalFont);
+		newFilePath.setFont(normalFont);
 		
 		
 		// Adds components to the top panel
