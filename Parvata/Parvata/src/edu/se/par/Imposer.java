@@ -20,7 +20,7 @@ public class Imposer {
 		try {
 			FileManager.PDFtoPNG(gui.getOpenFilePath());
 		} catch (IOException | InterruptedException e1) {
-
+			System.out.println("Failed to convert to images");
 		}
 
 		// count pages to determine how many signatures are necessary
@@ -33,7 +33,7 @@ public class Imposer {
 		});
 		
 		numberOfSignatures = (int) Math.ceil(files.length / (layout.inputPageCount + 0.0f));
-
+		System.out.println(numberOfSignatures);
 		for (int i = 0; i < numberOfSignatures; i++) {
 			// create the signature
 			Signature sig = new Signature(layout, layout.inputPageCount * i, layout.outputPageCount * i);

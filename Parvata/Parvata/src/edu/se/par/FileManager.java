@@ -69,9 +69,9 @@ class FileManager {
 		
 		try {
 			if(isWindows == true)
-				p = Runtime.getRuntime().exec("cmd /c convert " + prefix + "* " + fileLocation);
+				p = Runtime.getRuntime().exec("cmd /c convert " + prefix + "* \"" + fileLocation + "\"");
 			else
-				p = Runtime.getRuntime().exec("sh -c convert " + prefix + "* " + fileLocation);
+				p = Runtime.getRuntime().exec("sh -c convert " + prefix + "* \"" + fileLocation + "\"");
 		} catch (IOException e) {
 			System.out.println("Failed to compile pdf");
 		}
@@ -88,12 +88,12 @@ class FileManager {
 		
 		boolean isWindows = isWindows();
 		Process p = null;
-		
+		System.out.println("Decompiling ..." + fileLocation);
 		try {
 			if(isWindows == true)
-				p = Runtime.getRuntime().exec("cmd /c convert -density 300 " + fileLocation + " input-%04d.png");
+				p = Runtime.getRuntime().exec("cmd /c convert -density 300 \"" + fileLocation + "\" input-%04d.png");
 			else
-				p = Runtime.getRuntime().exec("sh -c convert -density 300 " + fileLocation + " input-%04d.png");
+				p = Runtime.getRuntime().exec("sh -c convert -density 300 \"" + fileLocation + "\" input-%04d.png");
 			
 		} catch (IOException e) {
 			System.out.println("Failed to decompile pdf");
